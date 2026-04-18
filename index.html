@@ -5,143 +5,83 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Brightmind Solutions Ltd — Portal</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>" />
-
-<!-- ═══ Firebase SDK ═══ -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<!-- ═══ React & Babel ═══ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;font-family:system-ui,-apple-system,sans-serif;}
 #root{min-height:100vh;}
 input,select,textarea,button{font-family:inherit;}
-
-/* Layout */
 .app-shell{display:flex;min-height:100vh;}
 .main-area{flex:1;overflow-y:auto;background:#f5f6f8;}
-
-/* Sidebar */
 .sidebar{width:210px;background:#0b1e3d;display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;}
 .sb-brand{padding:1.25rem 1rem;border-bottom:1px solid rgba(200,151,58,.2);}
 .sb-logo{width:34px;height:34px;background:linear-gradient(135deg,#c8973a,#e3b96a);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0b1e3d;font-size:15px;}
 .sb-nav{flex:1;padding:.75rem .6rem;overflow-y:auto;}
 .sb-item{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.55);font-size:13px;transition:all .2s;margin-bottom:2px;}
 .sb-item.active{background:rgba(200,151,58,.15);color:#e3b96a;font-weight:600;}
-.sb-item:hover:not(.active){background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.sb-item:hover:not(.active){background:rgba(255,255,255,.06);color:rgba(255,255,255,.85);}
 .sb-foot{padding:.75rem .6rem;border-top:1px solid rgba(200,151,58,.1);}
-
-/* Page header */
 .ph{background:#fff;border-bottom:1px solid #e5e7eb;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;}
 .ph-title{font-size:17px;font-weight:700;color:#0b1e3d;}
 .ph-sub{color:#9ca3af;font-size:12px;margin-top:2px;}
 .content{padding:1.25rem 1.5rem;}
-
-/* Cards */
 .card{background:#fff;border-radius:11px;border:1px solid #e5e7eb;overflow:hidden;}
 .card-head{padding:.85rem 1.1rem;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;color:#0b1e3d;}
 .a-card{background:#fff;border-radius:11px;border:1px solid #e5e7eb;padding:1rem;margin-bottom:10px;}
-.n-card{background:#fff;border-radius:11px;border:1px solid #e5e7eb;overflow:hidden;cursor:pointer;transition:box-shadow .2s;}
-.n-card:hover{box-shadow:0 4px 18px rgba(0,0,0,.09);}
-.n-head{background:linear-gradient(135deg,#0b1e3d,#1a3366);padding:1rem 1.1rem;}
-
-/* Stats */
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
 .stat-card{background:#fff;border-radius:10px;padding:1rem;border:1px solid #e5e7eb;}
 .stat-val{font-size:26px;font-weight:700;font-family:Georgia,serif;margin-top:4px;}
 .stat-lbl{font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:.05em;}
-
-/* Table */
 table{width:100%;border-collapse:collapse;}
 thead tr{background:#0b1e3d;}
 thead th{padding:9px 12px;text-align:left;color:rgba(255,255,255,.65);font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
 tbody tr{border-bottom:1px solid #f3f4f6;transition:background .15s;}
 tbody tr:hover{background:#fafafa;}
 tbody td{padding:10px 12px;font-size:12.5px;color:#374151;vertical-align:middle;}
-
-/* Badges */
 .badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.03em;white-space:nowrap;}
-.b-ks2{background:#ede9fe;color:#5b21b6;}
-.b-ks3{background:#dbeafe;color:#1d4ed8;}
-.b-gcse{background:#fef9c3;color:#854d0e;}
-.b-al{background:#dcfce7;color:#166534;}
-.b-green{background:#dcfce7;color:#166534;}
-.b-red{background:#fee2e2;color:#991b1b;}
-.b-amber{background:#fef3c7;color:#92400e;}
-.b-gray{background:#f3f4f6;color:#374151;}
-.b-navy{background:#0b1e3d;color:#e3b96a;}
-
-/* Buttons */
+.b-ks2{background:#ede9fe;color:#5b21b6;}.b-ks3{background:#dbeafe;color:#1d4ed8;}.b-gcse{background:#fef9c3;color:#854d0e;}.b-al{background:#dcfce7;color:#166534;}
+.b-green{background:#dcfce7;color:#166534;}.b-red{background:#fee2e2;color:#991b1b;}.b-amber{background:#fef3c7;color:#92400e;}.b-gray{background:#f3f4f6;color:#374151;}.b-blue{background:#dbeafe;color:#1e40af;}
 .btn{padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12.5px;font-weight:600;transition:opacity .2s;white-space:nowrap;}
 .btn:hover{opacity:.85;}
-.btn-gold{background:#c8973a;color:#0b1e3d;}
-.btn-navy{background:#0b1e3d;color:#fff;}
-.btn-ghost{background:transparent;color:#0b1e3d;border:1.5px solid #d1d5db;}
-.btn-danger{background:#fee2e2;color:#991b1b;}
-.btn-success{background:#dcfce7;color:#166534;}
+.btn-gold{background:#c8973a;color:#0b1e3d;}.btn-navy{background:#0b1e3d;color:#fff;}.btn-ghost{background:transparent;color:#0b1e3d;border:1.5px solid #d1d5db;}.btn-danger{background:#fee2e2;color:#991b1b;}.btn-success{background:#dcfce7;color:#166534;}
 .btn-sm{padding:5px 10px;font-size:11.5px;}
-
-/* Forms */
 .inp{width:100%;padding:8px 11px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;outline:none;background:#faf7f2;transition:border-color .2s;}
 .inp:focus{border-color:#c8973a;}
 .lbl{display:block;font-size:10.5px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
 .fg{margin-bottom:12px;}
 .form-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-
-/* Avatar */
 .av{border-radius:50%;background:#0b1e3d;display:flex;align-items:center;justify-content:center;color:#e3b96a;font-weight:700;flex-shrink:0;border:2px solid rgba(200,151,58,.25);}
-
-/* Modal overlay */
 .modal-bg{position:fixed;inset:0;background:rgba(11,30,61,.8);display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;z-index:1000;overflow-y:auto;}
 .modal-box{background:#fff;border-radius:14px;width:100%;max-width:540px;flex-shrink:0;}
-.modal-wide{max-width:680px;}
+.modal-wide{max-width:700px;}
 .modal-head{background:linear-gradient(135deg,#0b1e3d,#1a3366);padding:1.25rem 1.5rem;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:flex-start;position:sticky;top:0;}
 .modal-body{padding:1.5rem;}
 .close-x{background:rgba(255,255,255,.12);border:none;color:#fff;width:27px;height:27px;border-radius:50%;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;}
-
-/* Filters */
 .filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
 .fb{padding:5px 12px;border-radius:16px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-size:11.5px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .2s;}
 .fb.active,.fb:hover{background:#0b1e3d;color:#e3b96a;border-color:#0b1e3d;}
-
-/* Progress */
 .prog-bar{height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:3px;transition:width .4s;}
-
-/* Alerts */
 .alert-w{background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:.75rem 1rem;font-size:12px;color:#92400e;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
 .alert-ok{background:#dcfce7;border:1px solid #86efac;border-radius:8px;padding:.75rem 1rem;font-size:12px;color:#166534;margin-bottom:10px;}
 .alert-err{background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:.75rem 1rem;font-size:12px;color:#991b1b;margin-bottom:10px;}
-
-/* Row */
+.alert-info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:.75rem 1rem;font-size:12px;color:#1e40af;margin-bottom:12px;line-height:1.6;}
 .row-item{padding:10px 1.1rem;border-bottom:1px solid #f9fafb;display:flex;align-items:center;gap:10px;}
 .row-item:last-child{border-bottom:none;}
-
-/* Q chip */
 .q-chip{display:flex;gap:10px;padding:10px 12px;background:#faf7f2;border-radius:8px;margin-bottom:7px;align-items:flex-start;}
 .q-num{width:22px;height:22px;background:#0b1e3d;color:#e3b96a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
-
-/* Tag selector */
 .sel-tag{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:12.5px;font-weight:500;transition:all .2s;margin:3px;}
 .sel-tag.on{background:#0b1e3d;border-color:#0b1e3d;color:#e3b96a;}
 .sel-tag:not(.on){background:#fff;color:#374151;}
-
-/* Spinner */
 .spin{width:36px;height:36px;border:3px solid rgba(200,151,58,.3);border-top-color:#c8973a;border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-
-/* Two col grid */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-
-/* Hero grad */
 .hero-grad{background:linear-gradient(135deg,#0b1e3d,#1a3366);padding:1.5rem;color:#fff;}
-
-/* Login */
 .login-wrap{min-height:100vh;background:linear-gradient(160deg,#0b1e3d,#122550 50%,#0f2e5c);display:flex;align-items:center;justify-content:center;padding:16px;}
 .login-box{background:#fff;border-radius:16px;padding:1.75rem;box-shadow:0 20px 60px rgba(0,0,0,.35);width:100%;max-width:400px;}
 .role-tabs{display:flex;gap:5px;background:#f3f4f6;border-radius:9px;padding:3px;margin-bottom:20px;}
@@ -149,41 +89,58 @@ tbody td{padding:10px 12px;font-size:12.5px;color:#374151;vertical-align:middle;
 .role-tab.active{background:#0b1e3d;color:#e3b96a;}
 .role-tab:not(.active){background:transparent;color:#6b7280;}
 
-@media(max-width:768px){
-  .sidebar{display:none;}
-  .stat-grid{grid-template-columns:1fr 1fr;}
-  .two-col{grid-template-columns:1fr;}
-  .form-2{grid-template-columns:1fr;}
-}
+/* Drive link input */
+.drive-box{border:2px dashed #d1d5db;border-radius:10px;padding:1.25rem;background:#faf7f2;transition:border-color .2s;}
+.drive-box:focus-within{border-color:#4285f4;}
+.drive-box.set{border:1.5px solid #86efac;background:#f0fdf4;border-radius:10px;padding:1rem;display:flex;align-items:center;gap:10px;}
+
+/* File chip */
+.file-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;font-size:12.5px;color:#166534;font-weight:500;text-decoration:none;transition:background .2s;}
+.file-chip:hover{background:#dcfce7;}
+
+/* Resource card */
+.res-card{background:#fff;border-radius:10px;border:1px solid #e5e7eb;display:flex;align-items:center;gap:12px;padding:1rem;margin-bottom:8px;transition:box-shadow .2s;}
+.res-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.07);}
+.res-icon{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+
+@media(max-width:768px){.sidebar{display:none;}.stat-grid{grid-template-columns:1fr 1fr;}.two-col{grid-template-columns:1fr;}.form-2{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 <div id="root"></div>
-
 <script type="text/babel">
 
-/* ╔════════════════════════════════════════════════════════════════╗
-   ║         BRIGHTMIND SOLUTIONS LTD — TUITION PORTAL              ║
-   ║                                                                 ║
-   ║  HOW TO SET UP (5 steps):                                       ║
-   ║                                                                 ║
-   ║  1. Go to console.firebase.google.com                          ║
-   ║  2. Click "Add project" → name it "brightmind"                 ║
-   ║  3. Click "</> Web" → register app → copy firebaseConfig       ║
-   ║  4. Paste your config below (replace all 6 placeholder values) ║
-   ║  5. In Firebase Console:                                        ║
-   ║     • Authentication → Sign-in method → Email/Password → Enable║
-   ║     • Firestore Database → Create database → Start in test mode║
-   ║                                                                 ║
-   ║  CREATING YOUR ADMIN ACCOUNT:                                   ║
-   ║  • Authentication → Users → Add user                           ║
-   ║  • Enter your email + password                                  ║
-   ║  • Copy the UID shown                                           ║
-   ║  • Firestore → Add document:                                    ║
-   ║    Collection: users  /  Document ID: (your UID)               ║
-   ║    Fields: name (string), role (string = "admin")              ║
-   ╚════════════════════════════════════════════════════════════════╝ */
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║       BRIGHTMIND SOLUTIONS LTD — TUITION PORTAL              ║
+   ╠══════════════════════════════════════════════════════════════╣
+   ║  SETUP:                                                       ║
+   ║  1. console.firebase.google.com → new project                ║
+   ║  2. Add web app → copy config → paste below                  ║
+   ║  3. Authentication → Email/Password → Enable                 ║
+   ║  4. Firestore Database → Create (test mode)                  ║
+   ║  5. Auth → Settings → Authorised domains → add yours        ║
+   ║                                                               ║
+   ║  ADMIN ACCOUNT:                                               ║
+   ║  • Authentication → Users → Add user (your email/pass)       ║
+   ║  • Copy the UID shown                                         ║
+   ║  • Firestore → New collection: users                         ║
+   ║  • Document ID = your UID                                     ║
+   ║  • Fields:  name (string)  +  role (string) = "admin"        ║
+   ╚══════════════════════════════════════════════════════════════╝
 
+   FIRESTORE RULES — paste in Firestore → Rules → Publish:
+   ────────────────────────────────────────────────────────
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /{document=**} {
+         allow read, write: if request.auth != null;
+       }
+     }
+   }
+*/
+
+// ═══ PASTE YOUR FIREBASE CONFIG HERE ═══
 const firebaseConfig = {
   apiKey: "AIzaSyBNuK47wmZ1jPwNKDGbWpnseJoTcDcf9ME",
   authDomain: "brightmind-f6ec2.firebaseapp.com",
@@ -193,85 +150,49 @@ const firebaseConfig = {
   appId: "1:159834349305:web:985320fa778136d9ce8c28",
   measurementId: "G-4B28P9X16C"
 };
+// ════════════════════════════════════════
 
-/* ═══ Firestore Security Rules (paste into Firebase Console → Firestore → Rules):
-
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    function isAdmin() {
-      return request.auth != null &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    }
-    match /users/{uid} {
-      allow read: if request.auth != null;
-      allow write: if isAdmin();
-    }
-    match /assignments/{id} {
-      allow read: if request.auth != null;
-      allow write: if isAdmin();
-    }
-    match /notes/{id} {
-      allow read: if request.auth != null;
-      allow write: if isAdmin();
-    }
-    match /submissions/{id} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null && request.resource.data.studentId == request.auth.uid;
-      allow update, delete: if isAdmin();
-    }
-  }
-}
-═══ */
-
-// ─── Firebase Init ───
 firebase.initializeApp(firebaseConfig);
-const secondaryApp = firebase.initializeApp(firebaseConfig, 'Secondary');
+const secondaryApp  = firebase.initializeApp(firebaseConfig, 'Secondary');
 const auth          = firebase.auth();
 const secondaryAuth = firebase.auth(secondaryApp);
 const db            = firebase.firestore();
 
 const { useState, useEffect } = React;
-const uid = () => Math.random().toString(36).substr(2, 8);
-const fmt  = d => d ? new Date(d).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : '';
-const fmtS = d => d ? new Date(d).toLocaleDateString('en-GB', { day:'numeric', month:'short' }) : '';
-const today = () => new Date().toISOString().split('T')[0];
+const fmt  = d => d ? new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+const fmtS = d => d ? new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '';
+const tod  = () => new Date().toISOString().split('T')[0];
 
-// ─── Shared Components ───
-
-function Av({ name = '?', size = 32 }) {
-  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-  const bgs = ['#0b1e3d','#1a3366','#0f2e5c','#163b6b','#0d2b52'];
-  return (
-    <div className="av" style={{ width:size, height:size, fontSize:size*0.33, background:bgs[name.charCodeAt(0)%bgs.length] }}>
-      {initials}
-    </div>
-  );
+// Detect file type icon from name or url
+function fileIcon(name='') {
+  const ext = name.split('.').pop().toLowerCase();
+  if (ext==='pdf')                              return '📕';
+  if (['doc','docx'].includes(ext))             return '📘';
+  if (['ppt','pptx'].includes(ext))             return '📙';
+  if (['jpg','jpeg','png','gif'].includes(ext)) return '🖼️';
+  if (name.toLowerCase().includes('sheet') || ext==='xlsx') return '📗';
+  return '📄';
 }
 
-function LBadge({ level }) {
-  const m = { 'KS2':'b-ks2', 'KS3':'b-ks3', 'GCSE':'b-gcse', 'A-Level':'b-al' };
-  return <span className={`badge ${m[level]||'b-gray'}`}>{level}</span>;
-}
+// ─── Shared Components ────────────────────────────────────────────
 
-function SBadge({ status }) {
-  const m = { submitted:['b-green','Submitted'], pending:['b-amber','Pending'], overdue:['b-red','Overdue'] };
-  const [c,l] = m[status] || ['b-gray', status];
-  return <span className={`badge ${c}`}>{l}</span>;
+function Av({name='?',size=32}){
+  const i=(name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const bgs=['#0b1e3d','#1a3366','#0f2e5c','#163b6b','#0d2b52'];
+  return <div className="av" style={{width:size,height:size,fontSize:size*.33,background:bgs[name.charCodeAt(0)%bgs.length]}}>{i}</div>;
 }
+function LBadge({level}){const m={'KS2':'b-ks2','KS3':'b-ks3','GCSE':'b-gcse','A-Level':'b-al'};return <span className={`badge ${m[level]||'b-gray'}`}>{level}</span>;}
+function SBadge({status}){const m={submitted:['b-green','Submitted'],pending:['b-amber','Pending'],overdue:['b-red','Overdue']};const[c,l]=m[status]||['b-gray',status];return <span className={`badge ${c}`}>{l}</span>;}
+function Fg({label,children}){return <div className="fg"><label className="lbl">{label}</label>{children}</div>;}
 
-function Fg({ label, children }) {
-  return <div className="fg"><label className="lbl">{label}</label>{children}</div>;
-}
-
-function Modal({ title, sub, onClose, wide, children }) {
-  return (
-    <div className="modal-bg" onClick={e => e.target.classList.contains('modal-bg') && onClose()}>
-      <div className={`modal-box${wide ? ' modal-wide' : ''}`}>
+function Modal({title,sub,onClose,wide,children}){
+  return(
+    <div className="modal-bg" onClick={e=>e.target.classList.contains('modal-bg')&&onClose()}>
+      <div className={`modal-box${wide?' modal-wide':''}`}>
         <div className="modal-head">
           <div>
-            <div style={{ fontFamily:'Georgia,serif', color:'#fff', fontSize:16, fontWeight:700 }}>{title}</div>
-            {sub && <div style={{ color:'rgba(255,255,255,.5)', fontSize:11, marginTop:2 }}>{sub}</div>}
+            <div style={{fontFamily:'Georgia,serif',color:'#fff',fontSize:16,fontWeight:700}}>{title}</div>
+            {sub&&<div style={{color:'rgba(255,255,255,.5)',fontSize:11,marginTop:2}}>{sub}</div>}
           </div>
           <button className="close-x" onClick={onClose}>✕</button>
         </div>
@@ -280,199 +201,228 @@ function Modal({ title, sub, onClose, wide, children }) {
     </div>
   );
 }
-
-function PH({ title, sub, action }) {
-  return (
+function PH({title,sub,action}){
+  return(
     <div className="ph">
-      <div>
-        <div className="ph-title">{title}</div>
-        {sub && <div className="ph-sub">{sub}</div>}
-      </div>
+      <div><div className="ph-title">{title}</div>{sub&&<div className="ph-sub">{sub}</div>}</div>
       {action}
     </div>
   );
 }
-
-function Sidebar({ nav, pg, setPg, user, onLogout }) {
-  return (
+function Sidebar({nav,pg,setPg,user,onLogout}){
+  return(
     <div className="sidebar">
       <div className="sb-brand">
-        <div style={{ display:'flex', alignItems:'center', gap:9, marginBottom:10 }}>
+        <div style={{display:'flex',alignItems:'center',gap:9,marginBottom:10}}>
           <div className="sb-logo">B</div>
-          <div>
-            <div style={{ color:'#fff', fontSize:11.5, fontWeight:600 }}>Brightmind</div>
-            <div style={{ color:'rgba(255,255,255,.35)', fontSize:10 }}>Solutions Ltd</div>
-          </div>
+          <div><div style={{color:'#fff',fontSize:11.5,fontWeight:600}}>Brightmind</div><div style={{color:'rgba(255,255,255,.35)',fontSize:10}}>Solutions Ltd</div></div>
         </div>
-        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-          <Av name={user.name || '?'} size={26} />
+        <div style={{display:'flex',alignItems:'center',gap:8}}>
+          <Av name={user.name||'?'} size={26}/>
           <div>
-            <div style={{ color:'rgba(255,255,255,.8)', fontSize:11.5, fontWeight:500 }}>{user.name}</div>
-            <div style={{ color:'rgba(255,255,255,.35)', fontSize:10 }}>{user.role === 'admin' ? 'Tutor / Admin' : `${user.level} · ${user.year}`}</div>
+            <div style={{color:'rgba(255,255,255,.8)',fontSize:11.5,fontWeight:500}}>{user.name}</div>
+            <div style={{color:'rgba(255,255,255,.35)',fontSize:10}}>{user.role==='admin'?'Tutor / Admin':`${user.level} · ${user.year}`}</div>
           </div>
         </div>
       </div>
       <nav className="sb-nav">
-        {nav.map(n => (
-          <div key={n.id} className={`sb-item${pg === n.id ? ' active' : ''}`} onClick={() => setPg(n.id)}>
-            <span style={{ fontSize:15 }}>{n.icon}</span>{n.label}
+        {nav.map(n=>(
+          <div key={n.id} className={`sb-item${pg===n.id?' active':''}`} onClick={()=>setPg(n.id)}>
+            <span style={{fontSize:15}}>{n.icon}</span>{n.label}
           </div>
         ))}
       </nav>
       <div className="sb-foot">
-        <div className="sb-item" onClick={onLogout}><span style={{ fontSize:15 }}>🚪</span> Sign Out</div>
+        <div className="sb-item" onClick={onLogout}><span style={{fontSize:15}}>🚪</span>Sign Out</div>
       </div>
     </div>
   );
 }
 
-// ─── LOGIN ───
-function Login({ onLogin }) {
-  const [role, setRole]   = useState('admin');
-  const [em, setEm]       = useState('');
-  const [pw, setPw]       = useState('');
-  const [err, setErr]     = useState('');
-  const [loading, setLd]  = useState(false);
+// ─── Google Drive Link Component ─────────────────────────────────
+function DriveLink({value, onChange}){
+  // value = { url, name } or null
+  const [url,setUrl]   = useState(value?.url||'');
+  const [name,setName] = useState(value?.name||'');
+  const [added,setAdded] = useState(!!value?.url);
 
-  async function go() {
-    setErr(''); setLd(true);
-    try {
-      const cred = await auth.signInWithEmailAndPassword(em.trim(), pw);
-      const doc  = await db.collection('users').doc(cred.user.uid).get();
-      if (!doc.exists) throw new Error('No profile found. Ask your tutor to set up your account.');
-      const data = { id: cred.user.uid, ...doc.data() };
-      if (role === 'admin' && data.role !== 'admin') throw new Error('This account is not an admin account.');
-      if (role === 'student' && data.role !== 'student') throw new Error('Please use the Tutor login.');
+  function add(){
+    if(!url.trim())return;
+    const info={url:url.trim(), name:name.trim()||'Google Drive File'};
+    setAdded(true);
+    onChange(info);
+  }
+  function clear(){setUrl('');setName('');setAdded(false);onChange(null);}
+
+  if(added && value?.url){
+    return(
+      <div className="drive-box set">
+        <span style={{fontSize:24}}>🔗</span>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:600,color:'#166534',fontSize:13}}>{value.name}</div>
+          <div style={{fontSize:11,color:'#6b7280',marginTop:1}}>Google Drive link saved</div>
+        </div>
+        <a href={value.url} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-sm">Preview ↗</a>
+        <button className="btn btn-ghost btn-sm" onClick={clear}>Remove</button>
+      </div>
+    );
+  }
+
+  return(
+    <div className="drive-box">
+      <div className="alert-info" style={{marginBottom:10}}>
+        <strong>How to get a Google Drive link:</strong><br/>
+        1. Upload your file to Google Drive<br/>
+        2. Right-click the file → <strong>Share</strong><br/>
+        3. Under "General access" → change to <strong>"Anyone with the link"</strong><br/>
+        4. Click <strong>Copy link</strong> → paste it below
+      </div>
+      <Fg label="Paste Google Drive link *">
+        <input className="inp" value={url} onChange={e=>setUrl(e.target.value)} placeholder="https://drive.google.com/file/d/..."/>
+      </Fg>
+      <Fg label="File display name (e.g. GCSE Quadratics Notes.pdf)">
+        <input className="inp" value={name} onChange={e=>setName(e.target.value)} placeholder="What should students see as the file name?"/>
+      </Fg>
+      <button className="btn btn-navy btn-sm" onClick={add} disabled={!url.trim()}>Confirm Link ✓</button>
+    </div>
+  );
+}
+
+// File chip shown to students
+function FileChip({file}){
+  if(!file?.url)return null;
+  return(
+    <a href={file.url} target="_blank" rel="noopener noreferrer" className="file-chip">
+      <span>{fileIcon(file.name||'')}</span>
+      <span>{file.name||'Open File'}</span>
+      <span style={{fontSize:11,opacity:.6}}>↗</span>
+    </a>
+  );
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────────
+function Login({onLogin}){
+  const [role,setRole]=useState('admin');
+  const [em,setEm]=useState('');
+  const [pw,setPw]=useState('');
+  const [err,setErr]=useState('');
+  const [ld,setLd]=useState(false);
+
+  async function go(){
+    setErr('');setLd(true);
+    try{
+      const cred=await auth.signInWithEmailAndPassword(em.trim(),pw);
+      const doc=await db.collection('users').doc(cred.user.uid).get();
+      if(!doc.exists)throw new Error('No profile found. Ask your tutor to set up your account.');
+      const data={id:cred.user.uid,...doc.data()};
+      if(role==='admin'&&data.role!=='admin')throw new Error('This account is not an admin account.');
+      if(role==='student'&&data.role!=='student')throw new Error('Please use the Tutor login.');
       onLogin(data);
-    } catch (e) {
-      setErr(e.message.replace('Firebase: ', '').replace(/ \(auth\/.*\)/, ''));
-    }
+    }catch(e){setErr(e.message.replace('Firebase: ','').replace(/ \(auth\/.*\)/,''));}
     setLd(false);
   }
 
-  return (
+  return(
     <div className="login-wrap">
-      <div style={{ width:'100%', maxWidth:400 }}>
-        <div style={{ textAlign:'center', marginBottom:24 }}>
-          <div style={{ width:52, height:52, background:'linear-gradient(135deg,#c8973a,#e3b96a)', borderRadius:13, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Georgia,serif', fontWeight:800, color:'#0b1e3d', fontSize:22, margin:'0 auto 12px' }}>B</div>
-          <div style={{ fontFamily:'Georgia,serif', color:'#fff', fontSize:22, fontWeight:700 }}>Brightmind Solutions</div>
-          <div style={{ color:'rgba(255,255,255,.45)', fontSize:13, marginTop:3 }}>Tuition Management Portal</div>
+      <div style={{width:'100%',maxWidth:400}}>
+        <div style={{textAlign:'center',marginBottom:24}}>
+          <div style={{width:52,height:52,background:'linear-gradient(135deg,#c8973a,#e3b96a)',borderRadius:13,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Georgia,serif',fontWeight:800,color:'#0b1e3d',fontSize:22,margin:'0 auto 12px'}}>B</div>
+          <div style={{fontFamily:'Georgia,serif',color:'#fff',fontSize:22,fontWeight:700}}>Brightmind Solutions</div>
+          <div style={{color:'rgba(255,255,255,.45)',fontSize:13,marginTop:3}}>Tuition Management Portal</div>
         </div>
         <div className="login-box">
           <div className="role-tabs">
-            {['admin','student'].map(r => (
-              <button key={r} className={`role-tab${role===r?' active':''}`} onClick={() => { setRole(r); setErr(''); }}>
-                {r === 'admin' ? '👩‍🏫 Tutor / Admin' : '🎓 Student'}
+            {['admin','student'].map(r=>(
+              <button key={r} className={`role-tab${role===r?' active':''}`} onClick={()=>{setRole(r);setErr('');}}>
+                {r==='admin'?'👩‍🏫 Tutor / Admin':'🎓 Student'}
               </button>
             ))}
           </div>
-          <Fg label="Email Address"><input className="inp" type="email" placeholder="your@email.com" value={em} onChange={e=>setEm(e.target.value)} onKeyDown={e=>e.key==='Enter'&&go()} /></Fg>
-          <Fg label="Password"><input className="inp" type="password" placeholder="••••••••" value={pw} onChange={e=>setPw(e.target.value)} onKeyDown={e=>e.key==='Enter'&&go()} /></Fg>
-          {err && <div className="alert-err">{err}</div>}
-          <button className="btn btn-navy" onClick={go} disabled={loading} style={{ width:'100%', padding:'10px', fontSize:14, opacity:loading?0.7:1 }}>
-            {loading ? 'Signing in…' : 'Sign In →'}
-          </button>
-          <p style={{ fontSize:11, color:'#9ca3af', textAlign:'center', marginTop:12, lineHeight:1.5 }}>
-            Students: use the email & password your tutor gave you
-          </p>
+          <Fg label="Email Address"><input className="inp" type="email" placeholder="your@email.com" value={em} onChange={e=>setEm(e.target.value)} onKeyDown={e=>e.key==='Enter'&&go()}/></Fg>
+          <Fg label="Password"><input className="inp" type="password" placeholder="••••••••" value={pw} onChange={e=>setPw(e.target.value)} onKeyDown={e=>e.key==='Enter'&&go()}/></Fg>
+          {err&&<div className="alert-err">{err}</div>}
+          <button className="btn btn-navy" onClick={go} disabled={ld} style={{width:'100%',padding:'10px',fontSize:14,opacity:ld?.7:1}}>{ld?'Signing in…':'Sign In →'}</button>
+          <p style={{fontSize:11,color:'#9ca3af',textAlign:'center',marginTop:12,lineHeight:1.5}}>Students: use the email & password given by your tutor</p>
         </div>
       </div>
     </div>
   );
 }
 
-// ═════════════════════════════
+// ═══════════════════════════════════════
 // ADMIN PORTAL
-// ═════════════════════════════
+// ═══════════════════════════════════════
+function AdminPortal({user,onLogout}){
+  const [pg,setPg]=useState('dashboard');
+  const [students,setStudents]=useState([]);
+  const [resources,setResources]=useState([]);
+  const [assignments,setAssignments]=useState([]);
+  const [submissions,setSubmissions]=useState([]);
 
-function AdminPortal({ user, onLogout }) {
-  const [pg, setPg] = useState('dashboard');
-  const [students, setStudents]       = useState([]);
-  const [assignments, setAssignments] = useState([]);
-  const [notes, setNotes]             = useState([]);
-  const [submissions, setSubmissions] = useState([]);
+  useEffect(()=>{
+    const u1=db.collection('users').where('role','==','student').onSnapshot(s=>setStudents(s.docs.map(d=>({id:d.id,...d.data()}))));
+    const u2=db.collection('resources').orderBy('created','desc').onSnapshot(s=>setResources(s.docs.map(d=>({id:d.id,...d.data()}))));
+    const u3=db.collection('assignments').orderBy('created','desc').onSnapshot(s=>setAssignments(s.docs.map(d=>({id:d.id,...d.data()}))));
+    const u4=db.collection('submissions').onSnapshot(s=>setSubmissions(s.docs.map(d=>({id:d.id,...d.data()}))));
+    return()=>{u1();u2();u3();u4();};
+  },[]);
 
-  // Real-time listeners
-  useEffect(() => {
-    const u1 = db.collection('users').where('role','==','student').onSnapshot(s => setStudents(s.docs.map(d => ({ id:d.id, ...d.data() }))));
-    const u2 = db.collection('assignments').orderBy('created','desc').onSnapshot(s => setAssignments(s.docs.map(d => ({ id:d.id, ...d.data() }))));
-    const u3 = db.collection('notes').orderBy('created','desc').onSnapshot(s => setNotes(s.docs.map(d => ({ id:d.id, ...d.data() }))));
-    const u4 = db.collection('submissions').onSnapshot(s => setSubmissions(s.docs.map(d => ({ id:d.id, ...d.data() }))));
-    return () => { u1(); u2(); u3(); u4(); };
-  }, []);
-
-  const data = { students, assignments, notes, submissions };
-  const nav = [
-    { id:'dashboard', icon:'📊', label:'Dashboard' },
-    { id:'students',  icon:'👥', label:'Students' },
-    { id:'assign',    icon:'📝', label:'Assignments' },
-    { id:'notes',     icon:'📚', label:'Lesson Notes' },
-    { id:'reports',   icon:'📈', label:'Reports' },
+  const data={students,resources,assignments,submissions};
+  const nav=[
+    {id:'dashboard',icon:'📊',label:'Dashboard'},
+    {id:'students', icon:'👥',label:'Students'},
+    {id:'resources',icon:'📁',label:'Resources'},
+    {id:'assign',   icon:'📝',label:'Assignments'},
+    {id:'reports',  icon:'📈',label:'Reports'},
   ];
-
-  return (
+  return(
     <div className="app-shell">
-      <Sidebar nav={nav} pg={pg} setPg={setPg} user={user} onLogout={onLogout} />
+      <Sidebar nav={nav} pg={pg} setPg={setPg} user={user} onLogout={onLogout}/>
       <div className="main-area">
-        {pg==='dashboard' && <ADash data={data} setPg={setPg} />}
-        {pg==='students'  && <StudentsPage data={data} />}
-        {pg==='assign'    && <AssignPage data={data} />}
-        {pg==='notes'     && <NotesPage data={data} />}
-        {pg==='reports'   && <ReportsPage data={data} />}
+        {pg==='dashboard'&&<ADash data={data} setPg={setPg}/>}
+        {pg==='students' &&<StudentsPage data={data}/>}
+        {pg==='resources'&&<ResourcesPage data={data}/>}
+        {pg==='assign'   &&<AssignPage data={data}/>}
+        {pg==='reports'  &&<ReportsPage data={data}/>}
       </div>
     </div>
   );
 }
 
-// Admin Dashboard
-function ADash({ data, setPg }) {
-  const { students, assignments, notes, submissions } = data;
-  const pending = assignments.filter(a =>
-    (a.assignedTo || []).some(sid => !submissions.find(s => s.studentId===sid && s.assignmentId===a.id && s.status==='submitted'))
-  ).length;
-  return (
+// Dashboard
+function ADash({data,setPg}){
+  const{students,resources,assignments,submissions}=data;
+  const pending=assignments.filter(a=>(a.assignedTo||[]).some(sid=>!submissions.find(s=>s.studentId===sid&&s.assignmentId===a.id&&s.status==='submitted'))).length;
+  return(
     <div>
-      <PH title="Dashboard" sub="Brightmind Solutions Ltd" />
+      <PH title="Dashboard" sub="Brightmind Solutions Ltd"/>
       <div className="content">
         <div className="stat-grid">
           <div className="stat-card"><div className="stat-lbl">Students</div><div className="stat-val" style={{color:'#0b1e3d'}}>{students.length}</div><div style={{fontSize:11,color:'#d1d5db',marginTop:3}}>enrolled</div></div>
+          <div className="stat-card"><div className="stat-lbl">Resources</div><div className="stat-val" style={{color:'#7c3aed'}}>{resources.length}</div><div style={{fontSize:11,color:'#d1d5db',marginTop:3}}>uploaded</div></div>
           <div className="stat-card"><div className="stat-lbl">Assignments</div><div className="stat-val" style={{color:'#c8973a'}}>{assignments.length}</div><div style={{fontSize:11,color:'#d1d5db',marginTop:3}}>total</div></div>
-          <div className="stat-card"><div className="stat-lbl">Pending Work</div><div className="stat-val" style={{color:'#dc2626'}}>{pending}</div><div style={{fontSize:11,color:'#d1d5db',marginTop:3}}>awaiting</div></div>
-          <div className="stat-card"><div className="stat-lbl">Notes</div><div className="stat-val" style={{color:'#059669'}}>{notes.length}</div><div style={{fontSize:11,color:'#d1d5db',marginTop:3}}>published</div></div>
+          <div className="stat-card"><div className="stat-lbl">Pending</div><div className="stat-val" style={{color:pending?'#dc2626':'#059669'}}>{pending}</div><div style={{fontSize:11,color:'#d1d5db',marginTop:3}}>awaiting</div></div>
         </div>
         <div className="two-col">
           <div className="card">
-            <div className="card-head">Recent Students <button className="btn btn-ghost btn-sm" onClick={()=>setPg('students')}>View All</button></div>
-            {students.length === 0 ? <div style={{padding:'1.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No students enrolled yet</div> :
-              students.slice(0,5).map(s => (
+            <div className="card-head">Students <button className="btn btn-ghost btn-sm" onClick={()=>setPg('students')}>View All</button></div>
+            {students.length===0?<div style={{padding:'1.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No students enrolled yet</div>:
+              students.slice(0,5).map(s=>(
                 <div key={s.id} className="row-item">
-                  <Av name={s.name} size={30}/>
-                  <div style={{flex:1}}><div style={{fontWeight:600,color:'#111',fontSize:13}}>{s.name}</div><div style={{fontSize:11,color:'#9ca3af'}}>{s.email}</div></div>
-                  <LBadge level={s.level}/>
+                  <Av name={s.name} size={30}/><div style={{flex:1}}><div style={{fontWeight:600,color:'#111',fontSize:13}}>{s.name}</div><div style={{fontSize:11,color:'#9ca3af'}}>{s.year}</div></div><LBadge level={s.level}/>
                 </div>
               ))
             }
           </div>
           <div className="card">
-            <div className="card-head">Assignments <button className="btn btn-ghost btn-sm" onClick={()=>setPg('assign')}>View All</button></div>
-            {assignments.length === 0 ? <div style={{padding:'1.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No assignments yet</div> :
-              assignments.slice(0,5).map(a => {
-                const done = submissions.filter(s => s.assignmentId===a.id && s.status==='submitted').length;
-                const total = (a.assignedTo||[]).length;
-                const pct = total > 0 ? Math.round(done/total*100) : 0;
-                return (
-                  <div key={a.id} className="row-item" style={{flexDirection:'column',alignItems:'flex-start',gap:5}}>
-                    <div style={{display:'flex',gap:6,alignItems:'center',width:'100%'}}>
-                      <span style={{fontWeight:600,color:'#111',fontSize:12.5,flex:1}}>{a.title}</span>
-                      <LBadge level={a.level}/>
-                    </div>
-                    <div style={{display:'flex',alignItems:'center',gap:8,width:'100%'}}>
-                      <div className="prog-bar" style={{flex:1}}><div className="prog-fill" style={{width:pct+'%',background:pct===100?'#059669':'#c8973a'}}/></div>
-                      <span style={{fontSize:10.5,color:'#9ca3af',whiteSpace:'nowrap'}}>{done}/{total}</span>
-                    </div>
-                  </div>
-                );
-              })
+            <div className="card-head">Recent Resources <button className="btn btn-ghost btn-sm" onClick={()=>setPg('resources')}>View All</button></div>
+            {resources.length===0?<div style={{padding:'1.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No resources yet</div>:
+              resources.slice(0,5).map(r=>(
+                <div key={r.id} className="row-item">
+                  <div className="res-icon" style={{width:30,height:30,fontSize:16,background:'#f3f4f6'}}>{fileIcon(r.file?.name||'')}</div>
+                  <div style={{flex:1}}><div style={{fontWeight:600,color:'#111',fontSize:12.5}}>{r.title}</div><div style={{fontSize:11,color:'#9ca3af'}}>{r.level} · {r.type}</div></div>
+                </div>
+              ))
             }
           </div>
         </div>
@@ -481,96 +431,82 @@ function ADash({ data, setPg }) {
   );
 }
 
-// Students Page
-function StudentsPage({ data }) {
-  const { students } = data;
-  const [modal, setModal] = useState(null);
-  const [search, setSearch] = useState('');
-  const [fl, setFl] = useState('All');
-  const [saving, setSaving] = useState(false);
-  const [err, setErr] = useState('');
-  const [form, setForm] = useState({ name:'', email:'', password:'', level:'GCSE', year:'Year 11', parent:'', phone:'' });
-  const [editId, setEditId] = useState(null);
+// ─── STUDENTS ─────────────────────────────────────────────────────
+function StudentsPage({data}){
+  const{students}=data;
+  const [modal,setModal]=useState(null);
+  const [search,setSearch]=useState('');
+  const [fl,setFl]=useState('All');
+  const [saving,setSaving]=useState(false);
+  const [err,setErr]=useState('');
+  const [form,setForm]=useState({name:'',email:'',password:'',level:'GCSE',year:'Year 11',parent:'',phone:''});
+  const [editId,setEditId]=useState(null);
+  const yrs={
+    'KS2':   ['Year 3','Year 4','Year 5','Year 6'],
+    'KS3':   ['Year 7','Year 8','Year 9'],
+    'GCSE':  ['Year 10','Year 11'],
+    'A-Level':['Year 12','Year 13'],
+  };
+  const currentYears = yrs[form.level] || [];
+  const filtered=students.filter(s=>(fl==='All'||s.level===fl)&&(s.name+s.email).toLowerCase().includes(search.toLowerCase()));
 
-  const yrs = { 'KS2':['Year 3','Year 4','Year 5','Year 6'], 'KS3':['Year 7','Year 8','Year 9'], 'GCSE':['Year 10','Year 11'], 'A-Level':['Year 12','Year 13'] };
-  const filtered = students.filter(s => (fl==='All'||s.level===fl) && (s.name+s.email).toLowerCase().includes(search.toLowerCase()));
+  function openAdd(){setForm({name:'',email:'',password:'Brightmind2025',level:'KS2',year:'Year 3',parent:'',phone:''});setEditId(null);setErr('');setModal('form');}
+  function openEdit(s){setForm({...s,password:''});setEditId(s.id);setErr('');setModal('form');}
 
-  function openAdd() { setForm({ name:'', email:'', password:'student123', level:'GCSE', year:'Year 11', parent:'', phone:'' }); setEditId(null); setErr(''); setModal('form'); }
-  function openEdit(s) { setForm({ ...s, password:'' }); setEditId(s.id); setErr(''); setModal('form'); }
-
-  async function saveStudent() {
-    if (!form.name || !form.email) return setErr('Name and email are required.');
-    setSaving(true); setErr('');
-    try {
-      if (editId) {
-        await db.collection('users').doc(editId).update({ name:form.name, level:form.level, year:form.year, parent:form.parent, phone:form.phone });
-      } else {
-        if (!form.password) return setErr('Password is required for new students.');
-        const cred = await secondaryAuth.createUserWithEmailAndPassword(form.email.trim(), form.password);
-        await db.collection('users').doc(cred.user.uid).set({ name:form.name, email:form.email.trim(), level:form.level, year:form.year, parent:form.parent, phone:form.phone, role:'student', enrolled:today() });
+  async function saveStudent(){
+    if(!form.name||!form.email)return setErr('Name and email are required.');
+    setSaving(true);setErr('');
+    try{
+      if(editId){
+        await db.collection('users').doc(editId).update({name:form.name,level:form.level,year:form.year,parent:form.parent,phone:form.phone});
+      }else{
+        if(!form.password)return setErr('Password required for new students.');
+        const cred=await secondaryAuth.createUserWithEmailAndPassword(form.email.trim(),form.password);
+        await db.collection('users').doc(cred.user.uid).set({name:form.name,email:form.email.trim(),level:form.level,year:form.year,parent:form.parent,phone:form.phone,role:'student',enrolled:tod()});
         await secondaryAuth.signOut();
       }
       setModal(null);
-    } catch (e) {
-      setErr(e.message.replace('Firebase: ','').replace(/ \(auth\/.*\)/,''));
-    }
+    }catch(e){setErr(e.message.replace('Firebase: ','').replace(/ \(auth\/.*\)/,''));}
     setSaving(false);
   }
 
-  async function disableStudent(id) {
-    if (!window.confirm('Remove this student from the portal?')) return;
-    await db.collection('users').doc(id).delete();
-  }
-
-  return (
+  return(
     <div>
-      <PH title="Students" sub={`${students.length} enrolled`} action={<button className="btn btn-gold" onClick={openAdd}>+ Enrol Student</button>} />
+      <PH title="Students" sub={`${students.length} enrolled`} action={<button className="btn btn-gold" onClick={openAdd}>+ Enrol Student</button>}/>
       <div className="content">
-        <div style={{ display:'flex', gap:10, marginBottom:14, flexWrap:'wrap', alignItems:'center' }}>
-          <input className="inp" placeholder="Search name or email…" value={search} onChange={e=>setSearch(e.target.value)} style={{ width:200 }} />
-          <div className="filter-bar" style={{margin:0}}>
-            {['All','KS2','KS3','GCSE','A-Level'].map(l => <button key={l} className={`fb${fl===l?' active':''}`} onClick={()=>setFl(l)}>{l}</button>)}
-          </div>
+        <div style={{display:'flex',gap:10,marginBottom:14,flexWrap:'wrap',alignItems:'center'}}>
+          <input className="inp" placeholder="Search name or email…" value={search} onChange={e=>setSearch(e.target.value)} style={{width:220}}/>
+          <div className="filter-bar" style={{margin:0}}>{['All','KS2','KS3','GCSE','A-Level'].map(l=><button key={l} className={`fb${fl===l?' active':''}`} onClick={()=>setFl(l)}>{l}</button>)}</div>
         </div>
         <div className="card">
           <table>
-            <thead><tr>{['Student','Level','Year Group','Parent / Guardian','Enrolled','Actions'].map(h=><th key={h}>{h}</th>)}</tr></thead>
+            <thead><tr>{['Student','Level','Year','Parent / Guardian','Enrolled','Actions'].map(h=><th key={h}>{h}</th>)}</tr></thead>
             <tbody>
-              {filtered.map(s => (
+              {filtered.map(s=>(
                 <tr key={s.id}>
                   <td><div style={{display:'flex',alignItems:'center',gap:9}}><Av name={s.name} size={30}/><div><div style={{fontWeight:600}}>{s.name}</div><div style={{fontSize:11,color:'#9ca3af'}}>{s.email}</div></div></div></td>
-                  <td><LBadge level={s.level}/></td>
-                  <td>{s.year}</td>
-                  <td>{s.parent || '—'}</td>
+                  <td><LBadge level={s.level}/></td><td>{s.year}</td><td>{s.parent||'—'}</td>
                   <td style={{color:'#9ca3af'}}>{fmtS(s.enrolled)}</td>
-                  <td><div style={{display:'flex',gap:5}}><button className="btn btn-ghost btn-sm" onClick={()=>openEdit(s)}>Edit</button><button className="btn btn-danger btn-sm" onClick={()=>disableStudent(s.id)}>Remove</button></div></td>
+                  <td><div style={{display:'flex',gap:5}}><button className="btn btn-ghost btn-sm" onClick={()=>openEdit(s)}>Edit</button><button className="btn btn-danger btn-sm" onClick={async()=>{if(window.confirm('Remove this student?'))await db.collection('users').doc(s.id).delete();}}>Remove</button></div></td>
                 </tr>
               ))}
-              {filtered.length===0 && <tr><td colSpan={6} style={{textAlign:'center',color:'#9ca3af',padding:'2rem'}}>No students found</td></tr>}
+              {filtered.length===0&&<tr><td colSpan={6} style={{textAlign:'center',color:'#9ca3af',padding:'2rem'}}>No students found</td></tr>}
             </tbody>
           </table>
         </div>
       </div>
-      {modal==='form' && (
-        <Modal title={editId ? 'Edit Student' : 'Enrol New Student'} sub="Brightmind Solutions Ltd" onClose={()=>setModal(null)}>
+      {modal==='form'&&(
+        <Modal title={editId?'Edit Student':'Enrol New Student'} sub="Brightmind Solutions Ltd" onClose={()=>setModal(null)}>
           <div className="form-2">
-            <Fg label="Full Name *"><input className="inp" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Student's full name" /></Fg>
-            <Fg label="Email Address *"><input className="inp" type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="student@email.com" disabled={!!editId} /></Fg>
-            {!editId && <Fg label="Password *"><input className="inp" value={form.password} onChange={e=>setForm({...form,password:e.target.value})} placeholder="e.g. Brightmind2025" /></Fg>}
-            <Fg label="Level *">
-              <select className="inp" value={form.level} onChange={e=>setForm({...form,level:e.target.value,year:yrs[e.target.value][0]})}>
-                {['KS2','KS3','GCSE','A-Level'].map(l=><option key={l}>{l}</option>)}
-              </select>
-            </Fg>
-            <Fg label="Year Group">
-              <select className="inp" value={form.year} onChange={e=>setForm({...form,year:e.target.value})}>
-                {(yrs[form.level]||[]).map(y=><option key={y}>{y}</option>)}
-              </select>
-            </Fg>
-            <Fg label="Parent / Guardian"><input className="inp" value={form.parent} onChange={e=>setForm({...form,parent:e.target.value})} placeholder="Parent name" /></Fg>
-            <Fg label="Phone"><input className="inp" value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="07xxx xxxxxx" /></Fg>
+            <Fg label="Full Name *"><input className="inp" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Student's full name"/></Fg>
+            <Fg label="Email *"><input className="inp" type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="student@email.com" disabled={!!editId}/></Fg>
+            {!editId&&<Fg label="Password *"><input className="inp" value={form.password} onChange={e=>setForm({...form,password:e.target.value})} placeholder="e.g. Brightmind2025"/></Fg>}
+            <Fg label="Level *"><select className="inp" value={form.level} onChange={e=>{const l=e.target.value;setForm({...form,level:l,year:(yrs[l]||[])[0]||''});}}>{['KS2','KS3','GCSE','A-Level'].map(l=><option key={l} value={l}>{l}</option>)}</select></Fg>
+            <Fg label="Year Group"><select className="inp" value={form.year} onChange={e=>setForm({...form,year:e.target.value})}>{currentYears.map(y=><option key={y} value={y}>{y}</option>)}</select></Fg>
+            <Fg label="Parent / Guardian"><input className="inp" value={form.parent} onChange={e=>setForm({...form,parent:e.target.value})} placeholder="Parent name"/></Fg>
+            <Fg label="Phone"><input className="inp" value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="07xxx xxxxxx"/></Fg>
           </div>
-          {err && <div className="alert-err">{err}</div>}
+          {err&&<div className="alert-err">{err}</div>}
           <div style={{display:'flex',gap:8,justifyContent:'flex-end'}}>
             <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
             <button className="btn btn-gold" onClick={saveStudent} disabled={saving}>{saving?'Saving…':editId?'Save Changes':'Enrol Student'}</button>
@@ -581,112 +517,245 @@ function StudentsPage({ data }) {
   );
 }
 
-// Assignments Page
-function AssignPage({ data }) {
-  const { students, assignments, submissions } = data;
-  const [modal, setModal] = useState(null);
-  const [selA, setSelA]   = useState(null);
-  const [fl, setFl]       = useState('All');
-  const [saving, setSaving] = useState(false);
-  const [form, setForm]   = useState({ title:'', level:'GCSE', topic:'', due:'', desc:'', questions:['','',''], assignedTo:[] });
+// ─── RESOURCES PAGE ───────────────────────────────────────────────
+function ResourcesPage({data}){
+  const{resources,students}=data;
+  const [modal,setModal]=useState(null);
+  const [selR,setSelR]=useState(null);
+  const [fl,setFl]=useState('All');
+  const [typeF,setTypeF]=useState('All');
+  const [saving,setSaving]=useState(false);
+  const [form,setForm]=useState({title:'',level:'GCSE',type:'Lesson Note',topic:'',desc:'',file:null});
+  const [assignForm,setAssignForm]=useState({assignedTo:[],dueDate:'',note:''});
 
-  const filtered    = assignments.filter(a => fl==='All' || a.level===fl);
-  const lvStudents  = students.filter(s => s.level===form.level);
-  const tod = today();
+  const filtered=resources.filter(r=>(fl==='All'||r.level===fl)&&(typeF==='All'||r.type===typeF));
 
-  function toggleSel(id) {
-    setForm(f => ({ ...f, assignedTo: f.assignedTo.includes(id) ? f.assignedTo.filter(x=>x!==id) : [...f.assignedTo,id] }));
-  }
-  function updateQ(i, v) { const q=[...form.questions]; q[i]=v; setForm({...form,questions:q}); }
-
-  async function saveA() {
-    if (!form.title || !form.due) return;
+  async function saveResource(){
+    if(!form.title)return alert('Please enter a title.');
     setSaving(true);
-    const qs = form.questions.filter(q => q.trim());
-    await db.collection('assignments').add({ ...form, questions:qs, created:tod });
-    setModal(null);
-    setForm({ title:'', level:'GCSE', topic:'', due:'', desc:'', questions:['','',''], assignedTo:[] });
+    await db.collection('resources').add({...form,created:tod()});
+    setModal(null);setForm({title:'',level:'GCSE',type:'Lesson Note',topic:'',desc:'',file:null});
     setSaving(false);
   }
 
-  async function deleteA(id) {
-    if (!window.confirm('Delete this assignment?')) return;
-    await db.collection('assignments').doc(id).delete();
+  async function doAssign(){
+    if(!assignForm.assignedTo.length)return alert('Please select at least one student.');
+    setSaving(true);
+    await db.collection('assignments').add({
+      title:selR.title,level:selR.level,topic:selR.topic||'',type:selR.type,
+      desc:selR.desc||'',due:assignForm.dueDate||'',note:assignForm.note,
+      assignedTo:assignForm.assignedTo,resourceId:selR.id,file:selR.file||null,
+      questions:[],created:tod()
+    });
+    setSaving(false);setModal(null);
+    alert(`✅ "${selR.title}" assigned to ${assignForm.assignedTo.length} student${assignForm.assignedTo.length!==1?'s':''}!`);
   }
 
-  function getInfo(a) {
-    const done = submissions.filter(s => s.assignmentId===a.id && s.status==='submitted').length;
-    const total = (a.assignedTo||[]).length;
-    return { done, total, pct: total>0 ? Math.round(done/total*100) : 0 };
-  }
+  function toggleSel(id){setAssignForm(f=>({...f,assignedTo:f.assignedTo.includes(id)?f.assignedTo.filter(x=>x!==id):[...f.assignedTo,id]}));}
 
-  return (
+  return(
     <div>
-      <PH title="Assignments" sub={`${assignments.length} total`} action={<button className="btn btn-gold" onClick={()=>setModal('form')}>+ Create Assignment</button>} />
+      <PH title="Resources" sub="Add Google Drive links for notes & worksheets — then assign to students"
+        action={<button className="btn btn-gold" onClick={()=>setModal('upload')}>+ Add Resource</button>}/>
       <div className="content">
-        <div className="filter-bar">
-          {['All','KS2','KS3','GCSE','A-Level'].map(l=><button key={l} className={`fb${fl===l?' active':''}`} onClick={()=>setFl(l)}>{l}</button>)}
+        <div style={{display:'flex',gap:8,marginBottom:14,flexWrap:'wrap'}}>
+          <div className="filter-bar" style={{margin:0}}>{['All','KS2','KS3','GCSE','A-Level'].map(l=><button key={l} className={`fb${fl===l?' active':''}`} onClick={()=>setFl(l)}>{l}</button>)}</div>
+          <div className="filter-bar" style={{margin:0}}>{['All','Lesson Note','Worksheet','Past Paper','Other'].map(t=><button key={t} className={`fb${typeF===t?' active':''}`} onClick={()=>setTypeF(t)}>{t}</button>)}</div>
         </div>
-        {filtered.map(a => {
-          const { done, total, pct } = getInfo(a);
-          return (
-            <div key={a.id} className="a-card">
-              <div style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
-                <div style={{ flex:1 }}>
-                  <div style={{ display:'flex', gap:7, alignItems:'center', marginBottom:5, flexWrap:'wrap' }}>
-                    <span style={{ fontWeight:700, color:'#0b1e3d', fontSize:13 }}>{a.title}</span>
-                    <LBadge level={a.level}/>
-                    {a.due < tod && <span className="badge b-red">Overdue</span>}
+
+        {filtered.length===0?(
+          <div style={{background:'#fff',borderRadius:11,border:'1px dashed #e5e7eb',padding:'3rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>
+            <div style={{fontSize:40,marginBottom:10}}>📁</div>
+            <div style={{fontWeight:600,color:'#374151',marginBottom:6}}>No resources yet</div>
+            Click "+ Add Resource" to link your Google Drive files.<br/>
+            Once added, click <strong>Assign</strong> to send them to students.
+          </div>
+        ):filtered.map(r=>(
+          <div key={r.id} className="res-card">
+            <div className="res-icon" style={{background:'#f3f4f6'}}>{fileIcon(r.file?.name||'')}</div>
+            <div style={{flex:1}}>
+              <div style={{display:'flex',alignItems:'center',gap:7,marginBottom:4,flexWrap:'wrap'}}>
+                <span style={{fontWeight:700,color:'#0b1e3d',fontSize:13}}>{r.title}</span>
+                <LBadge level={r.level}/>
+                <span className="badge b-blue">{r.type}</span>
+                {r.topic&&<span className="badge b-gray">{r.topic}</span>}
+              </div>
+              {r.desc&&<div style={{fontSize:12,color:'#6b7280',marginBottom:5}}>{r.desc}</div>}
+              <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
+                {r.file?.url&&<FileChip file={r.file}/>}
+                <span style={{fontSize:11,color:'#d1d5db'}}>Added {fmtS(r.created)}</span>
+              </div>
+            </div>
+            <div style={{display:'flex',gap:6,flexShrink:0}}>
+              <button className="btn btn-gold btn-sm" onClick={()=>{setSelR(r);setAssignForm({assignedTo:[],dueDate:'',note:''});setModal('assign');}}>📤 Assign</button>
+              <button className="btn btn-danger btn-sm" onClick={async()=>{if(window.confirm('Delete this resource?'))await db.collection('resources').doc(r.id).delete();}}>Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Add Resource Modal */}
+      {modal==='upload'&&(
+        <Modal title="Add Resource" sub="Link a Google Drive file" onClose={()=>setModal(null)} wide>
+          <Fg label="Title *"><input className="inp" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="e.g. GCSE Quadratics – Lesson Notes"/></Fg>
+          <div className="form-2">
+            <Fg label="Level *"><select className="inp" value={form.level} onChange={e=>setForm({...form,level:e.target.value})}>{['KS2','KS3','GCSE','A-Level'].map(l=><option key={l}>{l}</option>)}</select></Fg>
+            <Fg label="Type *"><select className="inp" value={form.type} onChange={e=>setForm({...form,type:e.target.value})}>{['Lesson Note','Worksheet','Past Paper','Other'].map(t=><option key={t}>{t}</option>)}</select></Fg>
+            <Fg label="Topic"><input className="inp" value={form.topic} onChange={e=>setForm({...form,topic:e.target.value})} placeholder="e.g. Algebra"/></Fg>
+            <Fg label="Description"><input className="inp" value={form.desc} onChange={e=>setForm({...form,desc:e.target.value})} placeholder="Brief description (optional)"/></Fg>
+          </div>
+          <label className="lbl">Google Drive Link</label>
+          <DriveLink value={form.file} onChange={f=>setForm({...form,file:f})}/>
+          <div style={{display:'flex',gap:8,justifyContent:'flex-end',marginTop:16}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
+            <button className="btn btn-gold" onClick={saveResource} disabled={saving}>{saving?'Saving…':'Save Resource'}</button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Assign Modal */}
+      {modal==='assign'&&selR&&(
+        <Modal title={`Assign: ${selR.title}`} sub={`${selR.level} · ${selR.type}`} onClose={()=>setModal(null)} wide>
+          <div style={{display:'flex',gap:7,marginBottom:14,flexWrap:'wrap',alignItems:'center'}}>
+            <LBadge level={selR.level}/><span className="badge b-blue">{selR.type}</span>
+            {selR.file?.url&&<FileChip file={selR.file}/>}
+          </div>
+          <div className="form-2">
+            <Fg label="Due Date (optional)"><input className="inp" type="date" value={assignForm.dueDate} onChange={e=>setAssignForm({...assignForm,dueDate:e.target.value})}/></Fg>
+            <Fg label="Note to Students (optional)"><input className="inp" value={assignForm.note} onChange={e=>setAssignForm({...assignForm,note:e.target.value})} placeholder="e.g. Complete Section A only"/></Fg>
+          </div>
+          <div style={{marginBottom:14}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}}>
+              <label className="lbl" style={{margin:0}}>Select Students</label>
+              <div style={{display:'flex',gap:6}}>
+                <button className="btn btn-ghost btn-sm" onClick={()=>setAssignForm({...assignForm,assignedTo:students.filter(s=>s.level===selR.level).map(s=>s.id)})}>All {selR.level}</button>
+                <button className="btn btn-ghost btn-sm" onClick={()=>setAssignForm({...assignForm,assignedTo:students.map(s=>s.id)})}>All Students</button>
+                <button className="btn btn-ghost btn-sm" onClick={()=>setAssignForm({...assignForm,assignedTo:[]})}>Clear</button>
+              </div>
+            </div>
+            {students.length===0?(
+              <div style={{fontSize:12,color:'#9ca3af',fontStyle:'italic'}}>No students enrolled yet.</div>
+            ):(
+              <div style={{display:'flex',flexWrap:'wrap',maxHeight:200,overflowY:'auto'}}>
+                {students.map(s=>(
+                  <div key={s.id} className={`sel-tag${assignForm.assignedTo.includes(s.id)?' on':''}`} onClick={()=>toggleSel(s.id)}>
+                    <Av name={s.name} size={20}/>{s.name}&nbsp;<LBadge level={s.level}/>
                   </div>
-                  <div style={{ fontSize:11.5, color:'#9ca3af', marginBottom:8 }}>{a.topic} · Due {fmtS(a.due)} · {(a.questions||[]).length} questions · {total} student{total!==1?'s':''}</div>
-                  <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                ))}
+              </div>
+            )}
+          </div>
+          <div style={{background:assignForm.assignedTo.length?'#f0fdf4':'#f9fafb',border:`1px solid ${assignForm.assignedTo.length?'#86efac':'#e5e7eb'}`,borderRadius:8,padding:'10px 12px',fontSize:12,color:assignForm.assignedTo.length?'#166534':'#9ca3af',marginBottom:14,textAlign:'center',fontWeight:500}}>
+            {assignForm.assignedTo.length?`✓ ${assignForm.assignedTo.length} student${assignForm.assignedTo.length!==1?'s':''} selected`:'Select students above'}
+          </div>
+          <div style={{display:'flex',gap:8,justifyContent:'flex-end'}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
+            <button className="btn btn-gold" onClick={doAssign} disabled={saving||!assignForm.assignedTo.length}>{saving?'Assigning…':`Assign to ${assignForm.assignedTo.length} Student${assignForm.assignedTo.length!==1?'s':''} →`}</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+// ─── ASSIGNMENTS PAGE ─────────────────────────────────────────────
+function AssignPage({data}){
+  const{students,assignments,submissions}=data;
+  const [modal,setModal]=useState(null);
+  const [selA,setSelA]=useState(null);
+  const [fl,setFl]=useState('All');
+  const [saving,setSaving]=useState(false);
+  const [form,setForm]=useState({title:'',level:'GCSE',topic:'',due:'',desc:'',questions:['','',''],assignedTo:[],file:null});
+  const filtered=assignments.filter(a=>fl==='All'||a.level===fl);
+  const lvStudents=students.filter(s=>s.level===form.level);
+
+  function toggleSel(id){setForm(f=>({...f,assignedTo:f.assignedTo.includes(id)?f.assignedTo.filter(x=>x!==id):[...f.assignedTo,id]}));}
+  function updateQ(i,v){const q=[...form.questions];q[i]=v;setForm({...form,questions:q});}
+
+  async function saveA(){
+    if(!form.title)return alert('Please add a title.');
+    setSaving(true);
+    await db.collection('assignments').add({...form,questions:form.questions.filter(q=>q.trim()),created:tod()});
+    setModal(null);setForm({title:'',level:'GCSE',topic:'',due:'',desc:'',questions:['','',''],assignedTo:[],file:null});
+    setSaving(false);
+  }
+
+  function getInfo(a){
+    const done=submissions.filter(s=>s.assignmentId===a.id&&s.status==='submitted').length;
+    const total=(a.assignedTo||[]).length;
+    return{done,total,pct:total>0?Math.round(done/total*100):0};
+  }
+
+  return(
+    <div>
+      <PH title="Assignments" sub="Create manual assignments or assign resources from the Resources page"
+        action={<button className="btn btn-gold" onClick={()=>setModal('form')}>+ Create Assignment</button>}/>
+      <div className="content">
+        <div className="filter-bar">{['All','KS2','KS3','GCSE','A-Level'].map(l=><button key={l} className={`fb${fl===l?' active':''}`} onClick={()=>setFl(l)}>{l}</button>)}</div>
+        {filtered.map(a=>{
+          const{done,total,pct}=getInfo(a);
+          return(
+            <div key={a.id} className="a-card">
+              <div style={{display:'flex',alignItems:'flex-start',gap:12}}>
+                <div style={{flex:1}}>
+                  <div style={{display:'flex',gap:7,alignItems:'center',marginBottom:5,flexWrap:'wrap'}}>
+                    <span style={{fontWeight:700,color:'#0b1e3d',fontSize:13}}>{a.title}</span>
+                    <LBadge level={a.level}/>
+                    {a.type&&<span className="badge b-blue">{a.type}</span>}
+                    {a.due&&a.due<tod()&&<span className="badge b-red">Overdue</span>}
+                  </div>
+                  <div style={{fontSize:11.5,color:'#9ca3af',marginBottom:6}}>
+                    {a.topic}{a.due?' · Due '+fmtS(a.due):''} · {total} student{total!==1?'s':''}
+                  </div>
+                  {a.file?.url&&<div style={{marginBottom:6}}><FileChip file={a.file}/></div>}
+                  <div style={{display:'flex',alignItems:'center',gap:8}}>
                     <div className="prog-bar" style={{flex:1}}><div className="prog-fill" style={{width:pct+'%',background:pct===100?'#059669':'#c8973a'}}/></div>
-                    <span style={{ fontSize:11, color:'#9ca3af', whiteSpace:'nowrap' }}>{done}/{total} submitted</span>
+                    <span style={{fontSize:11,color:'#9ca3af',whiteSpace:'nowrap'}}>{done}/{total} submitted</span>
                   </div>
                 </div>
-                <div style={{ display:'flex', gap:6 }}>
+                <div style={{display:'flex',gap:6}}>
                   <button className="btn btn-ghost btn-sm" onClick={()=>{setSelA(a);setModal('view');}}>View</button>
-                  <button className="btn btn-danger btn-sm" onClick={()=>deleteA(a.id)}>Delete</button>
+                  <button className="btn btn-danger btn-sm" onClick={async()=>{if(window.confirm('Delete this assignment?'))await db.collection('assignments').doc(a.id).delete();}}>Delete</button>
                 </div>
               </div>
             </div>
           );
         })}
-        {filtered.length===0 && <div className="card" style={{padding:'2.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No assignments yet. Click "+ Create Assignment" to begin.</div>}
+        {filtered.length===0&&<div className="card" style={{padding:'2.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No assignments yet. Add files in Resources then click Assign, or create a manual assignment here.</div>}
       </div>
 
-      {modal==='form' && (
+      {modal==='form'&&(
         <Modal title="Create Assignment" sub="Brightmind Solutions Ltd" onClose={()=>setModal(null)} wide>
-          <Fg label="Title *"><input className="inp" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="e.g. Quadratic Equations – Set 1" /></Fg>
+          <Fg label="Title *"><input className="inp" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="e.g. Quadratic Equations – Set 1"/></Fg>
           <div className="form-2">
-            <Fg label="Level *">
-              <select className="inp" value={form.level} onChange={e=>setForm({...form,level:e.target.value,assignedTo:[]})}>
-                {['KS2','KS3','GCSE','A-Level'].map(l=><option key={l}>{l}</option>)}
-              </select>
-            </Fg>
-            <Fg label="Topic"><input className="inp" value={form.topic} onChange={e=>setForm({...form,topic:e.target.value})} placeholder="e.g. Algebra" /></Fg>
-            <Fg label="Due Date *"><input className="inp" type="date" value={form.due} onChange={e=>setForm({...form,due:e.target.value})} /></Fg>
-            <Fg label="Description"><input className="inp" value={form.desc} onChange={e=>setForm({...form,desc:e.target.value})} placeholder="Brief description" /></Fg>
+            <Fg label="Level *"><select className="inp" value={form.level} onChange={e=>setForm({...form,level:e.target.value,assignedTo:[]})}>{['KS2','KS3','GCSE','A-Level'].map(l=><option key={l}>{l}</option>)}</select></Fg>
+            <Fg label="Topic"><input className="inp" value={form.topic} onChange={e=>setForm({...form,topic:e.target.value})} placeholder="e.g. Algebra"/></Fg>
+            <Fg label="Due Date"><input className="inp" type="date" value={form.due} onChange={e=>setForm({...form,due:e.target.value})}/></Fg>
+            <Fg label="Description"><input className="inp" value={form.desc} onChange={e=>setForm({...form,desc:e.target.value})} placeholder="Brief description"/></Fg>
           </div>
-          <div style={{ marginBottom:14 }}>
-            <label className="lbl">Questions</label>
-            {form.questions.map((q,i) => (
-              <div key={i} style={{ display:'flex', gap:7, marginBottom:7, alignItems:'center' }}>
+          <div style={{marginBottom:14}}>
+            <label className="lbl">Attach Google Drive File (optional)</label>
+            <DriveLink value={form.file} onChange={f=>setForm({...form,file:f})}/>
+          </div>
+          <div style={{marginBottom:14}}>
+            <label className="lbl">Questions (optional — use if no file attached)</label>
+            {form.questions.map((q,i)=>(
+              <div key={i} style={{display:'flex',gap:7,marginBottom:7,alignItems:'center'}}>
                 <div className="q-num">{i+1}</div>
-                <input className="inp" value={q} onChange={e=>updateQ(i,e.target.value)} placeholder={`Question ${i+1}`} />
-                {form.questions.length>1 && <button onClick={()=>setForm({...form,questions:form.questions.filter((_,j)=>j!==i)})} style={{ background:'#fee2e2',color:'#991b1b',border:'none',borderRadius:6,padding:'5px 9px',cursor:'pointer',fontSize:11.5 }}>✕</button>}
+                <input className="inp" value={q} onChange={e=>updateQ(i,e.target.value)} placeholder={`Question ${i+1}`}/>
+                {form.questions.length>1&&<button onClick={()=>setForm({...form,questions:form.questions.filter((_,j)=>j!==i)})} style={{background:'#fee2e2',color:'#991b1b',border:'none',borderRadius:6,padding:'5px 9px',cursor:'pointer'}}>✕</button>}
               </div>
             ))}
-            <button onClick={()=>setForm({...form,questions:[...form.questions,'']})} style={{ background:'#f3f4f6',border:'1px dashed #d1d5db',borderRadius:8,padding:8,cursor:'pointer',fontSize:12,color:'#6b7280',width:'100%',fontFamily:'inherit' }}>+ Add Question</button>
+            <button onClick={()=>setForm({...form,questions:[...form.questions,'']})} style={{background:'#f3f4f6',border:'1px dashed #d1d5db',borderRadius:8,padding:8,cursor:'pointer',fontSize:12,color:'#6b7280',width:'100%',fontFamily:'inherit'}}>+ Add Question</button>
           </div>
-          <div style={{ marginBottom:16 }}>
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
-              <label className="lbl" style={{margin:0}}>Assign To — {form.level} Students</label>
-              <button className="btn btn-ghost btn-sm" onClick={()=>setForm({...form,assignedTo:lvStudents.map(s=>s.id)})}>Select All</button>
+          <div style={{marginBottom:14}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}}>
+              <label className="lbl" style={{margin:0}}>Assign To</label>
+              <button className="btn btn-ghost btn-sm" onClick={()=>setForm({...form,assignedTo:lvStudents.map(s=>s.id)})}>Select All {form.level}</button>
             </div>
-            {lvStudents.length===0 ? <div style={{fontSize:12,color:'#9ca3af'}}>No {form.level} students enrolled yet</div> : (
-              <div style={{ display:'flex', flexWrap:'wrap' }}>
-                {lvStudents.map(s => (
+            {lvStudents.length===0?<div style={{fontSize:12,color:'#9ca3af'}}>No {form.level} students enrolled yet</div>:(
+              <div style={{display:'flex',flexWrap:'wrap'}}>
+                {lvStudents.map(s=>(
                   <div key={s.id} className={`sel-tag${form.assignedTo.includes(s.id)?' on':''}`} onClick={()=>toggleSel(s.id)}>
                     <Av name={s.name} size={20}/>{s.name}
                   </div>
@@ -694,31 +763,29 @@ function AssignPage({ data }) {
               </div>
             )}
           </div>
-          <div style={{ display:'flex', gap:8, justifyContent:'flex-end' }}>
+          <div style={{display:'flex',gap:8,justifyContent:'flex-end'}}>
             <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
             <button className="btn btn-gold" onClick={saveA} disabled={saving}>{saving?'Saving…':'Create & Assign'}</button>
           </div>
         </Modal>
       )}
 
-      {modal==='view' && selA && (
-        <Modal title={selA.title} sub={`${selA.level} · Due ${fmt(selA.due)}`} onClose={()=>setModal(null)} wide>
-          <div style={{ display:'flex', gap:6, marginBottom:12, flexWrap:'wrap' }}>
-            <LBadge level={selA.level}/>{selA.topic && <span className="badge b-gray">{selA.topic}</span>}
-          </div>
-          {selA.desc && <p style={{ fontSize:13, color:'#6b7280', marginBottom:14, lineHeight:1.6 }}>{selA.desc}</p>}
-          <label className="lbl">Questions</label>
-          {(selA.questions||[]).map((q,i) => <div key={i} className="q-chip"><div className="q-num">{i+1}</div><span style={{fontSize:13,color:'#374151',lineHeight:1.5}}>{q}</span></div>)}
-          <label className="lbl" style={{ marginTop:16 }}>Assigned Students</label>
-          {(selA.assignedTo||[]).map(sid => {
-            const s = students.find(x=>x.id===sid);
-            if (!s) return null;
-            const sub = submissions.find(x=>x.studentId===sid&&x.assignmentId===selA.id&&x.status==='submitted');
-            return (
-              <div key={sid} style={{ display:'flex', alignItems:'center', gap:9, padding:'8px 10px', background:'#f9fafb', borderRadius:8, marginBottom:6 }}>
-                <Av name={s.name} size={26}/><span style={{ flex:1, fontSize:12.5, fontWeight:500 }}>{s.name}</span>
-                <SBadge status={sub?'submitted':'pending'}/>
-                {sub && <span style={{ fontSize:11, color:'#9ca3af' }}>{fmtS(sub.submitted)}</span>}
+      {modal==='view'&&selA&&(
+        <Modal title={selA.title} sub={`${selA.level}${selA.due?' · Due '+fmt(selA.due):''}`} onClose={()=>setModal(null)} wide>
+          <div style={{display:'flex',gap:6,marginBottom:12,flexWrap:'wrap'}}><LBadge level={selA.level}/>{selA.type&&<span className="badge b-blue">{selA.type}</span>}{selA.topic&&<span className="badge b-gray">{selA.topic}</span>}</div>
+          {selA.note&&<div className="alert-ok" style={{marginBottom:12}}>📌 {selA.note}</div>}
+          {selA.file?.url&&<div style={{marginBottom:14}}><label className="lbl">Attached File</label><br/><FileChip file={selA.file}/></div>}
+          {(selA.questions||[]).filter(q=>q).length>0&&(
+            <><label className="lbl">Questions</label>{selA.questions.filter(q=>q).map((q,i)=><div key={i} className="q-chip"><div className="q-num">{i+1}</div><span style={{fontSize:13,color:'#374151',lineHeight:1.5}}>{q}</span></div>)}</>
+          )}
+          <label className="lbl" style={{marginTop:14}}>Assigned Students</label>
+          {(selA.assignedTo||[]).map(sid=>{
+            const s=students.find(x=>x.id===sid);if(!s)return null;
+            const sub=data.submissions.find(x=>x.studentId===sid&&x.assignmentId===selA.id&&x.status==='submitted');
+            return(
+              <div key={sid} style={{display:'flex',alignItems:'center',gap:9,padding:'8px 10px',background:'#f9fafb',borderRadius:8,marginBottom:6}}>
+                <Av name={s.name} size={26}/><span style={{flex:1,fontSize:12.5,fontWeight:500}}>{s.name}</span>
+                <SBadge status={sub?'submitted':'pending'}/>{sub&&<span style={{fontSize:11,color:'#9ca3af'}}>{fmtS(sub.submitted)}</span>}
               </div>
             );
           })}
@@ -728,269 +795,193 @@ function AssignPage({ data }) {
   );
 }
 
-// Notes Page
-function NotesPage({ data }) {
-  const { notes } = data;
-  const [modal, setModal] = useState(null);
-  const [selN, setSelN]   = useState(null);
-  const [fl, setFl]       = useState('All');
-  const [saving, setSaving] = useState(false);
-  const [form, setForm]   = useState({ title:'', level:'GCSE', topic:'', content:'' });
-
-  const filtered = notes.filter(n => fl==='All'||n.level===fl);
-
-  async function saveNote() {
-    if (!form.title || !form.content) return;
-    setSaving(true);
-    await db.collection('notes').add({ ...form, created:today() });
-    setModal(null); setForm({ title:'', level:'GCSE', topic:'', content:'' });
-    setSaving(false);
-  }
-  async function deleteNote(id) {
-    if (!window.confirm('Delete this note?')) return;
-    await db.collection('notes').doc(id).delete();
-  }
-
-  return (
+function ReportsPage({data}){
+  const{students,assignments,submissions}=data;
+  return(
     <div>
-      <PH title="Lesson Notes" sub="Create and manage study notes" action={<button className="btn btn-gold" onClick={()=>setModal('form')}>+ Add Notes</button>} />
+      <PH title="Reports" sub="Student progress overview"/>
       <div className="content">
-        <div className="filter-bar">
-          {['All','KS2','KS3','GCSE','A-Level'].map(l=><button key={l} className={`fb${fl===l?' active':''}`} onClick={()=>setFl(l)}>{l}</button>)}
-        </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))', gap:14 }}>
-          {filtered.map(n => (
-            <div key={n.id} className="n-card" onClick={()=>{setSelN(n);setModal('view');}}>
-              <div className="n-head">
-                <div style={{ fontSize:9.5, color:'#e3b96a', fontWeight:700, textTransform:'uppercase', letterSpacing:'.07em', marginBottom:4 }}>{n.level} · {n.topic}</div>
-                <div style={{ fontFamily:'Georgia,serif', color:'#fff', fontSize:14.5, fontWeight:700 }}>{n.title}</div>
-              </div>
-              <div style={{ padding:'1rem' }}>
-                <p style={{ fontSize:12, color:'#9ca3af', lineHeight:1.5, marginBottom:10 }}>{(n.content||'').slice(0,90)}…</p>
-                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <span style={{ fontSize:10.5, color:'#d1d5db' }}>{fmtS(n.created)}</span>
-                  <button className="btn btn-danger btn-sm" onClick={e=>{e.stopPropagation();deleteNote(n.id);}}>Delete</button>
-                </div>
-              </div>
-            </div>
-          ))}
-          {filtered.length===0 && <div style={{ gridColumn:'1/-1', background:'#fff', borderRadius:11, border:'1px dashed #e5e7eb', padding:'2.5rem', textAlign:'center', color:'#9ca3af', fontSize:13 }}>No notes yet for this level.</div>}
-        </div>
-      </div>
-      {modal==='form' && (
-        <Modal title="Add Lesson Notes" sub="Brightmind Solutions Ltd" onClose={()=>setModal(null)}>
-          <Fg label="Note Title *"><input className="inp" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="e.g. Quadratic Equations" /></Fg>
-          <div className="form-2">
-            <Fg label="Level *"><select className="inp" value={form.level} onChange={e=>setForm({...form,level:e.target.value})}>{['KS2','KS3','GCSE','A-Level'].map(l=><option key={l}>{l}</option>)}</select></Fg>
-            <Fg label="Topic"><input className="inp" value={form.topic} onChange={e=>setForm({...form,topic:e.target.value})} placeholder="e.g. Algebra" /></Fg>
-          </div>
-          <Fg label="Content *"><textarea className="inp" rows={8} value={form.content} onChange={e=>setForm({...form,content:e.target.value})} placeholder="Key concepts, formulas, worked examples…" style={{resize:'vertical'}}/></Fg>
-          <div style={{ display:'flex', gap:8, justifyContent:'flex-end' }}>
-            <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
-            <button className="btn btn-gold" onClick={saveNote} disabled={saving}>{saving?'Saving…':'Save Notes'}</button>
-          </div>
-        </Modal>
-      )}
-      {modal==='view' && selN && (
-        <Modal title={selN.title} sub={`${selN.level} · ${selN.topic}`} onClose={()=>setModal(null)} wide>
-          <div style={{ display:'flex', gap:6, marginBottom:14 }}><LBadge level={selN.level}/>{selN.topic&&<span className="badge b-gray">{selN.topic}</span>}<span className="badge b-gray">Added {fmtS(selN.created)}</span></div>
-          <div style={{ fontSize:13.5, color:'#374151', lineHeight:1.9, whiteSpace:'pre-wrap', background:'#faf7f2', padding:'1.25rem', borderRadius:9, border:'1px solid #e5e7eb' }}>{selN.content}</div>
-        </Modal>
-      )}
-    </div>
-  );
-}
-
-// Reports Page
-function ReportsPage({ data }) {
-  const { students, assignments, submissions } = data;
-  return (
-    <div>
-      <PH title="Reports" sub="Student progress overview" />
-      <div className="content">
-        {students.map(s => {
-          const myA = assignments.filter(a=>(a.assignedTo||[]).includes(s.id));
-          const done = submissions.filter(x=>x.studentId===s.id&&x.status==='submitted').length;
-          const pct = myA.length>0 ? Math.round(done/myA.length*100) : 0;
-          return (
+        {students.map(s=>{
+          const myA=assignments.filter(a=>(a.assignedTo||[]).includes(s.id));
+          const done=submissions.filter(x=>x.studentId===s.id&&x.status==='submitted').length;
+          const pct=myA.length>0?Math.round(done/myA.length*100):0;
+          return(
             <div key={s.id} className="a-card" style={{marginBottom:10}}>
-              <div style={{ display:'flex', alignItems:'center', gap:14 }}>
+              <div style={{display:'flex',alignItems:'center',gap:14}}>
                 <Av name={s.name} size={42}/>
-                <div style={{ flex:1 }}>
-                  <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4 }}>
-                    <span style={{ fontWeight:700, color:'#0b1e3d', fontSize:13 }}>{s.name}</span>
-                    <LBadge level={s.level}/><span style={{ fontSize:11.5, color:'#9ca3af' }}>{s.year}</span>
-                  </div>
-                  <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4 }}>
+                <div style={{flex:1}}>
+                  <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:4}}><span style={{fontWeight:700,color:'#0b1e3d',fontSize:13}}>{s.name}</span><LBadge level={s.level}/><span style={{fontSize:11.5,color:'#9ca3af'}}>{s.year}</span></div>
+                  <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:4}}>
                     <div className="prog-bar" style={{flex:1}}><div className="prog-fill" style={{width:pct+'%',background:pct===100?'#059669':pct>=50?'#c8973a':'#dc2626'}}/></div>
-                    <span style={{ fontSize:12.5, fontWeight:700, color:'#374151' }}>{pct}%</span>
+                    <span style={{fontSize:12.5,fontWeight:700,color:'#374151'}}>{pct}%</span>
                   </div>
-                  <div style={{ fontSize:11.5, color:'#9ca3af' }}>{done} of {myA.length} assignments submitted · {s.email}</div>
+                  <div style={{fontSize:11.5,color:'#9ca3af'}}>{done} of {myA.length} submitted · {s.email}</div>
                 </div>
               </div>
             </div>
           );
         })}
-        {students.length===0 && <div className="card" style={{padding:'2.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No students enrolled yet</div>}
+        {students.length===0&&<div className="card" style={{padding:'2.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No students enrolled yet</div>}
       </div>
     </div>
   );
 }
 
-// ═════════════════════════════
+// ═══════════════════════════════════════
 // STUDENT PORTAL
-// ═════════════════════════════
+// ═══════════════════════════════════════
+function StudentPortal({user,onLogout}){
+  const [pg,setPg]=useState('dashboard');
+  const [assignments,setAssign]=useState([]);
+  const [submissions,setSubs]=useState([]);
 
-function StudentPortal({ user, onLogout }) {
-  const [pg, setPg] = useState('dashboard');
-  const [assignments, setAssignments] = useState([]);
-  const [notes, setNotes]             = useState([]);
-  const [submissions, setSubmissions] = useState([]);
+  useEffect(()=>{
+    const u1=db.collection('assignments').orderBy('created','desc').onSnapshot(s=>setAssign(s.docs.map(d=>({id:d.id,...d.data()}))));
+    const u2=db.collection('submissions').where('studentId','==',user.id).onSnapshot(s=>setSubs(s.docs.map(d=>({id:d.id,...d.data()}))));
+    return()=>{u1();u2();};
+  },[user.id]);
 
-  useEffect(() => {
-    const u1 = db.collection('assignments').orderBy('created','desc').onSnapshot(s => setAssignments(s.docs.map(d=>({id:d.id,...d.data()}))));
-    const u2 = db.collection('notes').orderBy('created','desc').onSnapshot(s => setNotes(s.docs.map(d=>({id:d.id,...d.data()}))));
-    const u3 = db.collection('submissions').where('studentId','==',user.id).onSnapshot(s => setSubmissions(s.docs.map(d=>({id:d.id,...d.data()}))));
-    return () => { u1(); u2(); u3(); };
-  }, [user.id]);
+  const myA=assignments.filter(a=>(a.assignedTo||[]).includes(user.id));
 
-  const myA   = assignments.filter(a=>(a.assignedTo||[]).includes(user.id));
-  const myN   = notes.filter(n=>n.level===user.level);
-
-  async function markDone(assignmentId) {
-    const already = submissions.find(s=>s.assignmentId===assignmentId&&s.status==='submitted');
-    if (already) return;
-    await db.collection('submissions').add({ assignmentId, studentId:user.id, status:'submitted', submitted:today() });
+  async function markDone(id){
+    if(submissions.find(s=>s.assignmentId===id&&s.status==='submitted'))return;
+    await db.collection('submissions').add({assignmentId:id,studentId:user.id,status:'submitted',submitted:tod()});
   }
 
-  const nav = [
-    { id:'dashboard', icon:'🏠', label:'Dashboard' },
-    { id:'work',      icon:'📝', label:'My Work' },
-    { id:'notes',     icon:'📚', label:'Lesson Notes' },
-    { id:'progress',  icon:'📈', label:'My Progress' },
+  const nav=[
+    {id:'dashboard',icon:'🏠',label:'My Dashboard'},
+    {id:'work',     icon:'📝',label:'My Work'},
+    {id:'progress', icon:'📈',label:'My Progress'},
   ];
-
-  return (
+  return(
     <div className="app-shell">
-      <Sidebar nav={nav} pg={pg} setPg={setPg} user={user} onLogout={onLogout} />
+      <Sidebar nav={nav} pg={pg} setPg={setPg} user={user} onLogout={onLogout}/>
       <div className="main-area">
-        {pg==='dashboard' && <SDash user={user} myA={myA} myN={myN} submissions={submissions} setPg={setPg} />}
-        {pg==='work'      && <SWork myA={myA} submissions={submissions} onDone={markDone} />}
-        {pg==='notes'     && <SNotes myN={myN} />}
-        {pg==='progress'  && <SProgress user={user} myA={myA} submissions={submissions} />}
+        {pg==='dashboard'&&<SDash user={user} myA={myA} submissions={submissions} setPg={setPg}/>}
+        {pg==='work'     &&<SWork myA={myA} submissions={submissions} onDone={markDone}/>}
+        {pg==='progress' &&<SProgress user={user} myA={myA} submissions={submissions}/>}
       </div>
     </div>
   );
 }
 
-function SDash({ user, myA, myN, submissions, setPg }) {
-  const tod = today();
-  const pending = myA.filter(a=>!submissions.find(s=>s.assignmentId===a.id&&s.status==='submitted'));
-  const done    = submissions.filter(s=>s.status==='submitted');
-  const pct     = myA.length>0 ? Math.round(done.length/myA.length*100) : 0;
-  const overdue = pending.filter(a=>a.due<tod);
-  return (
+function SDash({user,myA,submissions,setPg}){
+  const pending=myA.filter(a=>!submissions.find(s=>s.assignmentId===a.id&&s.status==='submitted'));
+  const done=submissions.filter(s=>s.status==='submitted');
+  const pct=myA.length>0?Math.round(done.length/myA.length*100):0;
+  const overdue=pending.filter(a=>a.due&&a.due<tod());
+  return(
     <div>
       <div className="hero-grad">
-        <div style={{ fontSize:12, color:'rgba(255,255,255,.5)', marginBottom:3 }}>Welcome back,</div>
-        <div style={{ fontFamily:'Georgia,serif', fontSize:20, fontWeight:700, color:'#fff', marginBottom:3 }}>{user.name}</div>
-        <div style={{ fontSize:12, color:'rgba(255,255,255,.5)' }}>{user.level} · {user.year} · Brightmind Solutions Ltd</div>
+        <div style={{fontSize:12,color:'rgba(255,255,255,.5)',marginBottom:3}}>Welcome back,</div>
+        <div style={{fontFamily:'Georgia,serif',fontSize:20,fontWeight:700,color:'#fff',marginBottom:3}}>{user.name}</div>
+        <div style={{fontSize:12,color:'rgba(255,255,255,.5)'}}>{user.level} · {user.year} · Brightmind Solutions Ltd</div>
       </div>
       <div className="content">
         <div className="stat-grid">
-          <div className="stat-card"><div className="stat-lbl">Assignments</div><div className="stat-val" style={{color:'#0b1e3d'}}>{myA.length}</div></div>
+          <div className="stat-card"><div className="stat-lbl">Assigned</div><div className="stat-val" style={{color:'#0b1e3d'}}>{myA.length}</div></div>
           <div className="stat-card"><div className="stat-lbl">Pending</div><div className="stat-val" style={{color:pending.length?'#dc2626':'#059669'}}>{pending.length}</div></div>
           <div className="stat-card"><div className="stat-lbl">Submitted</div><div className="stat-val" style={{color:'#059669'}}>{done.length}</div></div>
           <div className="stat-card"><div className="stat-lbl">Completion</div><div className="stat-val" style={{color:'#c8973a'}}>{pct}%</div></div>
         </div>
-        {overdue.length>0 && (
-          <div className="alert-w">⚠️ You have {overdue.length} overdue assignment{overdue.length>1?'s':''}. Please complete them as soon as possible.
-            <button className="btn btn-danger btn-sm" onClick={()=>setPg('work')} style={{marginLeft:'auto'}}>View Work</button>
-          </div>
-        )}
-        <div className="two-col">
-          <div className="card">
-            <div className="card-head">Pending Work <button className="btn btn-ghost btn-sm" onClick={()=>setPg('work')}>View All</button></div>
-            {pending.length===0 ? <div style={{padding:'1.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>🎉 All caught up!</div> :
-              pending.slice(0,4).map(a => (
-                <div key={a.id} className="row-item" style={{flexDirection:'column',alignItems:'flex-start',gap:3}}>
-                  <span style={{fontWeight:600,color:'#111',fontSize:13}}>{a.title}</span>
-                  <span style={{fontSize:11,color:a.due<tod?'#dc2626':'#9ca3af'}}>Due {fmtS(a.due)}{a.due<tod?' — OVERDUE':''}</span>
+        {overdue.length>0&&<div className="alert-w">⚠️ You have {overdue.length} overdue item{overdue.length>1?'s':''}. Please complete them as soon as possible.<button className="btn btn-danger btn-sm" onClick={()=>setPg('work')} style={{marginLeft:'auto'}}>View Work</button></div>}
+        <div className="card">
+          <div className="card-head">My Work <button className="btn btn-ghost btn-sm" onClick={()=>setPg('work')}>View All</button></div>
+          {myA.length===0?<div style={{padding:'1.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No work assigned yet</div>:
+            myA.slice(0,6).map(a=>{
+              const sub=submissions.find(s=>s.assignmentId===a.id&&s.status==='submitted');
+              return(
+                <div key={a.id} className="row-item" style={{flexDirection:'column',alignItems:'flex-start',gap:4}}>
+                  <div style={{display:'flex',alignItems:'center',gap:7,width:'100%'}}>
+                    <span style={{fontWeight:600,color:'#111',fontSize:13,flex:1}}>{a.title}</span>
+                    <SBadge status={sub?'submitted':a.due&&a.due<tod()?'overdue':'pending'}/>
+                  </div>
+                  <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}>
+                    {a.type&&<span className="badge b-blue" style={{fontSize:10}}>{a.type}</span>}
+                    {a.due&&<span style={{fontSize:11,color:'#9ca3af'}}>Due {fmtS(a.due)}</span>}
+                    {a.file?.url&&<span style={{fontSize:11,color:'#059669'}}>🔗 File attached</span>}
+                  </div>
                 </div>
-              ))
-            }
-          </div>
-          <div className="card">
-            <div className="card-head">Lesson Notes <button className="btn btn-ghost btn-sm" onClick={()=>setPg('notes')}>View All</button></div>
-            {myN.length===0 ? <div style={{padding:'1.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No notes yet</div> :
-              myN.slice(0,4).map(n => (
-                <div key={n.id} className="row-item" style={{flexDirection:'column',alignItems:'flex-start',gap:2}}>
-                  <span style={{fontWeight:600,color:'#111',fontSize:13}}>{n.title}</span>
-                  <span style={{fontSize:11,color:'#9ca3af'}}>{n.topic} · {fmtS(n.created)}</span>
-                </div>
-              ))
-            }
-          </div>
+              );
+            })
+          }
         </div>
       </div>
     </div>
   );
 }
 
-function SWork({ myA, submissions, onDone }) {
-  const [modal, setModal] = useState(null);
-  const [selA, setSelA]   = useState(null);
-  const [fl, setFl]       = useState('All');
-  const tod = today();
+function SWork({myA,submissions,onDone}){
+  const [modal,setModal]=useState(null);
+  const [selA,setSelA]=useState(null);
+  const [fl,setFl]=useState('All');
 
-  function getS(a) {
-    if (submissions.find(s=>s.assignmentId===a.id&&s.status==='submitted')) return 'submitted';
-    if (a.due<tod) return 'overdue';
-    return 'pending';
+  function getS(a){
+    if(submissions.find(s=>s.assignmentId===a.id&&s.status==='submitted'))return'submitted';
+    if(a.due&&a.due<tod())return'overdue';
+    return'pending';
   }
-  const filtered = myA.filter(a => fl==='All' || getS(a)===fl.toLowerCase());
+  const filtered=myA.filter(a=>fl==='All'||getS(a)===fl.toLowerCase());
 
-  return (
+  return(
     <div>
-      <PH title="My Work" sub="Assignments from your tutor" />
+      <PH title="My Work" sub="Assignments & resources from your tutor"/>
       <div className="content">
-        <div className="filter-bar">
-          {['All','Pending','Submitted','Overdue'].map(f=><button key={f} className={`fb${fl===f?' active':''}`} onClick={()=>setFl(f)}>{f}</button>)}
-        </div>
-        {filtered.map(a => {
-          const s = getS(a);
-          return (
+        <div className="filter-bar">{['All','Pending','Submitted','Overdue'].map(f=><button key={f} className={`fb${fl===f?' active':''}`} onClick={()=>setFl(f)}>{f}</button>)}</div>
+        {filtered.map(a=>{
+          const s=getS(a);
+          return(
             <div key={a.id} className="a-card" style={{borderColor:s==='submitted'?'#86efac':s==='overdue'?'#fca5a5':'#e5e7eb',marginBottom:10}}>
-              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
-                <div style={{ flex:1 }}>
-                  <div style={{ display:'flex', gap:7, alignItems:'center', marginBottom:5, flexWrap:'wrap' }}>
-                    <span style={{ fontWeight:700, color:'#0b1e3d', fontSize:13 }}>{a.title}</span>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
+                <div style={{flex:1}}>
+                  <div style={{display:'flex',gap:7,alignItems:'center',marginBottom:5,flexWrap:'wrap'}}>
+                    <span style={{fontWeight:700,color:'#0b1e3d',fontSize:13}}>{a.title}</span>
                     <SBadge status={s}/>
+                    {a.type&&<span className="badge b-blue">{a.type}</span>}
                   </div>
-                  <div style={{ fontSize:11.5, color:'#9ca3af' }}>{a.topic} · Due {fmt(a.due)} · {(a.questions||[]).length} questions</div>
-                  {a.desc && <p style={{ fontSize:12.5, color:'#6b7280', marginTop:5, marginBottom:0, lineHeight:1.5 }}>{a.desc}</p>}
+                  {a.due&&<div style={{fontSize:11.5,color:'#9ca3af',marginBottom:6}}>Due {fmt(a.due)}</div>}
+                  {a.note&&<div className="alert-ok" style={{marginBottom:8,padding:'6px 10px',fontSize:12}}>📌 {a.note}</div>}
+                  {a.file?.url&&<div style={{marginBottom:8}}><FileChip file={a.file}/></div>}
+                  {a.desc&&<p style={{fontSize:12.5,color:'#6b7280',marginBottom:0,lineHeight:1.5}}>{a.desc}</p>}
                 </div>
-                <div style={{ display:'flex', gap:6, marginLeft:12 }}>
-                  <button className="btn btn-ghost btn-sm" onClick={()=>{setSelA(a);setModal('view');}}>Questions</button>
-                  {s!=='submitted' && <button className="btn btn-success btn-sm" onClick={()=>onDone(a.id)}>Mark Done ✓</button>}
+                <div style={{display:'flex',gap:6,marginLeft:12}}>
+                  {((a.questions||[]).filter(q=>q).length>0||a.file?.url)&&(
+                    <button className="btn btn-ghost btn-sm" onClick={()=>{setSelA(a);setModal('view');}}>Open</button>
+                  )}
+                  {s!=='submitted'&&<button className="btn btn-success btn-sm" onClick={()=>onDone(a.id)}>Mark Done ✓</button>}
                 </div>
               </div>
             </div>
           );
         })}
-        {filtered.length===0 && <div className="card" style={{padding:'2.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No assignments in this category.</div>}
+        {filtered.length===0&&<div className="card" style={{padding:'2.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No items in this category.</div>}
       </div>
-      {modal==='view' && selA && (
-        <Modal title={selA.title} sub={`Due ${fmt(selA.due)}`} onClose={()=>setModal(null)} wide>
-          {selA.desc && <p style={{ fontSize:13, color:'#6b7280', marginBottom:14, lineHeight:1.6 }}>{selA.desc}</p>}
-          <label className="lbl">Questions</label>
-          {(selA.questions||[]).map((q,i) => <div key={i} className="q-chip"><div className="q-num">{i+1}</div><span style={{fontSize:13,color:'#374151',lineHeight:1.5}}>{q}</span></div>)}
-          <div style={{ background:'#fef9c3', borderRadius:8, padding:'9px 12px', fontSize:12, color:'#92400e', marginTop:12, marginBottom:12 }}>
-            📌 Complete in your exercise book and bring it to your next session, or send a photo to your tutor.
+      {modal==='view'&&selA&&(
+        <Modal title={selA.title} sub={selA.due?`Due ${fmt(selA.due)}`:selA.type} onClose={()=>setModal(null)} wide>
+          {selA.desc&&<p style={{fontSize:13,color:'#6b7280',marginBottom:14,lineHeight:1.6}}>{selA.desc}</p>}
+          {selA.note&&<div className="alert-ok" style={{marginBottom:14}}>📌 {selA.note}</div>}
+          {selA.file?.url&&(
+            <div style={{marginBottom:16}}>
+              <label className="lbl">Your File</label>
+              <div style={{display:'flex',gap:12,alignItems:'center',padding:'1rem',background:'#f0fdf4',borderRadius:9,border:'1px solid #86efac',marginTop:6}}>
+                <span style={{fontSize:30}}>{fileIcon(selA.file.name||'')}</span>
+                <div style={{flex:1}}>
+                  <div style={{fontWeight:600,color:'#166534',fontSize:13}}>{selA.file.name}</div>
+                  <div style={{fontSize:11.5,color:'#6b7280'}}>Stored in Google Drive — click to open</div>
+                </div>
+                <a href={selA.file.url} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-sm">Open File ↗</a>
+              </div>
+            </div>
+          )}
+          {(selA.questions||[]).filter(q=>q).length>0&&(
+            <><label className="lbl">Questions</label>{selA.questions.filter(q=>q).map((q,i)=><div key={i} className="q-chip"><div className="q-num">{i+1}</div><span style={{fontSize:13,color:'#374151',lineHeight:1.5}}>{q}</span></div>)}</>
+          )}
+          <div style={{background:'#fef9c3',borderRadius:8,padding:'9px 12px',fontSize:12,color:'#92400e',marginTop:12,marginBottom:12}}>
+            📌 Complete in your exercise book and bring to your next session, or send a photo to your tutor.
           </div>
-          {submissions.find(s=>s.assignmentId===selA.id&&s.status==='submitted') ?
-            <div className="alert-ok">✅ You have marked this as complete!</div> :
-            <button className="btn btn-success" onClick={()=>{onDone(selA.id);setModal(null);}} style={{ width:'100%', padding:10, fontSize:13 }}>Mark as Complete ✓</button>
+          {submissions.find(s=>s.assignmentId===selA.id&&s.status==='submitted')?
+            <div className="alert-ok">✅ You have marked this as complete!</div>:
+            <button className="btn btn-success" onClick={()=>{onDone(selA.id);setModal(null);}} style={{width:'100%',padding:10,fontSize:13}}>Mark as Complete ✓</button>
           }
         </Modal>
       )}
@@ -998,74 +989,37 @@ function SWork({ myA, submissions, onDone }) {
   );
 }
 
-function SNotes({ myN }) {
-  const [modal, setModal] = useState(null);
-  const [selN, setSelN]   = useState(null);
-  return (
+function SProgress({user,myA,submissions}){
+  const done=submissions.filter(s=>s.status==='submitted');
+  const pct=myA.length>0?Math.round(done.length/myA.length*100):0;
+  return(
     <div>
-      <PH title="Lesson Notes" sub="Study notes from your tutor" />
+      <PH title="My Progress"/>
       <div className="content">
-        {myN.length===0 ? <div className="card" style={{padding:'2.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No lesson notes yet for your level.</div> : (
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))', gap:14 }}>
-            {myN.map(n => (
-              <div key={n.id} className="n-card" onClick={()=>{setSelN(n);setModal('view');}}>
-                <div className="n-head">
-                  <div style={{ fontSize:9.5, color:'#e3b96a', fontWeight:700, textTransform:'uppercase', letterSpacing:'.07em', marginBottom:4 }}>{n.topic}</div>
-                  <div style={{ fontFamily:'Georgia,serif', color:'#fff', fontSize:14.5, fontWeight:700 }}>{n.title}</div>
-                </div>
-                <div style={{ padding:'1rem' }}>
-                  <p style={{ fontSize:12, color:'#9ca3af', lineHeight:1.5, marginBottom:8 }}>{(n.content||'').slice(0,90)}…</p>
-                  <div style={{ fontSize:10.5, color:'#d1d5db' }}>Added {fmtS(n.created)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      {modal==='view' && selN && (
-        <Modal title={selN.title} sub={`${selN.level} · ${selN.topic}`} onClose={()=>setModal(null)} wide>
-          <div style={{ fontSize:13.5, color:'#374151', lineHeight:1.9, whiteSpace:'pre-wrap', background:'#faf7f2', padding:'1.25rem', borderRadius:9 }}>{selN.content}</div>
-        </Modal>
-      )}
-    </div>
-  );
-}
-
-function SProgress({ user, myA, submissions }) {
-  const done = submissions.filter(s=>s.status==='submitted');
-  const pct  = myA.length>0 ? Math.round(done.length/myA.length*100) : 0;
-  const tod  = today();
-  return (
-    <div>
-      <PH title="My Progress" sub="Your learning journey" />
-      <div className="content">
-        <div className="card" style={{ padding:'1.5rem', marginBottom:16 }}>
-          <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:16 }}>
-            <Av name={user.name} size={48}/>
+        <div className="card" style={{padding:'1.5rem',marginBottom:16}}>
+          <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:16}}>
+            <Av name={user.name} size={46}/>
             <div>
-              <div style={{ fontFamily:'Georgia,serif', fontSize:18, fontWeight:700, color:'#0b1e3d' }}>{user.name}</div>
-              <div style={{ fontSize:13, color:'#6b7280' }}>{user.level} · {user.year}</div>
-              <div style={{ fontSize:11.5, color:'#9ca3af' }}>Enrolled {fmtS(user.enrolled)}</div>
+              <div style={{fontFamily:'Georgia,serif',fontSize:17,fontWeight:700,color:'#0b1e3d'}}>{user.name}</div>
+              <div style={{fontSize:13,color:'#6b7280'}}>{user.level} · {user.year}</div>
             </div>
           </div>
-          <div style={{ display:'flex', justifyContent:'space-between', marginBottom:6, fontSize:13 }}>
-            <span style={{ fontWeight:600, color:'#0b1e3d' }}>Overall Completion</span>
-            <span style={{ fontWeight:700, color:pct===100?'#059669':pct>=50?'#c8973a':'#dc2626' }}>{pct}%</span>
+          <div style={{display:'flex',justifyContent:'space-between',marginBottom:6,fontSize:13}}>
+            <span style={{fontWeight:600,color:'#0b1e3d'}}>Overall Completion</span>
+            <span style={{fontWeight:700,color:pct===100?'#059669':pct>=50?'#c8973a':'#dc2626'}}>{pct}%</span>
           </div>
           <div className="prog-bar" style={{height:10}}><div className="prog-fill" style={{width:pct+'%',background:pct===100?'#059669':pct>=50?'#c8973a':'#dc2626'}}/></div>
-          <div style={{ fontSize:12, color:'#9ca3af', marginTop:6 }}>{done.length} of {myA.length} assignments submitted</div>
+          <div style={{fontSize:12,color:'#9ca3af',marginTop:6}}>{done.length} of {myA.length} items submitted</div>
         </div>
-        {myA.map(a => {
-          const sub  = submissions.find(s=>s.assignmentId===a.id&&s.status==='submitted');
-          const over = !sub && a.due<tod;
-          return (
-            <div key={a.id} style={{ background:'#fff', borderRadius:10, border:`1px solid ${sub?'#86efac':over?'#fca5a5':'#e5e7eb'}`, padding:'12px 14px', marginBottom:8, display:'flex', alignItems:'center', gap:12 }}>
-              <div style={{ width:30, height:30, borderRadius:'50%', background:sub?'#dcfce7':over?'#fee2e2':'#f3f4f6', display:'flex', alignItems:'center', justifyContent:'center', fontSize:14, flexShrink:0 }}>
-                {sub?'✅':over?'⚠️':'⏳'}
-              </div>
-              <div style={{ flex:1 }}>
-                <div style={{ fontSize:13, fontWeight:600, color:'#0b1e3d' }}>{a.title}</div>
-                <div style={{ fontSize:11.5, color:'#9ca3af' }}>{a.topic} · {sub?'Submitted '+fmtS(sub.submitted):'Due '+fmtS(a.due)}</div>
+        {myA.map(a=>{
+          const sub=submissions.find(s=>s.assignmentId===a.id&&s.status==='submitted');
+          const over=!sub&&a.due&&a.due<tod();
+          return(
+            <div key={a.id} style={{background:'#fff',borderRadius:10,border:`1px solid ${sub?'#86efac':over?'#fca5a5':'#e5e7eb'}`,padding:'11px 14px',marginBottom:8,display:'flex',alignItems:'center',gap:12}}>
+              <div style={{width:28,height:28,borderRadius:'50%',background:sub?'#dcfce7':over?'#fee2e2':'#f3f4f6',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>{sub?'✅':over?'⚠️':'⏳'}</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:13,fontWeight:600,color:'#0b1e3d'}}>{a.title}</div>
+                <div style={{fontSize:11,color:'#9ca3af'}}>{a.type||a.topic}{a.due?' · Due '+fmtS(a.due):''}{sub?' · Submitted '+fmtS(sub.submitted):''}</div>
               </div>
               <SBadge status={sub?'submitted':over?'overdue':'pending'}/>
             </div>
@@ -1076,56 +1030,42 @@ function SProgress({ user, myA, submissions }) {
   );
 }
 
-// ═════════════════════════════
+// ═══════════════════════════════════════
 // APP ROOT
-// ═════════════════════════════
+// ═══════════════════════════════════════
+function App(){
+  const [state,setState]=useState('loading');
+  const [userData,setUserData]=useState(null);
 
-function App() {
-  const [state, setState]     = useState('loading');
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    const unsub = auth.onAuthStateChanged(async firebaseUser => {
-      if (firebaseUser) {
-        try {
-          const doc = await db.collection('users').doc(firebaseUser.uid).get();
-          if (doc.exists) {
-            setUserData({ id: firebaseUser.uid, ...doc.data() });
-            setState(doc.data().role === 'admin' ? 'admin' : 'student');
-          } else {
-            await auth.signOut();
-            setState('login');
-          }
-        } catch {
-          setState('login');
-        }
-      } else {
-        setState('login');
-      }
+  useEffect(()=>{
+    const unsub=auth.onAuthStateChanged(async fb=>{
+      if(fb){
+        try{
+          const doc=await db.collection('users').doc(fb.uid).get();
+          if(doc.exists){setUserData({id:fb.uid,...doc.data()});setState(doc.data().role==='admin'?'admin':'student');}
+          else{await auth.signOut();setState('login');}
+        }catch{setState('login');}
+      }else{setState('login');}
     });
     return unsub;
-  }, []);
+  },[]);
 
-  function handleLogout() { auth.signOut(); setState('login'); setUserData(null); }
+  function logout(){auth.signOut();setState('login');setUserData(null);}
 
-  if (state === 'loading') {
-    return (
-      <div style={{ minHeight:'100vh', background:'#0b1e3d', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:14 }}>
-        <div style={{ width:46, height:46, background:'linear-gradient(135deg,#c8973a,#e3b96a)', borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Georgia,serif', fontWeight:800, color:'#0b1e3d', fontSize:20 }}>B</div>
-        <div className="spin"></div>
-        <div style={{ color:'rgba(255,255,255,.4)', fontSize:13 }}>Loading Brightmind Portal…</div>
-      </div>
-    );
-  }
-
-  if (state === 'login')   return <Login onLogin={u => { setUserData(u); setState(u.role==='admin'?'admin':'student'); }} />;
-  if (state === 'admin')   return <AdminPortal user={userData} onLogout={handleLogout} />;
-  if (state === 'student') return <StudentPortal user={userData} onLogout={handleLogout} />;
+  if(state==='loading')return(
+    <div style={{minHeight:'100vh',background:'#0b1e3d',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:14}}>
+      <div style={{width:46,height:46,background:'linear-gradient(135deg,#c8973a,#e3b96a)',borderRadius:12,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Georgia,serif',fontWeight:800,color:'#0b1e3d',fontSize:20}}>B</div>
+      <div className="spin"/>
+      <div style={{color:'rgba(255,255,255,.4)',fontSize:13}}>Loading Brightmind Portal…</div>
+    </div>
+  );
+  if(state==='login')  return <Login onLogin={u=>{setUserData(u);setState(u.role==='admin'?'admin':'student');}}/>;
+  if(state==='admin')  return <AdminPortal user={userData} onLogout={logout}/>;
+  if(state==='student')return <StudentPortal user={userData} onLogout={logout}/>;
   return null;
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
-
+ReactDOM.render(<App/>,document.getElementById('root'));
 </script>
 </body>
 </html>
