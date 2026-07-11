@@ -3,1802 +3,1163 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Brightmind Solutions Ltd – Maths Tuition Centre</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<title>Brightmind Solutions Ltd — Portal</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>" />
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 <style>
-  :root {
-    --navy: #0b1e3d;
-    --navy-mid: #122550;
-    --navy-light: #1a3366;
-    --gold: #c8973a;
-    --gold-light: #e3b96a;
-    --gold-pale: #f5e6c8;
-    --cream: #faf7f2;
-    --white: #ffffff;
-    --text: #1a1a2e;
-    --muted: #6b7280;
-    --border: rgba(200,151,58,0.25);
-    --shadow: 0 8px 40px rgba(11,30,61,0.12);
-    --shadow-gold: 0 8px 30px rgba(200,151,58,0.2);
-  }
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:system-ui,-apple-system,sans-serif;}
+#root{min-height:100vh;}
+input,select,textarea,button{font-family:inherit;}
+.app-shell{display:flex;min-height:100vh;}
+.main-area{flex:1;overflow-y:auto;background:#f5f6f8;}
+.sidebar{width:210px;background:#0b1e3d;display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;}
+.sb-brand{padding:1.25rem 1rem;border-bottom:1px solid rgba(200,151,58,.2);}
+.sb-logo{width:34px;height:34px;background:linear-gradient(135deg,#c8973a,#e3b96a);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0b1e3d;font-size:15px;}
+.sb-nav{flex:1;padding:.75rem .6rem;overflow-y:auto;}
+.sb-item{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.55);font-size:13px;transition:all .2s;margin-bottom:2px;}
+.sb-item.active{background:rgba(200,151,58,.15);color:#e3b96a;font-weight:600;}
+.sb-item:hover:not(.active){background:rgba(255,255,255,.06);color:rgba(255,255,255,.85);}
+.sb-foot{padding:.75rem .6rem;border-top:1px solid rgba(200,151,58,.1);}
+.ph{background:#fff;border-bottom:1px solid #e5e7eb;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;}
+.ph-title{font-size:17px;font-weight:700;color:#0b1e3d;}
+.ph-sub{color:#9ca3af;font-size:12px;margin-top:2px;}
+.content{padding:1.25rem 1.5rem;}
+.card{background:#fff;border-radius:11px;border:1px solid #e5e7eb;overflow:hidden;}
+.card-head{padding:.85rem 1.1rem;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;color:#0b1e3d;}
+.a-card{background:#fff;border-radius:11px;border:1px solid #e5e7eb;padding:1rem;margin-bottom:10px;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
+.stat-card{background:#fff;border-radius:10px;padding:1rem;border:1px solid #e5e7eb;}
+.stat-val{font-size:26px;font-weight:700;font-family:Georgia,serif;margin-top:4px;}
+.stat-lbl{font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:.05em;}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:#0b1e3d;}
+thead th{padding:9px 12px;text-align:left;color:rgba(255,255,255,.65);font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+tbody tr{border-bottom:1px solid #f3f4f6;transition:background .15s;}
+tbody tr:hover{background:#fafafa;}
+tbody td{padding:10px 12px;font-size:12.5px;color:#374151;vertical-align:middle;}
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.03em;white-space:nowrap;}
+.b-ks2{background:#ede9fe;color:#5b21b6;}.b-ks3{background:#dbeafe;color:#1d4ed8;}.b-gcse{background:#fef9c3;color:#854d0e;}.b-al{background:#dcfce7;color:#166534;}
+.b-green{background:#dcfce7;color:#166534;}.b-red{background:#fee2e2;color:#991b1b;}.b-amber{background:#fef3c7;color:#92400e;}.b-gray{background:#f3f4f6;color:#374151;}.b-blue{background:#dbeafe;color:#1e40af;}
+.btn{padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12.5px;font-weight:600;transition:opacity .2s;white-space:nowrap;}
+.btn:hover{opacity:.85;}
+.btn-gold{background:#c8973a;color:#0b1e3d;}.btn-navy{background:#0b1e3d;color:#fff;}.btn-ghost{background:transparent;color:#0b1e3d;border:1.5px solid #d1d5db;}.btn-danger{background:#fee2e2;color:#991b1b;}.btn-success{background:#dcfce7;color:#166534;}
+.btn-sm{padding:5px 10px;font-size:11.5px;}
+.inp{width:100%;padding:8px 11px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;outline:none;background:#faf7f2;transition:border-color .2s;}
+.inp:focus{border-color:#c8973a;}
+.lbl{display:block;font-size:10.5px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.fg{margin-bottom:12px;}
+.form-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.av{border-radius:50%;background:#0b1e3d;display:flex;align-items:center;justify-content:center;color:#e3b96a;font-weight:700;flex-shrink:0;border:2px solid rgba(200,151,58,.25);}
+.modal-bg{position:fixed;inset:0;background:rgba(11,30,61,.8);display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;z-index:1000;overflow-y:auto;}
+.modal-box{background:#fff;border-radius:14px;width:100%;max-width:540px;flex-shrink:0;}
+.modal-wide{max-width:700px;}
+.modal-head{background:linear-gradient(135deg,#0b1e3d,#1a3366);padding:1.25rem 1.5rem;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:flex-start;position:sticky;top:0;}
+.modal-body{padding:1.5rem;}
+.close-x{background:rgba(255,255,255,.12);border:none;color:#fff;width:27px;height:27px;border-radius:50%;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.fb{padding:5px 12px;border-radius:16px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-size:11.5px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .2s;}
+.fb.active,.fb:hover{background:#0b1e3d;color:#e3b96a;border-color:#0b1e3d;}
+.prog-bar{height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:3px;transition:width .4s;}
+.alert-w{background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:.75rem 1rem;font-size:12px;color:#92400e;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.alert-ok{background:#dcfce7;border:1px solid #86efac;border-radius:8px;padding:.75rem 1rem;font-size:12px;color:#166534;margin-bottom:10px;}
+.alert-err{background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:.75rem 1rem;font-size:12px;color:#991b1b;margin-bottom:10px;}
+.alert-info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:.75rem 1rem;font-size:12px;color:#1e40af;margin-bottom:12px;line-height:1.6;}
+.row-item{padding:10px 1.1rem;border-bottom:1px solid #f9fafb;display:flex;align-items:center;gap:10px;}
+.row-item:last-child{border-bottom:none;}
+.q-chip{display:flex;gap:10px;padding:10px 12px;background:#faf7f2;border-radius:8px;margin-bottom:7px;align-items:flex-start;}
+.q-num{width:22px;height:22px;background:#0b1e3d;color:#e3b96a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.sel-tag{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:12.5px;font-weight:500;transition:all .2s;margin:3px;}
+.sel-tag.on{background:#0b1e3d;border-color:#0b1e3d;color:#e3b96a;}
+.sel-tag:not(.on){background:#fff;color:#374151;}
+.spin{width:36px;height:36px;border:3px solid rgba(200,151,58,.3);border-top-color:#c8973a;border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.hero-grad{background:linear-gradient(135deg,#0b1e3d,#1a3366);padding:1.5rem;color:#fff;}
+.login-wrap{min-height:100vh;background:linear-gradient(160deg,#0b1e3d,#122550 50%,#0f2e5c);display:flex;align-items:center;justify-content:center;padding:16px;}
+.login-box{background:#fff;border-radius:16px;padding:1.75rem;box-shadow:0 20px 60px rgba(0,0,0,.35);width:100%;max-width:400px;}
+.role-tabs{display:flex;gap:5px;background:#f3f4f6;border-radius:9px;padding:3px;margin-bottom:20px;}
+.role-tab{flex:1;padding:7px;border-radius:7px;border:none;cursor:pointer;font-size:12.5px;font-weight:600;font-family:inherit;transition:all .2s;}
+.role-tab.active{background:#0b1e3d;color:#e3b96a;}
+.role-tab:not(.active){background:transparent;color:#6b7280;}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* Drive link input */
+.drive-box{border:2px dashed #d1d5db;border-radius:10px;padding:1.25rem;background:#faf7f2;transition:border-color .2s;}
+.drive-box:focus-within{border-color:#4285f4;}
+.drive-box.set{border:1.5px solid #86efac;background:#f0fdf4;border-radius:10px;padding:1rem;display:flex;align-items:center;gap:10px;}
 
-  html { scroll-behavior: smooth; }
+/* File chip */
+.file-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;font-size:12.5px;color:#166534;font-weight:500;text-decoration:none;transition:background .2s;}
+.file-chip:hover{background:#dcfce7;}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
+/* Resource card */
+.res-card{background:#fff;border-radius:10px;border:1px solid #e5e7eb;display:flex;align-items:center;gap:12px;padding:1rem;margin-bottom:8px;transition:box-shadow .2s;}
+.res-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.07);}
+.res-icon{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 
-  /* ─── PAGE SYSTEM ─── */
-  .page { display: none; animation: fadeIn 0.45s ease; }
-  .page.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* ─── NAV ─── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-    background: rgba(11,30,61,0.97);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    height: 68px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-
-  .nav-brand {
-    display: flex; align-items: center; gap: 12px; cursor: pointer;
-    text-decoration: none;
-  }
-  .nav-logo {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-weight: 800; color: var(--navy); font-size: 1.1rem;
-    flex-shrink: 0;
-  }
-  .nav-name {
-    font-family: 'Playfair Display', serif;
-    color: var(--white);
-    font-size: 1.05rem;
-    font-weight: 600;
-    line-height: 1.2;
-  }
-  .nav-name span { color: var(--gold-light); font-size: 0.7rem; display: block; font-family: 'DM Sans', sans-serif; font-weight: 400; letter-spacing: 0.08em; }
-
-  .nav-links { display: flex; align-items: center; gap: 0.25rem; }
-  .nav-links a {
-    color: rgba(255,255,255,0.75);
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.4rem 0.9rem;
-    border-radius: 6px;
-    transition: all 0.2s;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-  }
-  .nav-links a:hover, .nav-links a.active {
-    color: var(--gold-light);
-    background: rgba(200,151,58,0.12);
-  }
-  .nav-cta {
-    background: var(--gold) !important;
-    color: var(--navy) !important;
-    font-weight: 600 !important;
-    padding: 0.45rem 1.1rem !important;
-    border-radius: 6px !important;
-  }
-  .nav-cta:hover { background: var(--gold-light) !important; }
-
-  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
-  .hamburger span { width: 22px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
-
-  /* ─── HERO ─── */
-  .hero {
-    min-height: 100vh;
-    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 50%, #0f2e5c 100%);
-    display: flex; align-items: center;
-    position: relative; overflow: hidden;
-    padding-top: 68px;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background-image:
-      radial-gradient(ellipse 800px 600px at 70% 40%, rgba(200,151,58,0.08) 0%, transparent 70%),
-      radial-gradient(ellipse 400px 300px at 10% 80%, rgba(200,151,58,0.05) 0%, transparent 70%);
-  }
-
-  .hero-grid {
-    position: absolute; inset: 0; opacity: 0.04;
-    background-image: linear-gradient(rgba(200,151,58,0.6) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(200,151,58,0.6) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-
-  .hero-content {
-    position: relative; z-index: 2;
-    max-width: 1200px; margin: 0 auto;
-    padding: 4rem 2rem;
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 4rem; align-items: center;
-  }
-
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(200,151,58,0.15);
-    border: 1px solid rgba(200,151,58,0.35);
-    color: var(--gold-light);
-    padding: 0.35rem 0.9rem;
-    border-radius: 100px;
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-  }
-  .hero-badge::before { content: '◆'; font-size: 0.5rem; }
-
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.4rem, 5vw, 3.8rem);
-    color: var(--white);
-    line-height: 1.15;
-    margin-bottom: 1.5rem;
-    font-weight: 800;
-  }
-  .hero h1 em {
-    font-style: italic;
-    color: var(--gold-light);
-  }
-
-  .hero p {
-    color: rgba(255,255,255,0.72);
-    font-size: 1.05rem;
-    margin-bottom: 2.5rem;
-    max-width: 480px;
-    font-weight: 300;
-    line-height: 1.8;
-  }
-
-  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-  .btn-primary {
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    color: var(--navy);
-    padding: 0.85rem 2rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    border: none;
-    transition: all 0.25s;
-    box-shadow: var(--shadow-gold);
-    letter-spacing: 0.02em;
-    text-decoration: none;
-    display: inline-block;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(200,151,58,0.35); }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--white);
-    padding: 0.85rem 2rem;
-    border-radius: 8px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    cursor: pointer;
-    border: 1px solid rgba(255,255,255,0.3);
-    transition: all 0.25s;
-    text-decoration: none;
-    display: inline-block;
-  }
-  .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
-
-  .hero-stats {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(200,151,58,0.2);
-    border-radius: 20px;
-    padding: 2.5rem;
-    backdrop-filter: blur(10px);
-  }
-  .hero-stats-title {
-    color: var(--gold-light);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-    font-family: 'DM Mono', monospace;
-  }
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-  .stat { text-align: center; }
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    color: var(--white);
-    font-weight: 800;
-    display: block;
-    line-height: 1;
-  }
-  .stat-label { color: rgba(255,255,255,0.5); font-size: 0.78rem; margin-top: 0.3rem; font-weight: 400; }
-
-  .levels-list { display: flex; flex-direction: column; gap: 0.6rem; }
-  .level-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 0.6rem 1rem;
-    background: rgba(200,151,58,0.08);
-    border: 1px solid rgba(200,151,58,0.15);
-    border-radius: 8px;
-    color: rgba(255,255,255,0.85);
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .level-item:hover { background: rgba(200,151,58,0.15); border-color: rgba(200,151,58,0.3); }
-  .level-dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
-  .level-item span:last-child { color: rgba(255,255,255,0.4); font-size: 0.78rem; margin-left: auto; }
-
-  /* ─── SECTION SHELLS ─── */
-  section { padding: 6rem 2rem; }
-  .container { max-width: 1200px; margin: 0 auto; }
-
-  .section-header { text-align: center; margin-bottom: 4rem; }
-  .section-tag {
-    display: inline-block;
-    color: var(--gold);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
-    font-family: 'DM Mono', monospace;
-  }
-  .section-header h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 2.8rem);
-    color: var(--navy);
-    font-weight: 800;
-    margin-bottom: 1rem;
-    line-height: 1.2;
-  }
-  .section-header p { color: var(--muted); max-width: 580px; margin: 0 auto; font-size: 1.02rem; }
-
-  /* ─── ABOUT ─── */
-  .about-section { background: var(--white); }
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-
-  .about-visual {
-    position: relative;
-  }
-  .about-img-box {
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-    border-radius: 20px;
-    padding: 3rem 2.5rem;
-    color: white;
-    position: relative;
-    overflow: hidden;
-  }
-  .about-img-box::before {
-    content: '';
-    position: absolute; top: -40px; right: -40px;
-    width: 200px; height: 200px;
-    background: rgba(200,151,58,0.12);
-    border-radius: 50%;
-  }
-  .about-quote {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    font-style: italic;
-    line-height: 1.5;
-    color: var(--white);
-    position: relative; z-index: 1;
-    margin-bottom: 1.5rem;
-  }
-  .about-quote::before { content: '"'; font-size: 4rem; color: var(--gold); line-height: 0; vertical-align: -1.5rem; margin-right: 4px; }
-  .about-author { font-size: 0.875rem; color: rgba(255,255,255,0.6); position: relative; z-index: 1; }
-  .about-author strong { color: var(--gold-light); display: block; }
-
-  .about-float {
-    position: absolute; bottom: -20px; right: -20px;
-    background: var(--gold);
-    color: var(--navy);
-    border-radius: 16px;
-    padding: 1.2rem 1.5rem;
-    box-shadow: var(--shadow-gold);
-    font-weight: 700;
-    font-size: 0.875rem;
-  }
-  .about-float span { font-family: 'Playfair Display', serif; font-size: 2rem; display: block; line-height: 1; }
-
-  .about-text h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    color: var(--navy);
-    font-weight: 800;
-    margin-bottom: 1.2rem;
-    line-height: 1.25;
-  }
-  .about-text p { color: var(--muted); margin-bottom: 1.2rem; font-weight: 300; line-height: 1.8; }
-  .about-pillars { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
-  .pillar {
-    display: flex; gap: 1rem; align-items: flex-start;
-    padding: 1rem 1.2rem;
-    background: var(--cream);
-    border-radius: 10px;
-    border-left: 3px solid var(--gold);
-  }
-  .pillar-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
-  .pillar-text h4 { font-size: 0.9rem; font-weight: 600; color: var(--navy); margin-bottom: 0.2rem; }
-  .pillar-text p { font-size: 0.82rem; color: var(--muted); margin: 0; }
-
-  /* ─── SUBJECTS ─── */
-  .subjects-section { background: var(--cream); }
-  .subjects-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
-  .subject-card {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 2rem 1.5rem;
-    border: 1px solid rgba(11,30,61,0.08);
-    transition: all 0.3s;
-    position: relative; overflow: hidden;
-    cursor: pointer;
-  }
-  .subject-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.35s ease;
-  }
-  .subject-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
-  .subject-card:hover::before { transform: scaleX(1); }
-
-  .subject-level {
-    display: inline-block;
-    background: var(--navy);
-    color: var(--gold-light);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.7rem;
-    border-radius: 5px;
-    margin-bottom: 1.2rem;
-    font-family: 'DM Mono', monospace;
-  }
-  .subject-card h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    color: var(--navy);
-    font-weight: 700;
-    margin-bottom: 0.6rem;
-  }
-  .subject-card p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.2rem; line-height: 1.6; }
-  .subject-topics { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1.5rem; }
-  .subject-topics li { font-size: 0.8rem; color: var(--muted); padding-left: 1rem; position: relative; }
-  .subject-topics li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-size: 0.75rem; }
-  .subject-link {
-    color: var(--gold);
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex; align-items: center; gap: 6px;
-    transition: gap 0.2s;
-  }
-  .subject-link:hover { gap: 10px; }
-
-  /* ─── FEATURES ─── */
-  .features-section { background: var(--navy); }
-  .features-section .section-header h2 { color: var(--white); }
-  .features-section .section-header p { color: rgba(255,255,255,0.55); }
-  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-  .feature-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(200,151,58,0.15);
-    border-radius: 16px;
-    padding: 2rem;
-    transition: all 0.3s;
-  }
-  .feature-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(200,151,58,0.3); transform: translateY(-4px); }
-  .feature-icon {
-    width: 48px; height: 48px;
-    background: rgba(200,151,58,0.15);
-    border: 1px solid rgba(200,151,58,0.3);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem;
-    margin-bottom: 1.2rem;
-  }
-  .feature-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--white); font-weight: 600; margin-bottom: 0.6rem; }
-  .feature-card p { font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.7; }
-
-  /* ─── TESTIMONIALS ─── */
-  .testimonials-section { background: var(--white); }
-  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-  .testimonial-card {
-    background: var(--cream);
-    border: 1px solid rgba(11,30,61,0.08);
-    border-radius: 16px;
-    padding: 2rem;
-    position: relative;
-  }
-  .testimonial-card::before {
-    content: '"';
-    position: absolute; top: -10px; left: 24px;
-    font-family: 'Playfair Display', serif;
-    font-size: 5rem;
-    color: var(--gold);
-    line-height: 1;
-    opacity: 0.4;
-  }
-  .testimonial-stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 1rem; }
-  .testimonial-text { font-size: 0.9rem; color: var(--muted); line-height: 1.8; margin-bottom: 1.5rem; font-style: italic; }
-  .testimonial-author { display: flex; align-items: center; gap: 10px; }
-  .testimonial-avatar {
-    width: 40px; height: 40px;
-    background: linear-gradient(135deg, var(--navy), var(--navy-light));
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--gold-light); font-weight: 700; font-size: 0.9rem;
-  }
-  .testimonial-name { font-weight: 600; font-size: 0.875rem; color: var(--navy); }
-  .testimonial-role { font-size: 0.78rem; color: var(--muted); }
-
-  /* ─── CTA BAND ─── */
-  .cta-section {
-    background: linear-gradient(135deg, var(--gold) 0%, #b8832a 100%);
-    padding: 5rem 2rem;
-    text-align: center;
-  }
-  .cta-section h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    color: var(--navy);
-    font-weight: 800;
-    margin-bottom: 1rem;
-  }
-  .cta-section p { color: rgba(11,30,61,0.7); font-size: 1.05rem; margin-bottom: 2rem; }
-  .btn-navy {
-    background: var(--navy);
-    color: var(--white);
-    padding: 0.9rem 2.2rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    border: none;
-    transition: all 0.25s;
-    box-shadow: 0 4px 20px rgba(11,30,61,0.3);
-  }
-  .btn-navy:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(11,30,61,0.4); }
-
-  /* ─── FOOTER ─── */
-  footer {
-    background: var(--navy);
-    padding: 4rem 2rem 2rem;
-    color: rgba(255,255,255,0.6);
-  }
-  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; max-width: 1200px; margin-left: auto; margin-right: auto; }
-  .footer-brand h3 { font-family: 'Playfair Display', serif; color: var(--white); font-size: 1.2rem; margin-bottom: 0.75rem; }
-  .footer-brand p { font-size: 0.85rem; line-height: 1.7; margin-bottom: 1.5rem; }
-  .footer-contact-item { display: flex; gap: 8px; align-items: flex-start; font-size: 0.83rem; margin-bottom: 0.5rem; }
-  .footer-contact-item span:first-child { color: var(--gold); flex-shrink: 0; }
-  .footer-col h4 { color: var(--white); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 1.2rem; }
-  .footer-col a, .footer-col span { display: block; font-size: 0.83rem; color: rgba(255,255,255,0.5); margin-bottom: 0.5rem; cursor: pointer; text-decoration: none; transition: color 0.2s; }
-  .footer-col a:hover { color: var(--gold-light); }
-  .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.8rem; }
-  .footer-bottom a { color: var(--gold-light); text-decoration: none; }
-
-  /* ─── LESSON NOTES PAGE ─── */
-  .inner-hero {
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-    padding: 8rem 2rem 4rem;
-    text-align: center;
-    position: relative; overflow: hidden;
-  }
-  .inner-hero::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 600px 400px at 50% 100%, rgba(200,151,58,0.1) 0%, transparent 70%);
-  }
-  .inner-hero h1 {
-    font-family: 'Playfair Display', serif;
-    color: var(--white); font-size: 2.8rem; font-weight: 800;
-    position: relative; z-index: 1;
-    margin-bottom: 0.75rem;
-  }
-  .inner-hero p { color: rgba(255,255,255,0.6); position: relative; z-index: 1; font-size: 1.05rem; }
-
-  .tabs-bar {
-    background: var(--white);
-    border-bottom: 1px solid rgba(11,30,61,0.08);
-    padding: 0 2rem;
-    position: sticky; top: 68px; z-index: 100;
-    display: flex; justify-content: center;
-  }
-  .tabs { display: flex; gap: 0; overflow-x: auto; }
-  .tab {
-    padding: 1rem 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--muted);
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
-    white-space: nowrap;
-    margin-bottom: -1px;
-  }
-  .tab:hover { color: var(--navy); }
-  .tab.active { color: var(--navy); border-bottom-color: var(--gold); font-weight: 600; }
-
-  .notes-content { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
-  .tab-pane { display: none; }
-  .tab-pane.active { display: block; animation: fadeIn 0.3s ease; }
-
-  .notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-  .note-card {
-    background: var(--white);
-    border: 1px solid rgba(11,30,61,0.08);
-    border-radius: 14px;
-    overflow: hidden;
-    transition: all 0.3s;
-    cursor: pointer;
-  }
-  .note-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-  .note-card-header {
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-    padding: 1.5rem;
-    position: relative; overflow: hidden;
-  }
-  .note-card-header::after {
-    content: attr(data-icon);
-    position: absolute; right: 1rem; bottom: -5px;
-    font-size: 3.5rem; opacity: 0.15;
-  }
-  .note-topic {
-    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--gold-light);
-    font-family: 'DM Mono', monospace; margin-bottom: 0.5rem;
-  }
-  .note-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--white); font-weight: 700; }
-  .note-card-body { padding: 1.5rem; }
-  .note-meta { display: flex; gap: 1rem; margin-bottom: 0.75rem; }
-  .note-badge {
-    font-size: 0.72rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 4px;
-    background: var(--cream); color: var(--navy);
-  }
-  .note-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.2rem; }
-  .note-card-footer { display: flex; justify-content: space-between; align-items: center; }
-  .note-pages { font-size: 0.78rem; color: var(--muted); }
-  .btn-sm {
-    padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 600;
-    background: var(--navy); color: var(--white);
-    border: none; border-radius: 6px; cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn-sm:hover { background: var(--navy-light); }
-  .btn-sm.gold { background: var(--gold); color: var(--navy); }
-  .btn-sm.gold:hover { background: var(--gold-light); }
-
-  /* ─── HOMEWORK PAGE ─── */
-  .hw-section { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
-  .hw-filters {
-    display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; align-items: center;
-  }
-  .filter-label { font-size: 0.85rem; font-weight: 500; color: var(--muted); }
-  .filter-btn {
-    padding: 0.45rem 1rem; border-radius: 100px; font-size: 0.82rem;
-    font-weight: 500; cursor: pointer; border: 1px solid rgba(11,30,61,0.15);
-    background: var(--white); color: var(--muted); transition: all 0.2s;
-  }
-  .filter-btn.active, .filter-btn:hover {
-    background: var(--navy); color: var(--white); border-color: var(--navy);
-  }
-
-  .hw-table-wrapper {
-    background: var(--white);
-    border: 1px solid rgba(11,30,61,0.08);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-  }
-  table { width: 100%; border-collapse: collapse; }
-  thead { background: var(--navy); }
-  thead th {
-    padding: 1rem 1.2rem;
-    text-align: left;
-    color: rgba(255,255,255,0.7);
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  tbody tr { border-bottom: 1px solid rgba(11,30,61,0.06); transition: background 0.15s; }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: var(--cream); }
-  tbody td { padding: 1rem 1.2rem; font-size: 0.875rem; color: var(--text); vertical-align: middle; }
-
-  .status-pill {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 100px;
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
-  .status-new { background: #dbeafe; color: #1e40af; }
-  .status-due { background: #fef3c7; color: #92400e; }
-  .status-overdue { background: #fee2e2; color: #991b1b; }
-  .status-done { background: #dcfce7; color: #166534; }
-
-  .level-tag {
-    display: inline-block;
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    font-family: 'DM Mono', monospace;
-  }
-  .ks2 { background: #ede9fe; color: #5b21b6; }
-  .ks3 { background: #dbeafe; color: #1d4ed8; }
-  .gcse { background: #fef3c7; color: #92400e; }
-  .alevel { background: #dcfce7; color: #065f46; }
-
-  /* ─── CONTACT PAGE ─── */
-  .contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem; max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; align-items: start; }
-  .contact-info h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--navy); font-weight: 800; margin-bottom: 1rem; }
-  .contact-info p { color: var(--muted); margin-bottom: 2rem; }
-  .contact-detail {
-    display: flex; gap: 1rem; align-items: flex-start;
-    padding: 1.2rem;
-    background: var(--white);
-    border-radius: 12px;
-    border: 1px solid rgba(11,30,61,0.08);
-    margin-bottom: 1rem;
-  }
-  .contact-detail-icon {
-    width: 42px; height: 42px;
-    background: var(--navy);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--gold-light); font-size: 1.1rem;
-    flex-shrink: 0;
-  }
-  .contact-detail h4 { font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.25rem; }
-  .contact-detail p { font-size: 0.9rem; color: var(--navy); font-weight: 500; margin: 0; }
-
-  .enrol-form {
-    background: var(--white);
-    border-radius: 20px;
-    padding: 2.5rem;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(11,30,61,0.06);
-  }
-  .enrol-form h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--navy); font-weight: 700; margin-bottom: 0.5rem; }
-  .enrol-form > p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.8rem; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .form-group { margin-bottom: 1.2rem; }
-  .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--navy); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.04em; }
-  .form-group input, .form-group select, .form-group textarea {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1.5px solid rgba(11,30,61,0.12);
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-family: 'DM Sans', sans-serif;
-    color: var(--text);
-    background: var(--cream);
-    transition: border-color 0.2s;
-    outline: none;
-  }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-    border-color: var(--gold);
-    background: var(--white);
-  }
-  .form-group textarea { height: 100px; resize: vertical; }
-  .form-submit {
-    width: 100%;
-    padding: 0.9rem;
-    background: linear-gradient(135deg, var(--navy), var(--navy-light));
-    color: var(--white);
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .form-submit:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-  .form-success {
-    display: none;
-    background: #dcfce7;
-    border: 1px solid #86efac;
-    color: #166534;
-    padding: 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    margin-top: 1rem;
-    text-align: center;
-  }
-
-  /* ─── MODAL ─── */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; z-index: 2000;
-    background: rgba(11,30,61,0.85); backdrop-filter: blur(6px);
-    justify-content: center; align-items: center;
-    padding: 1.5rem;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--white); border-radius: 20px; max-width: 700px; width: 100%;
-    max-height: 85vh; overflow-y: auto;
-    animation: fadeIn 0.3s ease;
-  }
-  .modal-header {
-    background: linear-gradient(135deg, var(--navy), var(--navy-light));
-    padding: 2rem;
-    border-radius: 20px 20px 0 0;
-    position: sticky; top: 0;
-  }
-  .modal-header h2 { font-family: 'Playfair Display', serif; color: var(--white); font-size: 1.5rem; font-weight: 700; }
-  .modal-header p { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 0.3rem; }
-  .modal-close {
-    position: absolute; top: 1.2rem; right: 1.5rem;
-    background: rgba(255,255,255,0.12); border: none;
-    color: var(--white); width: 32px; height: 32px;
-    border-radius: 50%; cursor: pointer; font-size: 1rem;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s;
-  }
-  .modal-close:hover { background: rgba(255,255,255,0.25); }
-  .modal-body { padding: 2rem; }
-  .note-section { margin-bottom: 2rem; }
-  .note-section h3 { font-family: 'Playfair Display', serif; color: var(--navy); font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--gold-pale); }
-  .note-section p { font-size: 0.9rem; color: var(--muted); line-height: 1.8; margin-bottom: 0.75rem; }
-  .note-section ul { margin-left: 1.5rem; }
-  .note-section ul li { font-size: 0.875rem; color: var(--muted); margin-bottom: 0.4rem; line-height: 1.6; }
-  .formula-box {
-    background: var(--navy);
-    color: var(--gold-light);
-    padding: 1.2rem 1.5rem;
-    border-radius: 10px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.9rem;
-    margin: 1rem 0;
-    line-height: 2;
-  }
-  .example-box {
-    background: var(--cream);
-    border-left: 3px solid var(--gold);
-    padding: 1.2rem;
-    border-radius: 0 8px 8px 0;
-    margin: 1rem 0;
-  }
-  .example-box h4 { font-size: 0.8rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
-  .example-box p { font-size: 0.875rem; color: var(--text); margin: 0; }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 1024px) {
-    .subjects-grid { grid-template-columns: repeat(2, 1fr); }
-    .features-grid { grid-template-columns: repeat(2, 1fr); }
-    .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
-    .notes-grid { grid-template-columns: repeat(2, 1fr); }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 768px) {
-    .hero-content { grid-template-columns: 1fr; gap: 2.5rem; text-align: center; }
-    .hero-btns { justify-content: center; }
-    .hero p { max-width: 100%; }
-    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .subjects-grid { grid-template-columns: 1fr; }
-    .features-grid { grid-template-columns: 1fr; }
-    .testimonials-grid { grid-template-columns: 1fr; }
-    .notes-grid { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    .contact-grid { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
-    .hamburger { display: flex; }
-    .footer-grid { grid-template-columns: 1fr; }
-    .footer-bottom { flex-direction: column; text-align: center; }
-    .inner-hero h1 { font-size: 2rem; }
-  }
+@media(max-width:768px){.sidebar{display:none;}.stat-grid{grid-template-columns:1fr 1fr;}.two-col{grid-template-columns:1fr;}.form-2{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
+<div id="root"></div>
+<script type="text/babel">
 
-<!-- ─── NAV ─── -->
-<nav>
-  <div class="nav-brand" onclick="showPage('home')">
-    <div class="nav-logo">B</div>
-    <div class="nav-name">
-      Brightmind Solutions
-      <span>Ltd · Excellence in Maths Tuition</span>
-    </div>
-  </div>
-  <div class="nav-links">
-    <a onclick="showPage('home')" class="active" id="nav-home">Home</a>
-    <a onclick="showPage('subjects')" id="nav-subjects">Subjects</a>
-    <a onclick="showPage('notes')" id="nav-notes">Lesson Notes</a>
-    <a onclick="showPage('homework')" id="nav-homework">Homework</a>
-    <a onclick="showPage('contact')" id="nav-contact" class="nav-cta">Enrol Now</a>
-  </div>
-  <div class="hamburger" onclick="toggleMobile()" id="hamburger">
-    <span></span><span></span><span></span>
-  </div>
-</nav>
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║       BRIGHTMIND SOLUTIONS LTD — TUITION PORTAL              ║
+   ╠══════════════════════════════════════════════════════════════╣
+   ║  SETUP:                                                       ║
+   ║  1. console.firebase.google.com → new project                ║
+   ║  2. Add web app → copy config → paste below                  ║
+   ║  3. Authentication → Email/Password → Enable                 ║
+   ║  4. Firestore Database → Create (test mode)                  ║
+   ║  5. Auth → Settings → Authorised domains → add yours        ║
+   ║                                                               ║
+   ║  ADMIN ACCOUNT:                                               ║
+   ║  • Authentication → Users → Add user (your email/pass)       ║
+   ║  • Copy the UID shown                                         ║
+   ║  • Firestore → New collection: users                         ║
+   ║  • Document ID = your UID                                     ║
+   ║  • Fields:  name (string)  +  role (string) = "admin"        ║
+   ╚══════════════════════════════════════════════════════════════╝
 
-<!-- ─── HOME PAGE ─── -->
-<div id="page-home" class="page active">
+   FIRESTORE RULES — paste in Firestore → Rules → Publish:
+   ────────────────────────────────────────────────────────
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /{document=**} {
+         allow read, write: if request.auth != null;
+       }
+     }
+   }
+*/
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-grid"></div>
-    <div class="hero-content">
-      <div>
-        <div class="hero-badge">Brightmind Solutions Ltd</div>
-        <h1>Where <em>Mathematical</em><br>Minds are Forged</h1>
-        <p>Expert maths tuition from KS2 through to A-Level. We don't just teach the curriculum — we build confident, capable mathematicians who excel in exams and beyond.</p>
-        <div class="hero-btns">
-          <button class="btn-primary" onclick="showPage('contact')">Enrol Today</button>
-          <button class="btn-secondary" onclick="showPage('subjects')">Our Programmes</button>
-        </div>
-      </div>
-      <div>
-        <div class="hero-stats">
-          <div class="hero-stats-title">◆ Our Track Record</div>
-          <div class="stats-grid">
-            <div class="stat"><span class="stat-num">97%</span><div class="stat-label">Pass Rate GCSE</div></div>
-            <div class="stat"><span class="stat-num">200+</span><div class="stat-label">Students Taught</div></div>
-            <div class="stat"><span class="stat-num">89%</span><div class="stat-label">Grade 7–9 GCSE</div></div>
-            <div class="stat"><span class="stat-num">10+</span><div class="stat-label">Years Experience</div></div>
-          </div>
-          <div class="levels-list">
-            <div class="level-item" onclick="showPage('notes'); setTab('ks2')"><div class="level-dot"></div>KS2 Maths (Ages 7–11)<span>Year 3–6 →</span></div>
-            <div class="level-item" onclick="showPage('notes'); setTab('ks3')"><div class="level-dot"></div>KS3 Maths (Ages 11–14)<span>Year 7–9 →</span></div>
-            <div class="level-item" onclick="showPage('notes'); setTab('gcse')"><div class="level-dot"></div>GCSE Maths (Ages 14–16)<span>Grade 9 →</span></div>
-            <div class="level-item" onclick="showPage('notes'); setTab('alevel')"><div class="level-dot"></div>A-Level Maths (Ages 16–18)<span>A* →</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section class="about-section">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-visual">
-          <div class="about-img-box">
-            <div class="about-quote">Every student has the potential to excel at maths — they just need the right guidance.</div>
-            <div class="about-author">
-              <strong>Brightmind Solutions Ltd</strong>
-              Our teaching philosophy
-            </div>
-          </div>
-          <div class="about-float">
-            <span>10+</span>
-            Years of Excellence
-          </div>
-        </div>
-        <div class="about-text">
-          <p class="section-tag">About Us</p>
-          <h2>Dedicated to Your Child's Mathematical Success</h2>
-          <p>At Brightmind Solutions Ltd, we believe every student is capable of achieving outstanding results in mathematics. Our experienced tutors provide personalised, structured tuition tailored to each student's unique learning style and academic goals.</p>
-          <p>From building core foundations at KS2 to tackling advanced calculus at A-Level, our programme is designed to instil both confidence and competence in every learner.</p>
-          <div class="about-pillars">
-            <div class="pillar">
-              <div class="pillar-icon">🎯</div>
-              <div class="pillar-text">
-                <h4>Personalised Learning Plans</h4>
-                <p>Each student receives a bespoke learning pathway based on an initial assessment.</p>
-              </div>
-            </div>
-            <div class="pillar">
-              <div class="pillar-icon">📊</div>
-              <div class="pillar-text">
-                <h4>Progress Tracking</h4>
-                <p>Monthly reports and termly assessments to monitor improvement and celebrate milestones.</p>
-              </div>
-            </div>
-            <div class="pillar">
-              <div class="pillar-icon">🏆</div>
-              <div class="pillar-text">
-                <h4>Exam Excellence</h4>
-                <p>Past paper practice and exam technique training to maximise grades on the day.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Why Choose Us -->
-  <section class="features-section">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-tag">Why Brightmind</p>
-        <h2>What Sets Us Apart</h2>
-        <p>A tuition experience built around results, confidence and genuine understanding — not rote memorisation.</p>
-      </div>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">📝</div>
-          <h3>Detailed Lesson Notes</h3>
-          <p>Every lesson is supported by comprehensive, student-friendly notes covering all key concepts, worked examples and formula summaries.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📚</div>
-          <h3>Weekly Homework</h3>
-          <p>Structured homework assignments reinforce each lesson with graduated difficulty, from recall practice to exam-style problem solving.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">👩‍🏫</div>
-          <h3>Expert Tutors</h3>
-          <p>All tutors are qualified mathematics specialists with experience teaching across KS2, KS3, GCSE and A-Level.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📈</div>
-          <h3>Regular Assessments</h3>
-          <p>Monthly mini-tests identify gaps early so we can address weaknesses before they affect exam performance.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🗓️</div>
-          <h3>Flexible Scheduling</h3>
-          <p>Weekend and weekday sessions available, with options for both group and one-to-one tuition to suit every family.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔗</div>
-          <h3>Parent Communication</h3>
-          <p>Regular updates on progress, areas for improvement, and next steps so parents are always informed and involved.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonials -->
-  <section class="testimonials-section">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-tag">Testimonials</p>
-        <h2>What Parents & Students Say</h2>
-      </div>
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <div class="testimonial-stars">★★★★★</div>
-          <div class="testimonial-text">My daughter moved from a Grade 4 to a Grade 8 in GCSE Maths in just one year. The structured notes and weekly homework made all the difference. Absolutely transformational.</div>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">SM</div>
-            <div><div class="testimonial-name">Sarah M.</div><div class="testimonial-role">Parent of GCSE student</div></div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <div class="testimonial-stars">★★★★★</div>
-          <div class="testimonial-text">I was really struggling with A-Level integration and mechanics. Brightmind's tutors broke everything down clearly and the lesson notes are brilliant to revise from. Got an A in my mocks!</div>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">JO</div>
-            <div><div class="testimonial-name">James O.</div><div class="testimonial-role">A-Level Maths student</div></div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <div class="testimonial-stars">★★★★★</div>
-          <div class="testimonial-text">My son used to dread maths. After joining Brightmind at KS3, his confidence has grown enormously. He now enjoys the subject and his school reports are fantastic.</div>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">PK</div>
-            <div><div class="testimonial-name">Priya K.</div><div class="testimonial-role">Parent of KS3 student</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="cta-section">
-    <div class="container">
-      <h2>Ready to Begin Your Journey?</h2>
-      <p>Join hundreds of students achieving their full potential in mathematics with Brightmind Solutions Ltd.</p>
-      <button class="btn-navy" onclick="showPage('contact')">Book a Free Assessment →</button>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <h3>Brightmind Solutions Ltd</h3>
-        <p>Expert maths tuition for KS2, KS3, GCSE and A-Level. Helping students across London achieve their full potential since 2014.</p>
-        <div class="footer-contact-item"><span>📍</span><span>London, United Kingdom</span></div>
-        <div class="footer-contact-item"><span>📞</span><span>020 XXXX XXXX</span></div>
-        <div class="footer-contact-item"><span>✉️</span><span>info@brightmindsolutions.co.uk</span></div>
-      </div>
-      <div class="footer-col">
-        <h4>Programmes</h4>
-        <a onclick="showPage('notes'); setTab('ks2')">KS2 Maths</a>
-        <a onclick="showPage('notes'); setTab('ks3')">KS3 Maths</a>
-        <a onclick="showPage('notes'); setTab('gcse')">GCSE Maths</a>
-        <a onclick="showPage('notes'); setTab('alevel')">A-Level Maths</a>
-      </div>
-      <div class="footer-col">
-        <h4>Resources</h4>
-        <a onclick="showPage('notes')">Lesson Notes</a>
-        <a onclick="showPage('homework')">Homework</a>
-        <a onclick="showPage('subjects')">Subjects</a>
-      </div>
-      <div class="footer-col">
-        <h4>Enrol</h4>
-        <a onclick="showPage('contact')">Book Assessment</a>
-        <a onclick="showPage('contact')">Contact Us</a>
-        <span>Mon–Sat: 9am–7pm</span>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 Brightmind Solutions Ltd. All rights reserved.</span>
-      <span>Registered in England & Wales · Excellence in Mathematics Education</span>
-    </div>
-  </footer>
-</div>
-
-<!-- ─── SUBJECTS PAGE ─── -->
-<div id="page-subjects" class="page">
-  <div class="inner-hero">
-    <h1>Our Programmes</h1>
-    <p>Structured, rigorous maths tuition from KS2 through to A-Level</p>
-  </div>
-  <section style="background: var(--cream);">
-    <div class="container">
-      <div class="subjects-grid">
-
-        <div class="subject-card">
-          <div class="subject-level">KS2 · Ages 7–11</div>
-          <h3>Key Stage 2 Maths</h3>
-          <p>Building strong numerical foundations to prepare for secondary school and SATs examinations.</p>
-          <ul class="subject-topics">
-            <li>Number & Place Value</li>
-            <li>Addition, Subtraction, Multiplication & Division</li>
-            <li>Fractions, Decimals & Percentages</li>
-            <li>Measurement & Geometry</li>
-            <li>Statistics & Data Handling</li>
-            <li>SATs Preparation</li>
-          </ul>
-          <div class="subject-link" onclick="showPage('notes'); setTab('ks2')">View Lesson Notes →</div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-level">KS3 · Ages 11–14</div>
-          <h3>Key Stage 3 Maths</h3>
-          <p>Bridging primary and GCSE maths with deeper algebraic and geometric thinking.</p>
-          <ul class="subject-topics">
-            <li>Algebra: Expressions & Equations</li>
-            <li>Ratio, Proportion & Rates of Change</li>
-            <li>Geometry & Measures</li>
-            <li>Probability & Statistics</li>
-            <li>Sequences & Functions</li>
-            <li>Problem-Solving Skills</li>
-          </ul>
-          <div class="subject-link" onclick="showPage('notes'); setTab('ks3')">View Lesson Notes →</div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-level">GCSE · Ages 14–16</div>
-          <h3>GCSE Mathematics</h3>
-          <p>Comprehensive GCSE preparation covering all AQA/Edexcel topics to achieve Grade 7–9.</p>
-          <ul class="subject-topics">
-            <li>Number, Algebra & Graphs</li>
-            <li>Geometry, Trigonometry & Pythagoras</li>
-            <li>Statistics & Probability</li>
-            <li>Vectors & Transformations</li>
-            <li>Higher & Foundation tiers</li>
-            <li>Extensive Past Paper Practice</li>
-          </ul>
-          <div class="subject-link" onclick="showPage('notes'); setTab('gcse')">View Lesson Notes →</div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-level">A-Level · Ages 16–18</div>
-          <h3>A-Level Mathematics</h3>
-          <p>Advanced tuition in Pure Mathematics, Statistics and Mechanics for Edexcel/AQA/OCR.</p>
-          <ul class="subject-topics">
-            <li>Pure: Calculus, Algebra, Proof</li>
-            <li>Pure: Trigonometry & Exponentials</li>
-            <li>Statistics: Hypothesis Testing</li>
-            <li>Mechanics: Forces & Kinematics</li>
-            <li>Further Maths available</li>
-            <li>University Entrance Preparation</li>
-          </ul>
-          <div class="subject-link" onclick="showPage('notes'); setTab('alevel')">View Lesson Notes →</div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-  <section class="cta-section" style="padding: 4rem 2rem;">
-    <h2>Not sure which programme?</h2>
-    <p>Book a free assessment and we'll place your child in the right level.</p>
-    <button class="btn-navy" onclick="showPage('contact')">Book Free Assessment →</button>
-  </section>
-</div>
-
-<!-- ─── LESSON NOTES PAGE ─── -->
-<div id="page-notes" class="page">
-  <div class="inner-hero">
-    <h1>Lesson Notes</h1>
-    <p>Well-structured notes for every topic across all levels — your study companion between sessions</p>
-  </div>
-
-  <div class="tabs-bar">
-    <div class="tabs">
-      <div class="tab active" onclick="setTab('ks2')" id="tab-ks2">KS2 Maths</div>
-      <div class="tab" onclick="setTab('ks3')" id="tab-ks3">KS3 Maths</div>
-      <div class="tab" onclick="setTab('gcse')" id="tab-gcse">GCSE Maths</div>
-      <div class="tab" onclick="setTab('alevel')" id="tab-alevel">A-Level Maths</div>
-    </div>
-  </div>
-
-  <div class="notes-content">
-
-    <!-- KS2 -->
-    <div class="tab-pane active" id="pane-ks2">
-      <div class="notes-grid">
-        <div class="note-card" onclick="openNote('ks2-fractions')">
-          <div class="note-card-header" data-icon="½">
-            <div class="note-topic">KS2 · Number</div>
-            <div class="note-title">Fractions, Decimals & Percentages</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Year 5–6</span><span class="note-badge">Core</span></div>
-            <p class="note-desc">Converting between fractions, decimals and percentages with worked examples and visual models.</p>
-            <div class="note-card-footer"><span class="note-pages">8 pages · 12 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-        <div class="note-card" onclick="openNote('ks2-multiplication')">
-          <div class="note-card-header" data-icon="×">
-            <div class="note-topic">KS2 · Number</div>
-            <div class="note-title">Multiplication & Division Mastery</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Year 3–5</span><span class="note-badge">Foundation</span></div>
-            <p class="note-desc">Times tables, long multiplication, short and long division with remainders — fully explained.</p>
-            <div class="note-card-footer"><span class="note-pages">6 pages · 15 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-        <div class="note-card" onclick="openNote('ks2-geometry')">
-          <div class="note-card-header" data-icon="△">
-            <div class="note-topic">KS2 · Geometry</div>
-            <div class="note-title">Shapes, Area & Perimeter</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Year 4–6</span><span class="note-badge">Core</span></div>
-            <p class="note-desc">Properties of 2D shapes, calculating area and perimeter of rectangles, triangles and compound shapes.</p>
-            <div class="note-card-footer"><span class="note-pages">7 pages · 10 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- KS3 -->
-    <div class="tab-pane" id="pane-ks3">
-      <div class="notes-grid">
-        <div class="note-card" onclick="openNote('ks3-algebra')">
-          <div class="note-card-header" data-icon="x">
-            <div class="note-topic">KS3 · Algebra</div>
-            <div class="note-title">Introduction to Algebra</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Year 7</span><span class="note-badge">Foundation</span></div>
-            <p class="note-desc">Variables, expressions, simplifying, expanding brackets and substitution — the language of algebra explained clearly.</p>
-            <div class="note-card-footer"><span class="note-pages">10 pages · 18 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-        <div class="note-card" onclick="openNote('ks3-equations')">
-          <div class="note-card-header" data-icon="=">
-            <div class="note-topic">KS3 · Algebra</div>
-            <div class="note-title">Solving Linear Equations</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Year 8</span><span class="note-badge">Core</span></div>
-            <p class="note-desc">One-step, two-step and multi-step linear equations. Equations with unknowns on both sides.</p>
-            <div class="note-card-footer"><span class="note-pages">9 pages · 20 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-        <div class="note-card" onclick="openNote('ks3-ratio')">
-          <div class="note-card-header" data-icon=":">
-            <div class="note-topic">KS3 · Ratio</div>
-            <div class="note-title">Ratio & Proportion</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Year 8–9</span><span class="note-badge">Core</span></div>
-            <p class="note-desc">Writing ratios, simplifying, dividing quantities, direct and inverse proportion.</p>
-            <div class="note-card-footer"><span class="note-pages">8 pages · 14 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- GCSE -->
-    <div class="tab-pane" id="pane-gcse">
-      <div class="notes-grid">
-        <div class="note-card" onclick="openNote('gcse-quadratics')">
-          <div class="note-card-header" data-icon="²">
-            <div class="note-topic">GCSE · Algebra</div>
-            <div class="note-title">Quadratic Equations</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Higher</span><span class="note-badge">Grade 6+</span></div>
-            <p class="note-desc">Factorising, completing the square and the quadratic formula. Graphical interpretation of roots.</p>
-            <div class="note-card-footer"><span class="note-pages">12 pages · 22 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-        <div class="note-card" onclick="openNote('gcse-trig')">
-          <div class="note-card-header" data-icon="θ">
-            <div class="note-topic">GCSE · Geometry</div>
-            <div class="note-title">Trigonometry</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Higher</span><span class="note-badge">Grade 6+</span></div>
-            <p class="note-desc">SOH CAH TOA, finding sides and angles, sine and cosine rules, 3D trigonometry.</p>
-            <div class="note-card-footer"><span class="note-pages">14 pages · 20 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-        <div class="note-card" onclick="openNote('gcse-stats')">
-          <div class="note-card-header" data-icon="σ">
-            <div class="note-topic">GCSE · Statistics</div>
-            <div class="note-title">Statistics & Probability</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Foundation & Higher</span><span class="note-badge">Grade 4+</span></div>
-            <p class="note-desc">Mean, median, mode, range, cumulative frequency, box plots, tree diagrams and Venn diagrams.</p>
-            <div class="note-card-footer"><span class="note-pages">11 pages · 18 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- A-LEVEL -->
-    <div class="tab-pane" id="pane-alevel">
-      <div class="notes-grid">
-        <div class="note-card" onclick="openNote('alevel-calculus')">
-          <div class="note-card-header" data-icon="∫">
-            <div class="note-topic">A-Level · Pure</div>
-            <div class="note-title">Differentiation & Integration</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Year 1 & 2</span><span class="note-badge">Core Pure</span></div>
-            <p class="note-desc">Differentiating from first principles, chain/product/quotient rules, integration techniques including substitution and by parts.</p>
-            <div class="note-card-footer"><span class="note-pages">18 pages · 30 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-        <div class="note-card" onclick="openNote('alevel-trig')">
-          <div class="note-card-header" data-icon="π">
-            <div class="note-topic">A-Level · Pure</div>
-            <div class="note-title">Advanced Trigonometry</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Year 1</span><span class="note-badge">Core Pure</span></div>
-            <p class="note-desc">Radians, arc length, sector area, exact values, reciprocal trig functions, addition formulae and double angle identities.</p>
-            <div class="note-card-footer"><span class="note-pages">15 pages · 25 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-        <div class="note-card" onclick="openNote('alevel-mechanics')">
-          <div class="note-card-header" data-icon="⚡">
-            <div class="note-topic">A-Level · Mechanics</div>
-            <div class="note-title">Kinematics & Forces</div>
-          </div>
-          <div class="note-card-body">
-            <div class="note-meta"><span class="note-badge">Year 1</span><span class="note-badge">Mechanics</span></div>
-            <p class="note-desc">SUVAT equations, Newton's Laws, friction, connected particles, resolving forces on inclined planes.</p>
-            <div class="note-card-footer"><span class="note-pages">16 pages · 22 examples</span><button class="btn-sm gold">View Notes</button></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ─── HOMEWORK PAGE ─── -->
-<div id="page-homework" class="page">
-  <div class="inner-hero">
-    <h1>Homework Assignments</h1>
-    <p>Weekly assignments to reinforce lessons — view tasks, due dates and submission status</p>
-  </div>
-
-  <div class="hw-section">
-    <div class="hw-filters">
-      <span class="filter-label">Filter by Level:</span>
-      <button class="filter-btn active" onclick="filterHW('all', this)">All Levels</button>
-      <button class="filter-btn" onclick="filterHW('ks2', this)">KS2</button>
-      <button class="filter-btn" onclick="filterHW('ks3', this)">KS3</button>
-      <button class="filter-btn" onclick="filterHW('gcse', this)">GCSE</button>
-      <button class="filter-btn" onclick="filterHW('alevel', this)">A-Level</button>
-    </div>
-
-    <div class="hw-table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Assignment Title</th>
-            <th>Level</th>
-            <th>Topic</th>
-            <th>Set Date</th>
-            <th>Due Date</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="hw-tbody">
-          <tr data-level="gcse">
-            <td><strong>GCSE Quadratics – Worksheet 1</strong></td>
-            <td><span class="level-tag gcse">GCSE</span></td>
-            <td>Factorising Quadratics</td>
-            <td>14 Apr 2025</td>
-            <td>21 Apr 2025</td>
-            <td><span class="status-pill status-new">New</span></td>
-            <td><button class="btn-sm gold" onclick="openHWModal('gcse-q1')">View</button></td>
-          </tr>
-          <tr data-level="alevel">
-            <td><strong>A-Level Integration – Problem Set 3</strong></td>
-            <td><span class="level-tag alevel">A-Level</span></td>
-            <td>Integration by Substitution</td>
-            <td>14 Apr 2025</td>
-            <td>21 Apr 2025</td>
-            <td><span class="status-pill status-new">New</span></td>
-            <td><button class="btn-sm gold" onclick="openHWModal('alevel-int3')">View</button></td>
-          </tr>
-          <tr data-level="ks3">
-            <td><strong>KS3 Algebra – Linear Equations Set 2</strong></td>
-            <td><span class="level-tag ks3">KS3</span></td>
-            <td>Solving Equations</td>
-            <td>07 Apr 2025</td>
-            <td>14 Apr 2025</td>
-            <td><span class="status-pill status-due">Due</span></td>
-            <td><button class="btn-sm" onclick="openHWModal('ks3-eq2')">View</button></td>
-          </tr>
-          <tr data-level="ks2">
-            <td><strong>KS2 Fractions – Worksheet 4</strong></td>
-            <td><span class="level-tag ks2">KS2</span></td>
-            <td>Adding & Subtracting Fractions</td>
-            <td>07 Apr 2025</td>
-            <td>14 Apr 2025</td>
-            <td><span class="status-pill status-done">Submitted</span></td>
-            <td><button class="btn-sm" onclick="openHWModal('ks2-frac4')">View</button></td>
-          </tr>
-          <tr data-level="gcse">
-            <td><strong>GCSE Trigonometry – Worksheet 2</strong></td>
-            <td><span class="level-tag gcse">GCSE</span></td>
-            <td>Sine & Cosine Rule</td>
-            <td>31 Mar 2025</td>
-            <td>07 Apr 2025</td>
-            <td><span class="status-pill status-done">Submitted</span></td>
-            <td><button class="btn-sm" onclick="openHWModal('gcse-trig2')">View</button></td>
-          </tr>
-          <tr data-level="alevel">
-            <td><strong>A-Level Differentiation – Set 2</strong></td>
-            <td><span class="level-tag alevel">A-Level</span></td>
-            <td>Chain Rule & Product Rule</td>
-            <td>31 Mar 2025</td>
-            <td>07 Apr 2025</td>
-            <td><span class="status-pill status-overdue">Overdue</span></td>
-            <td><button class="btn-sm" onclick="openHWModal('alevel-diff2')">View</button></td>
-          </tr>
-          <tr data-level="ks3">
-            <td><strong>KS3 Ratio & Proportion – Set 1</strong></td>
-            <td><span class="level-tag ks3">KS3</span></td>
-            <td>Ratio & Proportion</td>
-            <td>24 Mar 2025</td>
-            <td>31 Mar 2025</td>
-            <td><span class="status-pill status-done">Submitted</span></td>
-            <td><button class="btn-sm" onclick="openHWModal('ks3-ratio1')">View</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div style="margin-top: 2rem; background: var(--white); border-radius: 14px; padding: 1.5rem; border: 1px solid rgba(11,30,61,0.08); display: flex; gap: 2rem; flex-wrap: wrap;">
-      <div style="display: flex; align-items: center; gap: 8px; font-size: 0.83rem; color: var(--muted);">
-        <span class="status-pill status-new">New</span> Recently set – action required
-      </div>
-      <div style="display: flex; align-items: center; gap: 8px; font-size: 0.83rem; color: var(--muted);">
-        <span class="status-pill status-due">Due</span> Due within 3 days
-      </div>
-      <div style="display: flex; align-items: center; gap: 8px; font-size: 0.83rem; color: var(--muted);">
-        <span class="status-pill status-overdue">Overdue</span> Past due date
-      </div>
-      <div style="display: flex; align-items: center; gap: 8px; font-size: 0.83rem; color: var(--muted);">
-        <span class="status-pill status-done">Submitted</span> Completed
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ─── CONTACT PAGE ─── -->
-<div id="page-contact" class="page">
-  <div class="inner-hero">
-    <h1>Enrol & Contact Us</h1>
-    <p>Book your free assessment today and take the first step towards excellence</p>
-  </div>
-
-  <div class="contact-grid">
-    <div class="contact-info">
-      <h2>Get in Touch</h2>
-      <p>We'd love to hear from you. Fill in the form or use the details below to reach us.</p>
-      <div class="contact-detail">
-        <div class="contact-detail-icon">📍</div>
-        <div><h4>Address</h4><p>London, United Kingdom</p></div>
-      </div>
-      <div class="contact-detail">
-        <div class="contact-detail-icon">📞</div>
-        <div><h4>Phone</h4><p>020 XXXX XXXX</p></div>
-      </div>
-      <div class="contact-detail">
-        <div class="contact-detail-icon">✉️</div>
-        <div><h4>Email</h4><p>info@brightmindsolutions.co.uk</p></div>
-      </div>
-      <div class="contact-detail">
-        <div class="contact-detail-icon">🕐</div>
-        <div><h4>Opening Hours</h4><p>Monday–Saturday: 9am–7pm</p></div>
-      </div>
-      <div style="margin-top: 2rem; background: linear-gradient(135deg, var(--navy), var(--navy-light)); border-radius: 14px; padding: 1.5rem; color: white;">
-        <div style="font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--gold-light);">Free Initial Assessment</div>
-        <p style="font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.7; margin:0;">Every new student receives a free 45-minute assessment to identify their current level, strengths and areas for improvement — before any commitment is made.</p>
-      </div>
-    </div>
-
-    <div class="enrol-form">
-      <h3>Enrolment Enquiry</h3>
-      <p>Complete the form below and we'll be in touch within 24 hours.</p>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>Parent/Guardian Name *</label>
-          <input type="text" placeholder="Your full name" />
-        </div>
-        <div class="form-group">
-          <label>Student's Name *</label>
-          <input type="text" placeholder="Student's full name" />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Email Address *</label>
-          <input type="email" placeholder="your@email.com" />
-        </div>
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" placeholder="07xxx xxxxxx" />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Student's Year Group *</label>
-          <select>
-            <option value="">Select year group</option>
-            <option>Year 3</option><option>Year 4</option><option>Year 5</option>
-            <option>Year 6</option><option>Year 7</option><option>Year 8</option>
-            <option>Year 9</option><option>Year 10</option><option>Year 11</option>
-            <option>Year 12</option><option>Year 13</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Programme of Interest *</label>
-          <select>
-            <option value="">Select programme</option>
-            <option>KS2 Maths</option>
-            <option>KS3 Maths</option>
-            <option>GCSE Maths</option>
-            <option>A-Level Maths</option>
-            <option>Not sure – need assessment</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Additional Information</label>
-        <textarea placeholder="Tell us about any specific topics your child is struggling with, upcoming exams, or any other relevant information..."></textarea>
-      </div>
-      <button class="form-submit" onclick="submitForm()">Send Enquiry →</button>
-      <div class="form-success" id="form-success">
-        ✅ Thank you! We've received your enquiry and will be in touch within 24 hours.
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ─── NOTE MODAL ─── -->
-<div class="modal-overlay" id="note-modal" onclick="closeModal(event)">
-  <div class="modal">
-    <div class="modal-header" id="modal-header">
-      <button class="modal-close" onclick="closeNoteModal()">✕</button>
-      <h2 id="modal-title">Lesson Note</h2>
-      <p id="modal-subtitle">Brightmind Solutions Ltd</p>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-  </div>
-</div>
-
-<!-- ─── HOMEWORK MODAL ─── -->
-<div class="modal-overlay" id="hw-modal" onclick="closeModal(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <button class="modal-close" onclick="closeHWModal()">✕</button>
-      <h2 id="hw-modal-title">Homework Assignment</h2>
-      <p id="hw-modal-subtitle">Brightmind Solutions Ltd</p>
-    </div>
-    <div class="modal-body" id="hw-modal-body"></div>
-  </div>
-</div>
-
-<script>
-// ─── NAVIGATION ───
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-  const el = document.getElementById('nav-' + id);
-  if (el) el.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function toggleMobile() {
-  // Simple mobile: show/hide nav-links
-  const links = document.querySelector('.nav-links');
-  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
-  links.style.flexDirection = 'column';
-  links.style.position = 'fixed';
-  links.style.top = '68px';
-  links.style.left = '0'; links.style.right = '0';
-  links.style.background = 'rgba(11,30,61,0.98)';
-  links.style.padding = '1rem 2rem 2rem';
-  links.style.gap = '0.5rem';
-  links.style.zIndex = '999';
-}
-
-// ─── TABS ───
-function setTab(id) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  document.getElementById('pane-' + id).classList.add('active');
-}
-
-// ─── HW FILTER ───
-function filterHW(level, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('#hw-tbody tr').forEach(row => {
-    row.style.display = (level === 'all' || row.dataset.level === level) ? '' : 'none';
-  });
-}
-
-// ─── MODAL ───
-function closeModal(e) { if (e.target.classList.contains('modal-overlay')) { closeNoteModal(); closeHWModal(); } }
-
-function closeNoteModal() { document.getElementById('note-modal').classList.remove('open'); }
-function closeHWModal() { document.getElementById('hw-modal').classList.remove('open'); }
-
-// ─── NOTE CONTENT ───
-const noteData = {
-  'gcse-quadratics': {
-    title: 'Quadratic Equations', subtitle: 'GCSE Higher · Algebra',
-    body: `
-      <div class="note-section">
-        <h3>1. What is a Quadratic Equation?</h3>
-        <p>A quadratic equation has the general form <strong>ax² + bx + c = 0</strong>, where a ≠ 0. The graph of a quadratic is always a parabola — U-shaped (a > 0) or ∩-shaped (a < 0).</p>
-      </div>
-      <div class="note-section">
-        <h3>2. Method 1 — Factorising</h3>
-        <p>Find two numbers that multiply to give <em>ac</em> and add to give <em>b</em>. Rewrite the middle term and factorise by grouping.</p>
-        <div class="example-box"><h4>Worked Example</h4><p>Solve: x² + 5x + 6 = 0<br>Find two numbers × to 6, + to 5 → 2 and 3<br>(x + 2)(x + 3) = 0 → x = −2 or x = −3</p></div>
-      </div>
-      <div class="note-section">
-        <h3>3. Method 2 — The Quadratic Formula</h3>
-        <p>Use when the quadratic cannot be factorised easily.</p>
-        <div class="formula-box">x = (−b ± √(b² − 4ac)) / 2a<br><br>The discriminant b² − 4ac tells us:<br>  > 0 → two real roots<br>  = 0 → one repeated root<br>  &lt; 0 → no real roots</div>
-      </div>
-      <div class="note-section">
-        <h3>4. Method 3 — Completing the Square</h3>
-        <p>Rewrite ax² + bx + c in the form a(x + p)² + q. Essential for finding the vertex of a parabola.</p>
-        <div class="example-box"><h4>Worked Example</h4><p>x² + 6x + 5 → (x + 3)² − 9 + 5 → (x + 3)² − 4<br>So roots: x + 3 = ±2 → x = −1 or x = −5</p></div>
-      </div>
-      <div class="note-section">
-        <h3>5. Key Reminders</h3>
-        <ul><li>Always rearrange to ax² + bx + c = 0 first</li><li>Check your answers by substituting back in</li><li>Higher tier: know all three methods</li></ul>
-      </div>`
-  },
-  'alevel-calculus': {
-    title: 'Differentiation & Integration', subtitle: 'A-Level · Core Pure Mathematics',
-    body: `
-      <div class="note-section">
-        <h3>1. Differentiation from First Principles</h3>
-        <p>The derivative f'(x) = lim[h→0] (f(x+h) − f(x)) / h. This gives the gradient of the curve at any point.</p>
-        <div class="formula-box">d/dx (xⁿ) = nxⁿ⁻¹ &nbsp;&nbsp; (Power Rule)</div>
-      </div>
-      <div class="note-section">
-        <h3>2. Chain Rule</h3>
-        <p>If y = f(g(x)), then dy/dx = f'(g(x)) · g'(x). Useful when differentiating composite functions.</p>
-        <div class="example-box"><h4>Example</h4><p>y = (3x + 1)⁵ → dy/dx = 5(3x + 1)⁴ · 3 = 15(3x + 1)⁴</p></div>
-      </div>
-      <div class="note-section">
-        <h3>3. Product & Quotient Rules</h3>
-        <div class="formula-box">Product: d/dx(uv) = u(dv/dx) + v(du/dx)<br>Quotient: d/dx(u/v) = [v(du/dx) − u(dv/dx)] / v²</div>
-      </div>
-      <div class="note-section">
-        <h3>4. Integration</h3>
-        <p>Integration is the reverse of differentiation. The indefinite integral includes a constant of integration C.</p>
-        <div class="formula-box">∫ xⁿ dx = xⁿ⁺¹/(n+1) + C &nbsp; (n ≠ −1)</div>
-      </div>
-      <div class="note-section">
-        <h3>5. Integration by Substitution</h3>
-        <p>Let u = g(x), then replace dx with du/g'(x). Transform the whole integral in terms of u, integrate, then substitute back.</p>
-        <div class="example-box"><h4>Example</h4><p>∫ 2x(x²+1)⁴ dx — let u = x²+1, du = 2x dx<br>= ∫ u⁴ du = u⁵/5 + C = (x²+1)⁵/5 + C</p></div>
-      </div>`
-  },
-  'ks2-fractions': {
-    title: 'Fractions, Decimals & Percentages', subtitle: 'KS2 · Year 5–6',
-    body: `
-      <div class="note-section">
-        <h3>1. What is a Fraction?</h3>
-        <p>A fraction represents a part of a whole. The <strong>numerator</strong> (top number) tells us how many parts we have. The <strong>denominator</strong> (bottom number) tells us how many equal parts the whole is divided into.</p>
-      </div>
-      <div class="note-section">
-        <h3>2. Equivalent Fractions</h3>
-        <p>Fractions that represent the same value. Multiply or divide both top and bottom by the same number.</p>
-        <div class="example-box"><h4>Example</h4><p>1/2 = 2/4 = 3/6 = 50/100</p></div>
-      </div>
-      <div class="note-section">
-        <h3>3. Converting to Decimals & Percentages</h3>
-        <div class="formula-box">Fraction → Decimal: divide numerator ÷ denominator<br>Decimal → Percentage: multiply × 100<br><br>1/2 = 0.5 = 50%<br>1/4 = 0.25 = 25%<br>3/4 = 0.75 = 75%</div>
-      </div>
-      <div class="note-section">
-        <h3>4. Adding & Subtracting Fractions</h3>
-        <p>Make sure the denominators are the same (find the LCM) before adding or subtracting the numerators.</p>
-        <div class="example-box"><h4>Example</h4><p>1/3 + 1/4 = 4/12 + 3/12 = 7/12</p></div>
-      </div>`
-  },
-  'ks3-algebra': {
-    title: 'Introduction to Algebra', subtitle: 'KS3 · Year 7',
-    body: `
-      <div class="note-section">
-        <h3>1. What is Algebra?</h3>
-        <p>Algebra uses letters (called variables) to represent unknown numbers. This allows us to write general rules and solve problems without knowing the exact values.</p>
-      </div>
-      <div class="note-section">
-        <h3>2. Key Vocabulary</h3>
-        <ul><li><strong>Variable:</strong> a letter representing an unknown (e.g. x, y, n)</li><li><strong>Expression:</strong> a combination of variables and numbers (e.g. 3x + 2)</li><li><strong>Term:</strong> a single number or variable (e.g. 5x, −3, y²)</li><li><strong>Equation:</strong> two expressions that are equal (e.g. 3x + 2 = 11)</li></ul>
-      </div>
-      <div class="note-section">
-        <h3>3. Simplifying Expressions</h3>
-        <p>Collect like terms — terms with the same variable and power can be added or subtracted.</p>
-        <div class="example-box"><h4>Example</h4><p>3x + 5y + 2x − y = 5x + 4y</p></div>
-      </div>
-      <div class="note-section">
-        <h3>4. Expanding Brackets</h3>
-        <p>Multiply each term inside the bracket by the term outside.</p>
-        <div class="formula-box">a(b + c) = ab + ac</div>
-        <div class="example-box"><h4>Example</h4><p>3(2x + 5) = 6x + 15</p></div>
-      </div>`
-  }
+// ═══ PASTE YOUR FIREBASE CONFIG HERE ═══
+const firebaseConfig = {
+  apiKey:            "PASTE_YOUR_API_KEY_HERE",
+  authDomain:        "PASTE_YOUR_PROJECT_ID.firebaseapp.com",
+  projectId:         "PASTE_YOUR_PROJECT_ID",
+  storageBucket:     "PASTE_YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
+  appId:             "PASTE_YOUR_APP_ID"
 };
+// ════════════════════════════════════════
 
-function openNote(id) {
-  const data = noteData[id];
-  if (!data) {
-    // Generic fallback
-    document.getElementById('modal-title').textContent = 'Lesson Notes';
-    document.getElementById('modal-subtitle').textContent = 'Brightmind Solutions Ltd';
-    document.getElementById('modal-body').innerHTML = `<div class="note-section"><h3>Content Coming Soon</h3><p>Full notes for this topic will be available shortly. Please speak to your tutor for a printed copy.</p></div>`;
-  } else {
-    document.getElementById('modal-title').textContent = data.title;
-    document.getElementById('modal-subtitle').textContent = data.subtitle + ' · Brightmind Solutions Ltd';
-    document.getElementById('modal-body').innerHTML = data.body;
+firebase.initializeApp(firebaseConfig);
+const secondaryApp  = firebase.initializeApp(firebaseConfig, 'Secondary');
+const auth          = firebase.auth();
+const secondaryAuth = firebase.auth(secondaryApp);
+const db            = firebase.firestore();
+
+const { useState, useEffect } = React;
+const fmt  = d => d ? new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+const fmtS = d => d ? new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '';
+const tod  = () => new Date().toISOString().split('T')[0];
+
+// Detect file type icon from name or url
+function fileIcon(name='') {
+  const ext = name.split('.').pop().toLowerCase();
+  if (ext==='pdf')                              return '📕';
+  if (['doc','docx'].includes(ext))             return '📘';
+  if (['ppt','pptx'].includes(ext))             return '📙';
+  if (['jpg','jpeg','png','gif'].includes(ext)) return '🖼️';
+  if (name.toLowerCase().includes('sheet') || ext==='xlsx') return '📗';
+  return '📄';
+}
+
+// ─── Shared Components ────────────────────────────────────────────
+
+function Av({name='?',size=32}){
+  const i=(name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const bgs=['#0b1e3d','#1a3366','#0f2e5c','#163b6b','#0d2b52'];
+  return <div className="av" style={{width:size,height:size,fontSize:size*.33,background:bgs[name.charCodeAt(0)%bgs.length]}}>{i}</div>;
+}
+function LBadge({level}){const m={'KS2':'b-ks2','KS3':'b-ks3','GCSE':'b-gcse','A-Level':'b-al'};return <span className={`badge ${m[level]||'b-gray'}`}>{level}</span>;}
+function SBadge({status}){const m={submitted:['b-green','Submitted'],pending:['b-amber','Pending'],overdue:['b-red','Overdue']};const[c,l]=m[status]||['b-gray',status];return <span className={`badge ${c}`}>{l}</span>;}
+function Fg({label,children}){return <div className="fg"><label className="lbl">{label}</label>{children}</div>;}
+
+function Modal({title,sub,onClose,wide,children}){
+  return(
+    <div className="modal-bg" onClick={e=>e.target.classList.contains('modal-bg')&&onClose()}>
+      <div className={`modal-box${wide?' modal-wide':''}`}>
+        <div className="modal-head">
+          <div>
+            <div style={{fontFamily:'Georgia,serif',color:'#fff',fontSize:16,fontWeight:700}}>{title}</div>
+            {sub&&<div style={{color:'rgba(255,255,255,.5)',fontSize:11,marginTop:2}}>{sub}</div>}
+          </div>
+          <button className="close-x" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body">{children}</div>
+      </div>
+    </div>
+  );
+}
+function PH({title,sub,action}){
+  return(
+    <div className="ph">
+      <div><div className="ph-title">{title}</div>{sub&&<div className="ph-sub">{sub}</div>}</div>
+      {action}
+    </div>
+  );
+}
+function Sidebar({nav,pg,setPg,user,onLogout}){
+  return(
+    <div className="sidebar">
+      <div className="sb-brand">
+        <div style={{display:'flex',alignItems:'center',gap:9,marginBottom:10}}>
+          <div className="sb-logo">B</div>
+          <div><div style={{color:'#fff',fontSize:11.5,fontWeight:600}}>Brightmind</div><div style={{color:'rgba(255,255,255,.35)',fontSize:10}}>Solutions Ltd</div></div>
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:8}}>
+          <Av name={user.name||'?'} size={26}/>
+          <div>
+            <div style={{color:'rgba(255,255,255,.8)',fontSize:11.5,fontWeight:500}}>{user.name}</div>
+            <div style={{color:'rgba(255,255,255,.35)',fontSize:10}}>{user.role==='admin'?'Tutor / Admin':`${user.level} · ${user.year}`}</div>
+          </div>
+        </div>
+      </div>
+      <nav className="sb-nav">
+        {nav.map(n=>(
+          <div key={n.id} className={`sb-item${pg===n.id?' active':''}`} onClick={()=>setPg(n.id)}>
+            <span style={{fontSize:15}}>{n.icon}</span>{n.label}
+          </div>
+        ))}
+      </nav>
+      <div className="sb-foot">
+        <div className="sb-item" onClick={onLogout}><span style={{fontSize:15}}>🚪</span>Sign Out</div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Google Drive Link Component ─────────────────────────────────
+function DriveLink({value, onChange}){
+  // value = { url, name } or null
+  const [url,setUrl]   = useState(value?.url||'');
+  const [name,setName] = useState(value?.name||'');
+  const [added,setAdded] = useState(!!value?.url);
+
+  function add(){
+    if(!url.trim())return;
+    const info={url:url.trim(), name:name.trim()||'Google Drive File'};
+    setAdded(true);
+    onChange(info);
   }
-  document.getElementById('note-modal').classList.add('open');
-}
+  function clear(){setUrl('');setName('');setAdded(false);onChange(null);}
 
-// ─── HOMEWORK MODAL CONTENT ───
-const hwData = {
-  'gcse-q1': {
-    title: 'GCSE Quadratics – Worksheet 1',
-    subtitle: 'GCSE Higher · Set: 14 Apr 2025 · Due: 21 Apr 2025',
-    body: `
-      <div class="note-section">
-        <h3>Instructions</h3>
-        <p>Show all working clearly. Marks are awarded for method, not just the final answer. Use the quadratic formula where instructed.</p>
+  if(added && value?.url){
+    return(
+      <div className="drive-box set">
+        <span style={{fontSize:24}}>🔗</span>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:600,color:'#166534',fontSize:13}}>{value.name}</div>
+          <div style={{fontSize:11,color:'#6b7280',marginTop:1}}>Google Drive link saved</div>
+        </div>
+        <a href={value.url} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-sm">Preview ↗</a>
+        <button className="btn btn-ghost btn-sm" onClick={clear}>Remove</button>
       </div>
-      <div class="note-section">
-        <h3>Section A — Factorising (4 marks each)</h3>
-        <p><strong>Q1.</strong> Solve by factorising: x² + 7x + 12 = 0</p>
-        <p><strong>Q2.</strong> Solve by factorising: x² − 5x − 6 = 0</p>
-        <p><strong>Q3.</strong> Solve by factorising: 2x² + 7x + 3 = 0</p>
-        <p><strong>Q4.</strong> Solve by factorising: 3x² − 11x + 6 = 0</p>
-      </div>
-      <div class="note-section">
-        <h3>Section B — Quadratic Formula (5 marks each)</h3>
-        <p><strong>Q5.</strong> Using the quadratic formula, solve: x² + 3x − 5 = 0. Give your answers to 2 decimal places.</p>
-        <p><strong>Q6.</strong> Solve: 2x² − 4x − 3 = 0. Give your answers in surd form.</p>
-      </div>
-      <div class="note-section">
-        <h3>Section C — Problem Solving (6 marks)</h3>
-        <p><strong>Q7.</strong> A rectangle has a length that is (x + 3) cm and a width of (x − 1) cm. Its area is 21 cm². Find the value of x and hence the dimensions of the rectangle.</p>
-      </div>
-      <div style="background: var(--cream); border-radius: 10px; padding: 1rem 1.2rem; margin-top: 1rem; font-size: 0.82rem; color: var(--muted);">
-        📌 Total: 42 marks · Please bring completed work to your next session or photograph and send to your tutor.
-      </div>`
-  },
-  'alevel-int3': {
-    title: 'A-Level Integration – Problem Set 3',
-    subtitle: 'A-Level · Set: 14 Apr 2025 · Due: 21 Apr 2025',
-    body: `
-      <div class="note-section">
-        <h3>Integration by Substitution</h3>
-        <p>For each integral, state the substitution used and show all steps clearly.</p>
-        <p><strong>Q1.</strong> ∫ 6x(x² + 4)⁵ dx</p>
-        <p><strong>Q2.</strong> ∫ cos(x) · sin³(x) dx</p>
-        <p><strong>Q3.</strong> ∫ (2x + 1) / (x² + x + 3) dx</p>
-        <p><strong>Q4.</strong> ∫₀¹ x · e^(x²) dx &nbsp;&nbsp;<em>[definite integral]</em></p>
-      </div>
-      <div class="note-section">
-        <h3>Integration by Parts</h3>
-        <p>Use the formula: ∫u(dv/dx)dx = uv − ∫v(du/dx)dx</p>
-        <p><strong>Q5.</strong> ∫ x · eˣ dx</p>
-        <p><strong>Q6.</strong> ∫ x · sin(2x) dx</p>
-        <p><strong>Q7.</strong> ∫ ln(x) dx &nbsp;&nbsp;<em>[Hint: write as ∫ 1 · ln(x) dx]</em></p>
-      </div>
-      <div style="background: var(--cream); border-radius: 10px; padding: 1rem 1.2rem; margin-top: 1rem; font-size: 0.82rem; color: var(--muted);">
-        📌 Total: 35 marks · Show all substitutions and intermediate steps for full marks.
-      </div>`
-  },
-  'ks2-frac4': {
-    title: 'KS2 Fractions – Worksheet 4',
-    subtitle: 'KS2 · Set: 07 Apr 2025 · Due: 14 Apr 2025',
-    body: `
-      <div class="note-section">
-        <h3>Adding & Subtracting Fractions</h3>
-        <p>Remember: find a common denominator before adding or subtracting!</p>
-        <p><strong>Q1.</strong> 1/4 + 1/2 = ?</p>
-        <p><strong>Q2.</strong> 3/5 + 1/10 = ?</p>
-        <p><strong>Q3.</strong> 2/3 − 1/6 = ?</p>
-        <p><strong>Q4.</strong> 5/8 + 3/4 = ?</p>
-        <p><strong>Q5.</strong> 1 1/2 + 2 3/4 = ?</p>
-      </div>
-      <div class="note-section">
-        <h3>Word Problems</h3>
-        <p><strong>Q6.</strong> Emma ate 1/4 of a pizza and Tom ate 3/8. How much pizza did they eat altogether?</p>
-        <p><strong>Q7.</strong> A jug holds 3/4 litre. Mia pours out 1/3 litre. How much is left?</p>
-      </div>
-      <div style="background: #dcfce7; border-radius: 10px; padding: 1rem 1.2rem; margin-top: 1rem; font-size: 0.82rem; color: #166534;">
-        ✅ This worksheet has been submitted. Well done!
-      </div>`
+    );
   }
-};
 
-function openHWModal(id) {
-  const data = hwData[id] || {
-    title: 'Homework Assignment',
-    subtitle: 'Brightmind Solutions Ltd',
-    body: `<div class="note-section"><h3>Assignment Details</h3><p>Full details for this assignment are available from your tutor. Please contact us if you need a copy.</p></div>`
-  };
-  document.getElementById('hw-modal-title').textContent = data.title;
-  document.getElementById('hw-modal-subtitle').textContent = data.subtitle + ' · Brightmind Solutions Ltd';
-  document.getElementById('hw-modal-body').innerHTML = data.body;
-  document.getElementById('hw-modal').classList.add('open');
+  return(
+    <div className="drive-box">
+      <div className="alert-info" style={{marginBottom:10}}>
+        <strong>How to get a Google Drive link:</strong><br/>
+        1. Upload your file to Google Drive<br/>
+        2. Right-click the file → <strong>Share</strong><br/>
+        3. Under "General access" → change to <strong>"Anyone with the link"</strong><br/>
+        4. Click <strong>Copy link</strong> → paste it below
+      </div>
+      <Fg label="Paste Google Drive link *">
+        <input className="inp" value={url} onChange={e=>setUrl(e.target.value)} placeholder="https://drive.google.com/file/d/..."/>
+      </Fg>
+      <Fg label="File display name (e.g. GCSE Quadratics Notes.pdf)">
+        <input className="inp" value={name} onChange={e=>setName(e.target.value)} placeholder="What should students see as the file name?"/>
+      </Fg>
+      <button className="btn btn-navy btn-sm" onClick={add} disabled={!url.trim()}>Confirm Link ✓</button>
+    </div>
+  );
 }
 
-// ─── FORM SUBMIT ───
-function submitForm() {
-  document.getElementById('form-success').style.display = 'block';
-  setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
+// File chip shown to students
+function FileChip({file}){
+  if(!file?.url)return null;
+  return(
+    <a href={file.url} target="_blank" rel="noopener noreferrer" className="file-chip">
+      <span>{fileIcon(file.name||'')}</span>
+      <span>{file.name||'Open File'}</span>
+      <span style={{fontSize:11,opacity:.6}}>↗</span>
+    </a>
+  );
 }
+
+// ─── LOGIN ────────────────────────────────────────────────────────
+function Login({onLogin}){
+  const [role,setRole]=useState('admin');
+  const [em,setEm]=useState('');
+  const [pw,setPw]=useState('');
+  const [err,setErr]=useState('');
+  const [ld,setLd]=useState(false);
+
+  async function go(){
+    setErr('');setLd(true);
+    try{
+      const cred=await auth.signInWithEmailAndPassword(em.trim(),pw);
+      const doc=await db.collection('users').doc(cred.user.uid).get();
+      if(!doc.exists)throw new Error('No profile found. Ask your tutor to set up your account.');
+      const data={id:cred.user.uid,...doc.data()};
+      if(role==='admin'&&data.role!=='admin')throw new Error('This account is not an admin account.');
+      if(role==='student'&&data.role!=='student')throw new Error('Please use the Tutor login.');
+      onLogin(data);
+    }catch(e){setErr(e.message.replace('Firebase: ','').replace(/ \(auth\/.*\)/,''));}
+    setLd(false);
+  }
+
+  return(
+    <div className="login-wrap">
+      <div style={{width:'100%',maxWidth:400}}>
+        <div style={{textAlign:'center',marginBottom:24}}>
+          <div style={{width:52,height:52,background:'linear-gradient(135deg,#c8973a,#e3b96a)',borderRadius:13,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Georgia,serif',fontWeight:800,color:'#0b1e3d',fontSize:22,margin:'0 auto 12px'}}>B</div>
+          <div style={{fontFamily:'Georgia,serif',color:'#fff',fontSize:22,fontWeight:700}}>Brightmind Solutions</div>
+          <div style={{color:'rgba(255,255,255,.45)',fontSize:13,marginTop:3}}>Tuition Management Portal</div>
+        </div>
+        <div className="login-box">
+          <div className="role-tabs">
+            {['admin','student'].map(r=>(
+              <button key={r} className={`role-tab${role===r?' active':''}`} onClick={()=>{setRole(r);setErr('');}}>
+                {r==='admin'?'👩‍🏫 Tutor / Admin':'🎓 Student'}
+              </button>
+            ))}
+          </div>
+          <Fg label="Email Address"><input className="inp" type="email" placeholder="your@email.com" value={em} onChange={e=>setEm(e.target.value)} onKeyDown={e=>e.key==='Enter'&&go()}/></Fg>
+          <Fg label="Password"><input className="inp" type="password" placeholder="••••••••" value={pw} onChange={e=>setPw(e.target.value)} onKeyDown={e=>e.key==='Enter'&&go()}/></Fg>
+          {err&&<div className="alert-err">{err}</div>}
+          <button className="btn btn-navy" onClick={go} disabled={ld} style={{width:'100%',padding:'10px',fontSize:14,opacity:ld?.7:1}}>{ld?'Signing in…':'Sign In →'}</button>
+          <p style={{fontSize:11,color:'#9ca3af',textAlign:'center',marginTop:12,lineHeight:1.5}}>Students: use the email & password given by your tutor</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════
+// ADMIN PORTAL
+// ═══════════════════════════════════════
+function AdminPortal({user,onLogout}){
+  const [pg,setPg]=useState('dashboard');
+  const [students,setStudents]=useState([]);
+  const [resources,setResources]=useState([]);
+  const [assignments,setAssignments]=useState([]);
+  const [submissions,setSubmissions]=useState([]);
+
+  useEffect(()=>{
+    const u1=db.collection('users').where('role','==','student').onSnapshot(s=>setStudents(s.docs.map(d=>({id:d.id,...d.data()}))));
+    const u2=db.collection('resources').orderBy('created','desc').onSnapshot(s=>setResources(s.docs.map(d=>({id:d.id,...d.data()}))));
+    const u3=db.collection('assignments').orderBy('created','desc').onSnapshot(s=>setAssignments(s.docs.map(d=>({id:d.id,...d.data()}))));
+    const u4=db.collection('submissions').onSnapshot(s=>setSubmissions(s.docs.map(d=>({id:d.id,...d.data()}))));
+    return()=>{u1();u2();u3();u4();};
+  },[]);
+
+  const data={students,resources,assignments,submissions};
+  const nav=[
+    {id:'dashboard',icon:'📊',label:'Dashboard'},
+    {id:'students', icon:'👥',label:'Students'},
+    {id:'resources',icon:'📁',label:'Resources'},
+    {id:'assign',   icon:'📝',label:'Assignments'},
+    {id:'reports',  icon:'📈',label:'Reports'},
+  ];
+  return(
+    <div className="app-shell">
+      <Sidebar nav={nav} pg={pg} setPg={setPg} user={user} onLogout={onLogout}/>
+      <div className="main-area">
+        {pg==='dashboard'&&<ADash data={data} setPg={setPg}/>}
+        {pg==='students' &&<StudentsPage data={data}/>}
+        {pg==='resources'&&<ResourcesPage data={data}/>}
+        {pg==='assign'   &&<AssignPage data={data}/>}
+        {pg==='reports'  &&<ReportsPage data={data}/>}
+      </div>
+    </div>
+  );
+}
+
+// Dashboard
+function ADash({data,setPg}){
+  const{students,resources,assignments,submissions}=data;
+  const pending=assignments.filter(a=>(a.assignedTo||[]).some(sid=>!submissions.find(s=>s.studentId===sid&&s.assignmentId===a.id&&s.status==='submitted'))).length;
+  return(
+    <div>
+      <PH title="Dashboard" sub="Brightmind Solutions Ltd"/>
+      <div className="content">
+        <div className="stat-grid">
+          <div className="stat-card"><div className="stat-lbl">Students</div><div className="stat-val" style={{color:'#0b1e3d'}}>{students.length}</div><div style={{fontSize:11,color:'#d1d5db',marginTop:3}}>enrolled</div></div>
+          <div className="stat-card"><div className="stat-lbl">Resources</div><div className="stat-val" style={{color:'#7c3aed'}}>{resources.length}</div><div style={{fontSize:11,color:'#d1d5db',marginTop:3}}>uploaded</div></div>
+          <div className="stat-card"><div className="stat-lbl">Assignments</div><div className="stat-val" style={{color:'#c8973a'}}>{assignments.length}</div><div style={{fontSize:11,color:'#d1d5db',marginTop:3}}>total</div></div>
+          <div className="stat-card"><div className="stat-lbl">Pending</div><div className="stat-val" style={{color:pending?'#dc2626':'#059669'}}>{pending}</div><div style={{fontSize:11,color:'#d1d5db',marginTop:3}}>awaiting</div></div>
+        </div>
+        <div className="two-col">
+          <div className="card">
+            <div className="card-head">Students <button className="btn btn-ghost btn-sm" onClick={()=>setPg('students')}>View All</button></div>
+            {students.length===0?<div style={{padding:'1.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No students enrolled yet</div>:
+              students.slice(0,5).map(s=>(
+                <div key={s.id} className="row-item">
+                  <Av name={s.name} size={30}/><div style={{flex:1}}><div style={{fontWeight:600,color:'#111',fontSize:13}}>{s.name}</div><div style={{fontSize:11,color:'#9ca3af'}}>{s.year}</div></div><LBadge level={s.level}/>
+                </div>
+              ))
+            }
+          </div>
+          <div className="card">
+            <div className="card-head">Recent Resources <button className="btn btn-ghost btn-sm" onClick={()=>setPg('resources')}>View All</button></div>
+            {resources.length===0?<div style={{padding:'1.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No resources yet</div>:
+              resources.slice(0,5).map(r=>(
+                <div key={r.id} className="row-item">
+                  <div className="res-icon" style={{width:30,height:30,fontSize:16,background:'#f3f4f6'}}>{fileIcon(r.file?.name||'')}</div>
+                  <div style={{flex:1}}><div style={{fontWeight:600,color:'#111',fontSize:12.5}}>{r.title}</div><div style={{fontSize:11,color:'#9ca3af'}}>{r.level} · {r.type}</div></div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── STUDENTS ─────────────────────────────────────────────────────
+function StudentsPage({data}){
+  const{students}=data;
+  const [modal,setModal]=useState(null);
+  const [search,setSearch]=useState('');
+  const [fl,setFl]=useState('All');
+  const [saving,setSaving]=useState(false);
+  const [err,setErr]=useState('');
+  const [form,setForm]=useState({name:'',email:'',password:'',level:'GCSE',year:'Year 11',parent:'',phone:''});
+  const [editId,setEditId]=useState(null);
+  const allYears=['Year 3','Year 4','Year 5','Year 6','Year 7','Year 8','Year 9','Year 10','Year 11','Year 12','Year 13'];
+  function levelFromYear(y){
+    if(['Year 3','Year 4','Year 5','Year 6'].includes(y))return'KS2';
+    if(['Year 7','Year 8','Year 9'].includes(y))return'KS3';
+    if(['Year 10','Year 11'].includes(y))return'GCSE';
+    return'A-Level';
+  }
+  const filtered=students.filter(s=>(fl==='All'||s.level===fl)&&(s.name+s.email).toLowerCase().includes(search.toLowerCase()));
+
+  function openAdd(){setForm({name:'',email:'',password:'Brightmind2025',level:'KS3',year:'Year 7',parent:'',phone:''});setEditId(null);setErr('');setModal('form');}
+  function openEdit(s){setForm({...s,password:''});setEditId(s.id);setErr('');setModal('form');}
+
+  async function saveStudent(){
+    if(!form.name||!form.email)return setErr('Name and email are required.');
+    setSaving(true);setErr('');
+    try{
+      const level=levelFromYear(form.year);
+      if(editId){
+        await db.collection('users').doc(editId).update({name:form.name,level,year:form.year,parent:form.parent,phone:form.phone});
+      }else{
+        if(!form.password)return setErr('Password required for new students.');
+        const cred=await secondaryAuth.createUserWithEmailAndPassword(form.email.trim(),form.password);
+        await db.collection('users').doc(cred.user.uid).set({name:form.name,email:form.email.trim(),level,year:form.year,parent:form.parent,phone:form.phone,role:'student',enrolled:tod()});
+        await secondaryAuth.signOut();
+      }
+      setModal(null);
+    }catch(e){setErr(e.message.replace('Firebase: ','').replace(/ \(auth\/.*\)/,''));}
+    setSaving(false);
+  }
+
+  return(
+    <div>
+      <PH title="Students" sub={`${students.length} enrolled`} action={<button className="btn btn-gold" onClick={openAdd}>+ Enrol Student</button>}/>
+      <div className="content">
+        <div style={{display:'flex',gap:10,marginBottom:14,flexWrap:'wrap',alignItems:'center'}}>
+          <input className="inp" placeholder="Search name or email…" value={search} onChange={e=>setSearch(e.target.value)} style={{width:220}}/>
+          <div className="filter-bar" style={{margin:0}}>{['All','KS2','KS3','GCSE','A-Level'].map(l=><button key={l} className={`fb${fl===l?' active':''}`} onClick={()=>setFl(l)}>{l}</button>)}</div>
+        </div>
+        <div className="card">
+          <table>
+            <thead><tr>{['Student','Level','Year','Parent / Guardian','Enrolled','Actions'].map(h=><th key={h}>{h}</th>)}</tr></thead>
+            <tbody>
+              {filtered.map(s=>(
+                <tr key={s.id}>
+                  <td><div style={{display:'flex',alignItems:'center',gap:9}}><Av name={s.name} size={30}/><div><div style={{fontWeight:600}}>{s.name}</div><div style={{fontSize:11,color:'#9ca3af'}}>{s.email}</div></div></div></td>
+                  <td><LBadge level={s.level}/></td><td>{s.year}</td><td>{s.parent||'—'}</td>
+                  <td style={{color:'#9ca3af'}}>{fmtS(s.enrolled)}</td>
+                  <td><div style={{display:'flex',gap:5}}><button className="btn btn-ghost btn-sm" onClick={()=>openEdit(s)}>Edit</button><button className="btn btn-danger btn-sm" onClick={async()=>{if(window.confirm('Remove this student?'))await db.collection('users').doc(s.id).delete();}}>Remove</button></div></td>
+                </tr>
+              ))}
+              {filtered.length===0&&<tr><td colSpan={6} style={{textAlign:'center',color:'#9ca3af',padding:'2rem'}}>No students found</td></tr>}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {modal==='form'&&(
+        <Modal title={editId?'Edit Student':'Enrol New Student'} sub="Brightmind Solutions Ltd" onClose={()=>setModal(null)}>
+          <div className="form-2">
+            <Fg label="Full Name *"><input className="inp" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Student's full name"/></Fg>
+            <Fg label="Email *"><input className="inp" type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="student@email.com" disabled={!!editId}/></Fg>
+            {!editId&&<Fg label="Password *"><input className="inp" value={form.password} onChange={e=>setForm({...form,password:e.target.value})} placeholder="e.g. Brightmind2025"/></Fg>}
+            <Fg label="Year Group *"><select className="inp" value={form.year} onChange={e=>setForm({...form,year:e.target.value})}>{allYears.map(y=><option key={y} value={y}>{y}</option>)}</select></Fg>
+            <Fg label="Parent / Guardian"><input className="inp" value={form.parent} onChange={e=>setForm({...form,parent:e.target.value})} placeholder="Parent name"/></Fg>
+            <Fg label="Phone"><input className="inp" value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="07xxx xxxxxx"/></Fg>
+          </div>
+          {err&&<div className="alert-err">{err}</div>}
+          <div style={{display:'flex',gap:8,justifyContent:'flex-end'}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
+            <button className="btn btn-gold" onClick={saveStudent} disabled={saving}>{saving?'Saving…':editId?'Save Changes':'Enrol Student'}</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+// ─── RESOURCES PAGE ───────────────────────────────────────────────
+function ResourcesPage({data}){
+  const{resources,students}=data;
+  const [modal,setModal]=useState(null);
+  const [selR,setSelR]=useState(null);
+  const [fl,setFl]=useState('All');
+  const [typeF,setTypeF]=useState('All');
+  const [saving,setSaving]=useState(false);
+  const [form,setForm]=useState({title:'',level:'GCSE',type:'Lesson Note',topic:'',desc:'',file:null});
+  const [assignForm,setAssignForm]=useState({assignedTo:[],dueDate:'',note:''});
+
+  const [waStudents,setWaStudents]=useState([]);
+  const [waResource,setWaResource]=useState(null);
+  const [waDueDate,setWaDueDate]=useState('');
+  const filtered=resources.filter(r=>(fl==='All'||r.level===fl)&&(typeF==='All'||r.type===typeF));
+
+  async function saveResource(){
+    if(!form.title)return alert('Please enter a title.');
+    setSaving(true);
+    await db.collection('resources').add({...form,created:tod()});
+    setModal(null);setForm({title:'',level:'GCSE',type:'Lesson Note',topic:'',desc:'',file:null});
+    setSaving(false);
+  }
+
+  async function doAssign(){
+    if(!assignForm.assignedTo.length)return alert('Please select at least one student.');
+    setSaving(true);
+    await db.collection('assignments').add({
+      title:selR.title,level:selR.level,topic:selR.topic||'',type:selR.type,
+      desc:selR.desc||'',due:assignForm.dueDate||'',note:assignForm.note,
+      assignedTo:assignForm.assignedTo,resourceId:selR.id,file:selR.file||null,
+      questions:[],created:tod()
+    });
+    setSaving(false);
+    // Build WhatsApp links for parents
+    const assigned=students.filter(s=>assignForm.assignedTo.includes(s.id));
+    const withPhone=assigned.filter(s=>s.phone);
+    if(withPhone.length>0){
+      setWaStudents(withPhone);
+      setWaResource(selR);
+      setWaDueDate(assignForm.dueDate);
+      setModal('whatsapp');
+    }else{
+      setModal(null);
+      alert(`✅ "${selR.title}" assigned to ${assignForm.assignedTo.length} student${assignForm.assignedTo.length!==1?'s':''}!`);
+    }
+  }
+
+  function toggleSel(id){setAssignForm(f=>({...f,assignedTo:f.assignedTo.includes(id)?f.assignedTo.filter(x=>x!==id):[...f.assignedTo,id]}));}
+
+  return(
+    <div>
+      <PH title="Resources" sub="Add Google Drive links for notes & worksheets — then assign to students"
+        action={<button className="btn btn-gold" onClick={()=>setModal('upload')}>+ Add Resource</button>}/>
+      <div className="content">
+        <div style={{display:'flex',gap:8,marginBottom:14,flexWrap:'wrap'}}>
+          <div className="filter-bar" style={{margin:0}}>{['All','KS2','KS3','GCSE','A-Level'].map(l=><button key={l} className={`fb${fl===l?' active':''}`} onClick={()=>setFl(l)}>{l}</button>)}</div>
+          <div className="filter-bar" style={{margin:0}}>{['All','Lesson Note','Worksheet','Past Paper','Other'].map(t=><button key={t} className={`fb${typeF===t?' active':''}`} onClick={()=>setTypeF(t)}>{t}</button>)}</div>
+        </div>
+
+        {filtered.length===0?(
+          <div style={{background:'#fff',borderRadius:11,border:'1px dashed #e5e7eb',padding:'3rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>
+            <div style={{fontSize:40,marginBottom:10}}>📁</div>
+            <div style={{fontWeight:600,color:'#374151',marginBottom:6}}>No resources yet</div>
+            Click "+ Add Resource" to link your Google Drive files.<br/>
+            Once added, click <strong>Assign</strong> to send them to students.
+          </div>
+        ):filtered.map(r=>(
+          <div key={r.id} className="res-card">
+            <div className="res-icon" style={{background:'#f3f4f6'}}>{fileIcon(r.file?.name||'')}</div>
+            <div style={{flex:1}}>
+              <div style={{display:'flex',alignItems:'center',gap:7,marginBottom:4,flexWrap:'wrap'}}>
+                <span style={{fontWeight:700,color:'#0b1e3d',fontSize:13}}>{r.title}</span>
+                <LBadge level={r.level}/>
+                <span className="badge b-blue">{r.type}</span>
+                {r.topic&&<span className="badge b-gray">{r.topic}</span>}
+              </div>
+              {r.desc&&<div style={{fontSize:12,color:'#6b7280',marginBottom:5}}>{r.desc}</div>}
+              <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
+                {r.file?.url&&<FileChip file={r.file}/>}
+                <span style={{fontSize:11,color:'#d1d5db'}}>Added {fmtS(r.created)}</span>
+              </div>
+            </div>
+            <div style={{display:'flex',gap:6,flexShrink:0}}>
+              <button className="btn btn-gold btn-sm" onClick={()=>{setSelR(r);setAssignForm({assignedTo:[],dueDate:'',note:''});setModal('assign');}}>📤 Assign</button>
+              <button className="btn btn-danger btn-sm" onClick={async()=>{if(window.confirm('Delete this resource?'))await db.collection('resources').doc(r.id).delete();}}>Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Add Resource Modal */}
+      {modal==='upload'&&(
+        <Modal title="Add Resource" sub="Link a Google Drive file" onClose={()=>setModal(null)} wide>
+          <Fg label="Title *"><input className="inp" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="e.g. GCSE Quadratics – Lesson Notes"/></Fg>
+          <div className="form-2">
+            <Fg label="Level *"><select className="inp" value={form.level} onChange={e=>setForm({...form,level:e.target.value})}>{['KS2','KS3','GCSE','A-Level'].map(l=><option key={l}>{l}</option>)}</select></Fg>
+            <Fg label="Type *"><select className="inp" value={form.type} onChange={e=>setForm({...form,type:e.target.value})}>{['Lesson Note','Worksheet','Past Paper','Other'].map(t=><option key={t}>{t}</option>)}</select></Fg>
+            <Fg label="Topic"><input className="inp" value={form.topic} onChange={e=>setForm({...form,topic:e.target.value})} placeholder="e.g. Algebra"/></Fg>
+            <Fg label="Description"><input className="inp" value={form.desc} onChange={e=>setForm({...form,desc:e.target.value})} placeholder="Brief description (optional)"/></Fg>
+          </div>
+          <label className="lbl">Google Drive Link</label>
+          <DriveLink value={form.file} onChange={f=>setForm({...form,file:f})}/>
+          <div style={{display:'flex',gap:8,justifyContent:'flex-end',marginTop:16}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
+            <button className="btn btn-gold" onClick={saveResource} disabled={saving}>{saving?'Saving…':'Save Resource'}</button>
+          </div>
+        </Modal>
+      )}
+
+      {/* WhatsApp Notify Modal */}
+      {modal==='whatsapp'&&waResource&&(
+        <Modal title="Notify Parents via WhatsApp" sub="Click each button to open WhatsApp with a pre-written message" onClose={()=>setModal(null)} wide>
+          <div className="alert-info" style={{marginBottom:16}}>
+            ✅ <strong>Assignment created!</strong> Now notify parents below.<br/>
+            Each button opens WhatsApp with a ready-to-send message — just press <strong>Send</strong>.
+          </div>
+          {waStudents.map(s=>{
+            const due=waDueDate?`\n📅 Due: ${fmt(waDueDate)}`:'';
+            const fileNote=waResource.file?.url?`\n🔗 Access it on the Brightmind portal at brightmindsolutions.co.uk`:'';
+            const msg=`Hello ${s.parent||'Parent'},\n\nThis is Brightmind Solutions Ltd.\n\n📚 A new ${waResource.type} has been assigned to *${s.name}*:\n\n*${waResource.title}*\n${waResource.topic?`📖 Topic: ${waResource.topic}\n`:''}${due}${fileNote}\n\nPlease encourage ${s.name.split(' ')[0]} to complete this on time.\n\nThank you,\nBrightmind Solutions Ltd`;
+            const phone=s.phone.replace(/\s+/g,'').replace(/^0/,'44');
+            const url=`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+            return(
+              <div key={s.id} style={{display:'flex',alignItems:'center',gap:12,padding:'12px 14px',background:'#f9fafb',borderRadius:10,border:'1px solid #e5e7eb',marginBottom:8}}>
+                <Av name={s.name} size={36}/>
+                <div style={{flex:1}}>
+                  <div style={{fontWeight:600,color:'#0b1e3d',fontSize:13}}>{s.name}</div>
+                  <div style={{fontSize:11.5,color:'#6b7280'}}>Parent: {s.parent||'—'} · {s.phone}</div>
+                </div>
+                <a href={url} target="_blank" rel="noopener noreferrer"
+                  style={{display:'inline-flex',alignItems:'center',gap:7,padding:'8px 14px',background:'#25d366',color:'#fff',borderRadius:8,fontWeight:600,fontSize:12.5,textDecoration:'none',whiteSpace:'nowrap'}}>
+                  <span style={{fontSize:16}}>💬</span> Send WhatsApp
+                </a>
+              </div>
+            );
+          })}
+          <div style={{background:'#fef9c3',border:'1px solid #fde68a',borderRadius:8,padding:'10px 12px',fontSize:12,color:'#92400e',marginTop:12}}>
+            💡 <strong>Tip:</strong> Make sure each parent's phone number is saved with the correct UK format (e.g. 07700 900123). The portal automatically converts it to international format (+44).
+          </div>
+          <div style={{display:'flex',justifyContent:'flex-end',marginTop:14}}>
+            <button className="btn btn-navy" onClick={()=>setModal(null)}>Done</button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Assign Modal */}
+      {modal==='assign'&&selR&&(
+        <Modal title={`Assign: ${selR.title}`} sub={`${selR.level} · ${selR.type}`} onClose={()=>setModal(null)} wide>
+          <div style={{display:'flex',gap:7,marginBottom:14,flexWrap:'wrap',alignItems:'center'}}>
+            <LBadge level={selR.level}/><span className="badge b-blue">{selR.type}</span>
+            {selR.file?.url&&<FileChip file={selR.file}/>}
+          </div>
+          <div className="form-2">
+            <Fg label="Due Date (optional)"><input className="inp" type="date" value={assignForm.dueDate} onChange={e=>setAssignForm({...assignForm,dueDate:e.target.value})}/></Fg>
+            <Fg label="Note to Students (optional)"><input className="inp" value={assignForm.note} onChange={e=>setAssignForm({...assignForm,note:e.target.value})} placeholder="e.g. Complete Section A only"/></Fg>
+          </div>
+          <div style={{marginBottom:14}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}}>
+              <label className="lbl" style={{margin:0}}>Select Students</label>
+              <div style={{display:'flex',gap:6}}>
+                <button className="btn btn-ghost btn-sm" onClick={()=>setAssignForm({...assignForm,assignedTo:students.filter(s=>s.level===selR.level).map(s=>s.id)})}>All {selR.level}</button>
+                <button className="btn btn-ghost btn-sm" onClick={()=>setAssignForm({...assignForm,assignedTo:students.map(s=>s.id)})}>All Students</button>
+                <button className="btn btn-ghost btn-sm" onClick={()=>setAssignForm({...assignForm,assignedTo:[]})}>Clear</button>
+              </div>
+            </div>
+            {students.length===0?(
+              <div style={{fontSize:12,color:'#9ca3af',fontStyle:'italic'}}>No students enrolled yet.</div>
+            ):(
+              <div style={{display:'flex',flexWrap:'wrap',maxHeight:200,overflowY:'auto'}}>
+                {students.map(s=>(
+                  <div key={s.id} className={`sel-tag${assignForm.assignedTo.includes(s.id)?' on':''}`} onClick={()=>toggleSel(s.id)}>
+                    <Av name={s.name} size={20}/>{s.name}&nbsp;<LBadge level={s.level}/>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <div style={{background:assignForm.assignedTo.length?'#f0fdf4':'#f9fafb',border:`1px solid ${assignForm.assignedTo.length?'#86efac':'#e5e7eb'}`,borderRadius:8,padding:'10px 12px',fontSize:12,color:assignForm.assignedTo.length?'#166534':'#9ca3af',marginBottom:14,textAlign:'center',fontWeight:500}}>
+            {assignForm.assignedTo.length?`✓ ${assignForm.assignedTo.length} student${assignForm.assignedTo.length!==1?'s':''} selected`:'Select students above'}
+          </div>
+          <div style={{display:'flex',gap:8,justifyContent:'flex-end'}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
+            <button className="btn btn-gold" onClick={doAssign} disabled={saving||!assignForm.assignedTo.length}>{saving?'Assigning…':`Assign to ${assignForm.assignedTo.length} Student${assignForm.assignedTo.length!==1?'s':''} →`}</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+// ─── ASSIGNMENTS PAGE ─────────────────────────────────────────────
+function AssignPage({data}){
+  const{students,assignments,submissions}=data;
+  const [modal,setModal]=useState(null);
+  const [selA,setSelA]=useState(null);
+  const [fl,setFl]=useState('All');
+  const [saving,setSaving]=useState(false);
+  const [form,setForm]=useState({title:'',level:'GCSE',topic:'',due:'',desc:'',questions:['','',''],assignedTo:[],file:null});
+  const filtered=assignments.filter(a=>fl==='All'||a.level===fl);
+  const lvStudents=students.filter(s=>s.level===form.level);
+
+  function toggleSel(id){setForm(f=>({...f,assignedTo:f.assignedTo.includes(id)?f.assignedTo.filter(x=>x!==id):[...f.assignedTo,id]}));}
+  function updateQ(i,v){const q=[...form.questions];q[i]=v;setForm({...form,questions:q});}
+
+  const [waStudents2,setWaStudents2]=useState([]);
+  const [waTitle,setWaTitle]=useState('');
+  const [waForm,setWaForm]=useState(null);
+
+  async function saveA(){
+    if(!form.title)return alert('Please add a title.');
+    setSaving(true);
+    await db.collection('assignments').add({...form,questions:form.questions.filter(q=>q.trim()),created:tod()});
+    const assigned=students.filter(s=>form.assignedTo.includes(s.id)&&s.phone);
+    const savedForm={...form};
+    setForm({title:'',level:'GCSE',topic:'',due:'',desc:'',questions:['','',''],assignedTo:[],file:null});
+    setSaving(false);
+    if(assigned.length>0){
+      setWaStudents2(assigned);setWaTitle(savedForm.title);setWaForm(savedForm);setModal('whatsapp2');
+    }else{
+      setModal(null);
+    }
+  }
+
+  function getInfo(a){
+    const done=submissions.filter(s=>s.assignmentId===a.id&&s.status==='submitted').length;
+    const total=(a.assignedTo||[]).length;
+    return{done,total,pct:total>0?Math.round(done/total*100):0};
+  }
+
+  return(
+    <div>
+      <PH title="Assignments" sub="Create manual assignments or assign resources from the Resources page"
+        action={<button className="btn btn-gold" onClick={()=>setModal('form')}>+ Create Assignment</button>}/>
+      <div className="content">
+        <div className="filter-bar">{['All','KS2','KS3','GCSE','A-Level'].map(l=><button key={l} className={`fb${fl===l?' active':''}`} onClick={()=>setFl(l)}>{l}</button>)}</div>
+        {filtered.map(a=>{
+          const{done,total,pct}=getInfo(a);
+          return(
+            <div key={a.id} className="a-card">
+              <div style={{display:'flex',alignItems:'flex-start',gap:12}}>
+                <div style={{flex:1}}>
+                  <div style={{display:'flex',gap:7,alignItems:'center',marginBottom:5,flexWrap:'wrap'}}>
+                    <span style={{fontWeight:700,color:'#0b1e3d',fontSize:13}}>{a.title}</span>
+                    <LBadge level={a.level}/>
+                    {a.type&&<span className="badge b-blue">{a.type}</span>}
+                    {a.due&&a.due<tod()&&<span className="badge b-red">Overdue</span>}
+                  </div>
+                  <div style={{fontSize:11.5,color:'#9ca3af',marginBottom:6}}>
+                    {a.topic}{a.due?' · Due '+fmtS(a.due):''} · {total} student{total!==1?'s':''}
+                  </div>
+                  {a.file?.url&&<div style={{marginBottom:6}}><FileChip file={a.file}/></div>}
+                  <div style={{display:'flex',alignItems:'center',gap:8}}>
+                    <div className="prog-bar" style={{flex:1}}><div className="prog-fill" style={{width:pct+'%',background:pct===100?'#059669':'#c8973a'}}/></div>
+                    <span style={{fontSize:11,color:'#9ca3af',whiteSpace:'nowrap'}}>{done}/{total} submitted</span>
+                  </div>
+                </div>
+                <div style={{display:'flex',gap:6}}>
+                  <button className="btn btn-ghost btn-sm" onClick={()=>{setSelA(a);setModal('view');}}>View</button>
+                  <button className="btn btn-danger btn-sm" onClick={async()=>{if(window.confirm('Delete this assignment?'))await db.collection('assignments').doc(a.id).delete();}}>Delete</button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+        {filtered.length===0&&<div className="card" style={{padding:'2.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No assignments yet. Add files in Resources then click Assign, or create a manual assignment here.</div>}
+      </div>
+
+      {modal==='form'&&(
+        <Modal title="Create Assignment" sub="Brightmind Solutions Ltd" onClose={()=>setModal(null)} wide>
+          <Fg label="Title *"><input className="inp" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="e.g. Quadratic Equations – Set 1"/></Fg>
+          <div className="form-2">
+            <Fg label="Level *"><select className="inp" value={form.level} onChange={e=>setForm({...form,level:e.target.value,assignedTo:[]})}>{['KS2','KS3','GCSE','A-Level'].map(l=><option key={l}>{l}</option>)}</select></Fg>
+            <Fg label="Topic"><input className="inp" value={form.topic} onChange={e=>setForm({...form,topic:e.target.value})} placeholder="e.g. Algebra"/></Fg>
+            <Fg label="Due Date"><input className="inp" type="date" value={form.due} onChange={e=>setForm({...form,due:e.target.value})}/></Fg>
+            <Fg label="Description"><input className="inp" value={form.desc} onChange={e=>setForm({...form,desc:e.target.value})} placeholder="Brief description"/></Fg>
+          </div>
+          <div style={{marginBottom:14}}>
+            <label className="lbl">Attach Google Drive File (optional)</label>
+            <DriveLink value={form.file} onChange={f=>setForm({...form,file:f})}/>
+          </div>
+          <div style={{marginBottom:14}}>
+            <label className="lbl">Questions (optional — use if no file attached)</label>
+            {form.questions.map((q,i)=>(
+              <div key={i} style={{display:'flex',gap:7,marginBottom:7,alignItems:'center'}}>
+                <div className="q-num">{i+1}</div>
+                <input className="inp" value={q} onChange={e=>updateQ(i,e.target.value)} placeholder={`Question ${i+1}`}/>
+                {form.questions.length>1&&<button onClick={()=>setForm({...form,questions:form.questions.filter((_,j)=>j!==i)})} style={{background:'#fee2e2',color:'#991b1b',border:'none',borderRadius:6,padding:'5px 9px',cursor:'pointer'}}>✕</button>}
+              </div>
+            ))}
+            <button onClick={()=>setForm({...form,questions:[...form.questions,'']})} style={{background:'#f3f4f6',border:'1px dashed #d1d5db',borderRadius:8,padding:8,cursor:'pointer',fontSize:12,color:'#6b7280',width:'100%',fontFamily:'inherit'}}>+ Add Question</button>
+          </div>
+          <div style={{marginBottom:14}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}}>
+              <label className="lbl" style={{margin:0}}>Assign To</label>
+              <button className="btn btn-ghost btn-sm" onClick={()=>setForm({...form,assignedTo:lvStudents.map(s=>s.id)})}>Select All {form.level}</button>
+            </div>
+            {lvStudents.length===0?<div style={{fontSize:12,color:'#9ca3af'}}>No {form.level} students enrolled yet</div>:(
+              <div style={{display:'flex',flexWrap:'wrap'}}>
+                {lvStudents.map(s=>(
+                  <div key={s.id} className={`sel-tag${form.assignedTo.includes(s.id)?' on':''}`} onClick={()=>toggleSel(s.id)}>
+                    <Av name={s.name} size={20}/>{s.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <div style={{display:'flex',gap:8,justifyContent:'flex-end'}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
+            <button className="btn btn-gold" onClick={saveA} disabled={saving}>{saving?'Saving…':'Create & Assign'}</button>
+          </div>
+        </Modal>
+      )}
+
+      {/* WhatsApp modal for manual assignments */}
+      {modal==='whatsapp2'&&waForm&&(
+        <Modal title="Notify Parents via WhatsApp" sub="Assignment created — notify parents with one click" onClose={()=>setModal(null)} wide>
+          <div className="alert-info" style={{marginBottom:16}}>
+            ✅ <strong>Assignment created!</strong> Click each button to send a WhatsApp message to the parent.
+          </div>
+          {waStudents2.map(s=>{
+            const due=waForm.due?`\n📅 Due: ${fmt(waForm.due)}`:'';
+            const msg=`Hello ${s.parent||'Parent'},\n\nThis is Brightmind Solutions Ltd.\n\n📚 A new assignment has been set for *${s.name}*:\n\n*${waTitle}*\n${waForm.topic?`📖 Topic: ${waForm.topic}\n`:''}${due}\n\nPlease encourage ${s.name.split(' ')[0]} to complete this on time and log in to the Brightmind portal to view the full details.\n\nThank you,\nBrightmind Solutions Ltd`;
+            const phone=s.phone.replace(/\s+/g,'').replace(/^0/,'44');
+            const url=`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+            return(
+              <div key={s.id} style={{display:'flex',alignItems:'center',gap:12,padding:'12px 14px',background:'#f9fafb',borderRadius:10,border:'1px solid #e5e7eb',marginBottom:8}}>
+                <Av name={s.name} size={36}/>
+                <div style={{flex:1}}>
+                  <div style={{fontWeight:600,color:'#0b1e3d',fontSize:13}}>{s.name}</div>
+                  <div style={{fontSize:11.5,color:'#6b7280'}}>Parent: {s.parent||'—'} · {s.phone}</div>
+                </div>
+                <a href={url} target="_blank" rel="noopener noreferrer"
+                  style={{display:'inline-flex',alignItems:'center',gap:7,padding:'8px 14px',background:'#25d366',color:'#fff',borderRadius:8,fontWeight:600,fontSize:12.5,textDecoration:'none',whiteSpace:'nowrap'}}>
+                  <span style={{fontSize:16}}>💬</span> Send WhatsApp
+                </a>
+              </div>
+            );
+          })}
+          <div style={{background:'#fef9c3',border:'1px solid #fde68a',borderRadius:8,padding:'10px 12px',fontSize:12,color:'#92400e',marginTop:12}}>
+            💡 <strong>Tip:</strong> Parents without a phone number saved won't appear here. Add their number in the Students page.
+          </div>
+          <div style={{display:'flex',justifyContent:'flex-end',marginTop:14}}>
+            <button className="btn btn-navy" onClick={()=>setModal(null)}>Done</button>
+          </div>
+        </Modal>
+      )}
+
+      {modal==='view'&&selA&&(
+        <Modal title={selA.title} sub={`${selA.level}${selA.due?' · Due '+fmt(selA.due):''}`} onClose={()=>setModal(null)} wide>
+          <div style={{display:'flex',gap:6,marginBottom:12,flexWrap:'wrap'}}><LBadge level={selA.level}/>{selA.type&&<span className="badge b-blue">{selA.type}</span>}{selA.topic&&<span className="badge b-gray">{selA.topic}</span>}</div>
+          {selA.note&&<div className="alert-ok" style={{marginBottom:12}}>📌 {selA.note}</div>}
+          {selA.file?.url&&<div style={{marginBottom:14}}><label className="lbl">Attached File</label><br/><FileChip file={selA.file}/></div>}
+          {(selA.questions||[]).filter(q=>q).length>0&&(
+            <><label className="lbl">Questions</label>{selA.questions.filter(q=>q).map((q,i)=><div key={i} className="q-chip"><div className="q-num">{i+1}</div><span style={{fontSize:13,color:'#374151',lineHeight:1.5}}>{q}</span></div>)}</>
+          )}
+          <label className="lbl" style={{marginTop:14}}>Assigned Students</label>
+          {(selA.assignedTo||[]).map(sid=>{
+            const s=students.find(x=>x.id===sid);if(!s)return null;
+            const sub=data.submissions.find(x=>x.studentId===sid&&x.assignmentId===selA.id&&x.status==='submitted');
+            return(
+              <div key={sid} style={{display:'flex',alignItems:'center',gap:9,padding:'8px 10px',background:'#f9fafb',borderRadius:8,marginBottom:6}}>
+                <Av name={s.name} size={26}/><span style={{flex:1,fontSize:12.5,fontWeight:500}}>{s.name}</span>
+                <SBadge status={sub?'submitted':'pending'}/>{sub&&<span style={{fontSize:11,color:'#9ca3af'}}>{fmtS(sub.submitted)}</span>}
+              </div>
+            );
+          })}
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function ReportsPage({data}){
+  const{students,assignments,submissions}=data;
+  return(
+    <div>
+      <PH title="Reports" sub="Student progress overview"/>
+      <div className="content">
+        {students.map(s=>{
+          const myA=assignments.filter(a=>(a.assignedTo||[]).includes(s.id));
+          const done=submissions.filter(x=>x.studentId===s.id&&x.status==='submitted').length;
+          const pct=myA.length>0?Math.round(done/myA.length*100):0;
+          return(
+            <div key={s.id} className="a-card" style={{marginBottom:10}}>
+              <div style={{display:'flex',alignItems:'center',gap:14}}>
+                <Av name={s.name} size={42}/>
+                <div style={{flex:1}}>
+                  <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:4}}><span style={{fontWeight:700,color:'#0b1e3d',fontSize:13}}>{s.name}</span><LBadge level={s.level}/><span style={{fontSize:11.5,color:'#9ca3af'}}>{s.year}</span></div>
+                  <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:4}}>
+                    <div className="prog-bar" style={{flex:1}}><div className="prog-fill" style={{width:pct+'%',background:pct===100?'#059669':pct>=50?'#c8973a':'#dc2626'}}/></div>
+                    <span style={{fontSize:12.5,fontWeight:700,color:'#374151'}}>{pct}%</span>
+                  </div>
+                  <div style={{fontSize:11.5,color:'#9ca3af'}}>{done} of {myA.length} submitted · {s.email}</div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+        {students.length===0&&<div className="card" style={{padding:'2.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No students enrolled yet</div>}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════
+// STUDENT PORTAL
+// ═══════════════════════════════════════
+function StudentPortal({user,onLogout}){
+  const [pg,setPg]=useState('dashboard');
+  const [assignments,setAssign]=useState([]);
+  const [submissions,setSubs]=useState([]);
+
+  useEffect(()=>{
+    const u1=db.collection('assignments').orderBy('created','desc').onSnapshot(s=>setAssign(s.docs.map(d=>({id:d.id,...d.data()}))));
+    const u2=db.collection('submissions').where('studentId','==',user.id).onSnapshot(s=>setSubs(s.docs.map(d=>({id:d.id,...d.data()}))));
+    return()=>{u1();u2();};
+  },[user.id]);
+
+  const myA=assignments.filter(a=>(a.assignedTo||[]).includes(user.id));
+
+  async function markDone(id){
+    if(submissions.find(s=>s.assignmentId===id&&s.status==='submitted'))return;
+    await db.collection('submissions').add({assignmentId:id,studentId:user.id,status:'submitted',submitted:tod()});
+  }
+
+  const nav=[
+    {id:'dashboard',icon:'🏠',label:'My Dashboard'},
+    {id:'work',     icon:'📝',label:'My Work'},
+    {id:'progress', icon:'📈',label:'My Progress'},
+  ];
+  return(
+    <div className="app-shell">
+      <Sidebar nav={nav} pg={pg} setPg={setPg} user={user} onLogout={onLogout}/>
+      <div className="main-area">
+        {pg==='dashboard'&&<SDash user={user} myA={myA} submissions={submissions} setPg={setPg}/>}
+        {pg==='work'     &&<SWork myA={myA} submissions={submissions} onDone={markDone}/>}
+        {pg==='progress' &&<SProgress user={user} myA={myA} submissions={submissions}/>}
+      </div>
+    </div>
+  );
+}
+
+function SDash({user,myA,submissions,setPg}){
+  const pending=myA.filter(a=>!submissions.find(s=>s.assignmentId===a.id&&s.status==='submitted'));
+  const done=submissions.filter(s=>s.status==='submitted');
+  const pct=myA.length>0?Math.round(done.length/myA.length*100):0;
+  const overdue=pending.filter(a=>a.due&&a.due<tod());
+  return(
+    <div>
+      <div className="hero-grad">
+        <div style={{fontSize:12,color:'rgba(255,255,255,.5)',marginBottom:3}}>Welcome back,</div>
+        <div style={{fontFamily:'Georgia,serif',fontSize:20,fontWeight:700,color:'#fff',marginBottom:3}}>{user.name}</div>
+        <div style={{fontSize:12,color:'rgba(255,255,255,.5)'}}>{user.level} · {user.year} · Brightmind Solutions Ltd</div>
+      </div>
+      <div className="content">
+        <div className="stat-grid">
+          <div className="stat-card"><div className="stat-lbl">Assigned</div><div className="stat-val" style={{color:'#0b1e3d'}}>{myA.length}</div></div>
+          <div className="stat-card"><div className="stat-lbl">Pending</div><div className="stat-val" style={{color:pending.length?'#dc2626':'#059669'}}>{pending.length}</div></div>
+          <div className="stat-card"><div className="stat-lbl">Submitted</div><div className="stat-val" style={{color:'#059669'}}>{done.length}</div></div>
+          <div className="stat-card"><div className="stat-lbl">Completion</div><div className="stat-val" style={{color:'#c8973a'}}>{pct}%</div></div>
+        </div>
+        {overdue.length>0&&<div className="alert-w">⚠️ You have {overdue.length} overdue item{overdue.length>1?'s':''}. Please complete them as soon as possible.<button className="btn btn-danger btn-sm" onClick={()=>setPg('work')} style={{marginLeft:'auto'}}>View Work</button></div>}
+        <div className="card">
+          <div className="card-head">My Work <button className="btn btn-ghost btn-sm" onClick={()=>setPg('work')}>View All</button></div>
+          {myA.length===0?<div style={{padding:'1.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No work assigned yet</div>:
+            myA.slice(0,6).map(a=>{
+              const sub=submissions.find(s=>s.assignmentId===a.id&&s.status==='submitted');
+              return(
+                <div key={a.id} className="row-item" style={{flexDirection:'column',alignItems:'flex-start',gap:4}}>
+                  <div style={{display:'flex',alignItems:'center',gap:7,width:'100%'}}>
+                    <span style={{fontWeight:600,color:'#111',fontSize:13,flex:1}}>{a.title}</span>
+                    <SBadge status={sub?'submitted':a.due&&a.due<tod()?'overdue':'pending'}/>
+                  </div>
+                  <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}>
+                    {a.type&&<span className="badge b-blue" style={{fontSize:10}}>{a.type}</span>}
+                    {a.due&&<span style={{fontSize:11,color:'#9ca3af'}}>Due {fmtS(a.due)}</span>}
+                    {a.file?.url&&<span style={{fontSize:11,color:'#059669'}}>🔗 File attached</span>}
+                  </div>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SWork({myA,submissions,onDone}){
+  const [modal,setModal]=useState(null);
+  const [selA,setSelA]=useState(null);
+  const [fl,setFl]=useState('All');
+
+  function getS(a){
+    if(submissions.find(s=>s.assignmentId===a.id&&s.status==='submitted'))return'submitted';
+    if(a.due&&a.due<tod())return'overdue';
+    return'pending';
+  }
+  const filtered=myA.filter(a=>fl==='All'||getS(a)===fl.toLowerCase());
+
+  return(
+    <div>
+      <PH title="My Work" sub="Assignments & resources from your tutor"/>
+      <div className="content">
+        <div className="filter-bar">{['All','Pending','Submitted','Overdue'].map(f=><button key={f} className={`fb${fl===f?' active':''}`} onClick={()=>setFl(f)}>{f}</button>)}</div>
+        {filtered.map(a=>{
+          const s=getS(a);
+          return(
+            <div key={a.id} className="a-card" style={{borderColor:s==='submitted'?'#86efac':s==='overdue'?'#fca5a5':'#e5e7eb',marginBottom:10}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
+                <div style={{flex:1}}>
+                  <div style={{display:'flex',gap:7,alignItems:'center',marginBottom:5,flexWrap:'wrap'}}>
+                    <span style={{fontWeight:700,color:'#0b1e3d',fontSize:13}}>{a.title}</span>
+                    <SBadge status={s}/>
+                    {a.type&&<span className="badge b-blue">{a.type}</span>}
+                  </div>
+                  {a.due&&<div style={{fontSize:11.5,color:'#9ca3af',marginBottom:6}}>Due {fmt(a.due)}</div>}
+                  {a.note&&<div className="alert-ok" style={{marginBottom:8,padding:'6px 10px',fontSize:12}}>📌 {a.note}</div>}
+                  {a.file?.url&&<div style={{marginBottom:8}}><FileChip file={a.file}/></div>}
+                  {a.desc&&<p style={{fontSize:12.5,color:'#6b7280',marginBottom:0,lineHeight:1.5}}>{a.desc}</p>}
+                </div>
+                <div style={{display:'flex',gap:6,marginLeft:12}}>
+                  {((a.questions||[]).filter(q=>q).length>0||a.file?.url)&&(
+                    <button className="btn btn-ghost btn-sm" onClick={()=>{setSelA(a);setModal('view');}}>Open</button>
+                  )}
+                  {s!=='submitted'&&<button className="btn btn-success btn-sm" onClick={()=>onDone(a.id)}>Mark Done ✓</button>}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+        {filtered.length===0&&<div className="card" style={{padding:'2.5rem',textAlign:'center',color:'#9ca3af',fontSize:13}}>No items in this category.</div>}
+      </div>
+      {modal==='view'&&selA&&(
+        <Modal title={selA.title} sub={selA.due?`Due ${fmt(selA.due)}`:selA.type} onClose={()=>setModal(null)} wide>
+          {selA.desc&&<p style={{fontSize:13,color:'#6b7280',marginBottom:14,lineHeight:1.6}}>{selA.desc}</p>}
+          {selA.note&&<div className="alert-ok" style={{marginBottom:14}}>📌 {selA.note}</div>}
+          {selA.file?.url&&(
+            <div style={{marginBottom:16}}>
+              <label className="lbl">Your File</label>
+              <div style={{display:'flex',gap:12,alignItems:'center',padding:'1rem',background:'#f0fdf4',borderRadius:9,border:'1px solid #86efac',marginTop:6}}>
+                <span style={{fontSize:30}}>{fileIcon(selA.file.name||'')}</span>
+                <div style={{flex:1}}>
+                  <div style={{fontWeight:600,color:'#166534',fontSize:13}}>{selA.file.name}</div>
+                  <div style={{fontSize:11.5,color:'#6b7280'}}>Stored in Google Drive — click to open</div>
+                </div>
+                <a href={selA.file.url} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-sm">Open File ↗</a>
+              </div>
+            </div>
+          )}
+          {(selA.questions||[]).filter(q=>q).length>0&&(
+            <><label className="lbl">Questions</label>{selA.questions.filter(q=>q).map((q,i)=><div key={i} className="q-chip"><div className="q-num">{i+1}</div><span style={{fontSize:13,color:'#374151',lineHeight:1.5}}>{q}</span></div>)}</>
+          )}
+          <div style={{background:'#fef9c3',borderRadius:8,padding:'9px 12px',fontSize:12,color:'#92400e',marginTop:12,marginBottom:12}}>
+            📌 Complete in your exercise book and bring to your next session, or send a photo to your tutor.
+          </div>
+          {submissions.find(s=>s.assignmentId===selA.id&&s.status==='submitted')?
+            <div className="alert-ok">✅ You have marked this as complete!</div>:
+            <button className="btn btn-success" onClick={()=>{onDone(selA.id);setModal(null);}} style={{width:'100%',padding:10,fontSize:13}}>Mark as Complete ✓</button>
+          }
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function SProgress({user,myA,submissions}){
+  const done=submissions.filter(s=>s.status==='submitted');
+  const pct=myA.length>0?Math.round(done.length/myA.length*100):0;
+  return(
+    <div>
+      <PH title="My Progress"/>
+      <div className="content">
+        <div className="card" style={{padding:'1.5rem',marginBottom:16}}>
+          <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:16}}>
+            <Av name={user.name} size={46}/>
+            <div>
+              <div style={{fontFamily:'Georgia,serif',fontSize:17,fontWeight:700,color:'#0b1e3d'}}>{user.name}</div>
+              <div style={{fontSize:13,color:'#6b7280'}}>{user.level} · {user.year}</div>
+            </div>
+          </div>
+          <div style={{display:'flex',justifyContent:'space-between',marginBottom:6,fontSize:13}}>
+            <span style={{fontWeight:600,color:'#0b1e3d'}}>Overall Completion</span>
+            <span style={{fontWeight:700,color:pct===100?'#059669':pct>=50?'#c8973a':'#dc2626'}}>{pct}%</span>
+          </div>
+          <div className="prog-bar" style={{height:10}}><div className="prog-fill" style={{width:pct+'%',background:pct===100?'#059669':pct>=50?'#c8973a':'#dc2626'}}/></div>
+          <div style={{fontSize:12,color:'#9ca3af',marginTop:6}}>{done.length} of {myA.length} items submitted</div>
+        </div>
+        {myA.map(a=>{
+          const sub=submissions.find(s=>s.assignmentId===a.id&&s.status==='submitted');
+          const over=!sub&&a.due&&a.due<tod();
+          return(
+            <div key={a.id} style={{background:'#fff',borderRadius:10,border:`1px solid ${sub?'#86efac':over?'#fca5a5':'#e5e7eb'}`,padding:'11px 14px',marginBottom:8,display:'flex',alignItems:'center',gap:12}}>
+              <div style={{width:28,height:28,borderRadius:'50%',background:sub?'#dcfce7':over?'#fee2e2':'#f3f4f6',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>{sub?'✅':over?'⚠️':'⏳'}</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:13,fontWeight:600,color:'#0b1e3d'}}>{a.title}</div>
+                <div style={{fontSize:11,color:'#9ca3af'}}>{a.type||a.topic}{a.due?' · Due '+fmtS(a.due):''}{sub?' · Submitted '+fmtS(sub.submitted):''}</div>
+              </div>
+              <SBadge status={sub?'submitted':over?'overdue':'pending'}/>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════
+// APP ROOT
+// ═══════════════════════════════════════
+function App(){
+  const [state,setState]=useState('loading');
+  const [userData,setUserData]=useState(null);
+
+  useEffect(()=>{
+    const unsub=auth.onAuthStateChanged(async fb=>{
+      if(fb){
+        try{
+          const doc=await db.collection('users').doc(fb.uid).get();
+          if(doc.exists){setUserData({id:fb.uid,...doc.data()});setState(doc.data().role==='admin'?'admin':'student');}
+          else{await auth.signOut();setState('login');}
+        }catch{setState('login');}
+      }else{setState('login');}
+    });
+    return unsub;
+  },[]);
+
+  function logout(){auth.signOut();setState('login');setUserData(null);}
+
+  if(state==='loading')return(
+    <div style={{minHeight:'100vh',background:'#0b1e3d',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:14}}>
+      <div style={{width:46,height:46,background:'linear-gradient(135deg,#c8973a,#e3b96a)',borderRadius:12,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Georgia,serif',fontWeight:800,color:'#0b1e3d',fontSize:20}}>B</div>
+      <div className="spin"/>
+      <div style={{color:'rgba(255,255,255,.4)',fontSize:13}}>Loading Brightmind Portal…</div>
+    </div>
+  );
+  if(state==='login')  return <Login onLogin={u=>{setUserData(u);setState(u.role==='admin'?'admin':'student');}}/>;
+  if(state==='admin')  return <AdminPortal user={userData} onLogout={logout}/>;
+  if(state==='student')return <StudentPortal user={userData} onLogout={logout}/>;
+  return null;
+}
+
+ReactDOM.render(<App/>,document.getElementById('root'));
 </script>
 </body>
 </html>
