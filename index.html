@@ -149,3 +149,25 @@
   </script>
 </body>
 </html>
+function doPost(e) {
+  let result;
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const action = data.action;
+
+    switch (action) {
+      case 'addStudent': result = addStudent(data.payload); break;
+      case 'recordLesson': result = recordLesson(data.payload); break;
+      case 'recordPayment': result = recordPayment(data.payload); break;
+      case 'assignHomework': result = assignHomework(data.payload); break;
+      case 'getStudentData': result = getStudentData(data.payload.studentId); break;
+      case 'getAllData': result = getAllData(); break;
+      default: result = { status: 'error', message: 'Invalid action' };
+    }
+  } catch (err) {
+    result = { status: 'error', message: err.toString() };
+  }
+
+  return ContentService.createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}
