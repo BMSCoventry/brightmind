@@ -67,7 +67,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKqaum5Rpok2gru6seuIoIqphLCMEuUJFWGsy1KKmbxUXgH2WfynSMRhRR_xbIAHz9/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLExo5Fpf3oewa3PSzw1jvFcii0vDjkjlkntJiXfPzVRBSog8X9bjwQpDWbNRxNKlw/exec";
 
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
@@ -118,7 +118,14 @@
 
         const hwEl = document.getElementById('homework-list');
         hwEl.innerHTML = data.homework.length > 0
-          ? data.homework.map(h => `<li class="list-group-item p-3"><strong>${h.title}</strong> <span class="badge bg-secondary float-end">Due: ${h.dueDate}</span><br><small class="text-muted d-block mt-1">${h.details}</small></li>`).join('')
+          ? data.homework.map(h => `
+              <li class="list-group-item p-3">
+                <strong>${h.title}</strong> 
+                <span class="badge bg-secondary float-end">Due: ${h.dueDate}</span><br>
+                <small class="text-muted d-block mt-1">${h.details}</small>
+                ${h.pdfUrl ? `<a href="${h.pdfUrl}" target="_blank" class="btn btn-sm btn-outline-primary mt-2 fw-semibold">📄 Download PDF Worksheet</a>` : ''}
+              </li>
+            `).join('')
           : '<li class="list-group-item p-3 text-muted">No pending homework assigned.</li>';
 
         const ledgerEl = document.getElementById('ledger-list');
