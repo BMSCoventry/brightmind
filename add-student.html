@@ -77,49 +77,57 @@
     // Paste your deployed Google Apps Script Web App URL here
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_eEEtv_eq7oPGRaGv3IMxuIYNIeu-5epA5UWqSA9jnyP6P9KipZZP5cesbHiUB2Uk/exec";
 
-    document.getElementById('addStudentForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const submitBtn = document.getElementById('submitBtn');
-      const statusAlert = document.getElementById('statusAlert');
-      
-      submitBtn.disabled = true;
-      submitBtn.innerText = "Saving...";
-      statusAlert.style.display = "none";
+document.getElementById('addStudentForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const submitBtn = document.getElementById('submitBtn');
+  const statusAlert = document.getElementById('statusAlert');
+  
+  submitBtn.disabled = true;
+  submitBtn.innerText = "Saving...";
+  statusAlert.style.display = "none";
 
-      const payload = {
-        name: document.getElementById('name').value,
-        yearGroup: document.getElementById('yearGroup').value,
-        customFee: parseFloat(document.getElementById('customFee').value),
-        phone: document.getElementById('phone').value,
-        pin: document.getElementById('pin').value || '1234'
-      };
+  const payload = {
+    name: document.getElementById('name').value,
+    yearGroup: document.getElementById('yearGroup').value,
+    customFee: parseFloat(document.getElementById('customFee').value),
+    phone: document.getElementById('phone').value,
+    pin: document.getElementById('pin').value || '1234'
+  };
 
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'addStudent', payload: payload })
-        });
-        
-        const result = await response.json();
-
-        if (result.status === 'success') {
-          statusAlert.className = "alert success";
-          statusAlert.innerHTML = `Student registered successfully! Assign ID: <strong>${result.studentId}</strong>`;
-          statusAlert.style.display = "block";
-          document.getElementById('addStudentForm').reset();
-        } else {
-          throw new Error(result.message || "Failed to save details");
-        }
-      } catch (err) {
-        statusAlert.className = "alert error";
-        statusAlert.innerText = "Error: " + err.message;
-        statusAlert.style.display = "block";
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Save Student Details";
-      }
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Prevents CORS pre-flight triggers
+      body: JSON.stringify({ action: 'addStudent', payload: payload })
     });
+
+    const responseText = await response.text();
+    let result;
+
+    try {
+      result = JSON.parse(responseText);
+    } catch (parseError) {
+      throw new Error("Received invalid response from server. Make sure your Apps Script is deployed to 'Anyone'.");
+    }
+
+    if (result.status === 'success') {
+      statusAlert.className = "alert success";
+      statusAlert.innerHTML = `Student registered successfully! Student ID: <strong>${result.studentId}</strong>`;
+      statusAlert.style.display = "block";
+      document.getElementById('addStudentForm').reset();
+    } else {
+      throw new Error(result.message || "Failed to save details.");
+    }
+  } catch (err) {
+    statusAlert.className = "alert error";
+    statusAlert.innerText = "Error: " + err.message;
+    statusAlert.style.display = "block";
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Save Student Details";
+  }
+});
   </script>
 </body>
 </html>
