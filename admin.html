@@ -80,30 +80,34 @@
       <!-- Assign Homework -->
       <div class="card shadow-sm border-0 mt-4">
         <div class="card-body p-4">
-          <h5 class="fw-bold mb-3">3. Assign Homework & Trigger WhatsApp</h5>
+          <h5 class="fw-bold mb-3">3. Assign Homework & Email PDF</h5>
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label fw-semibold">Select Student</label>
-              <select id="hw-student-select" class="form-select" onchange="autoFillPhone(this)"></select>
+              <select id="hw-student-select" class="form-select" onchange="autoFillEmail(this)"></select>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Mobile Number</label>
-              <input type="tel" id="hw-phone" class="form-control" placeholder="+44...">
+              <label class="form-label fw-semibold">Student / Parent Email</label>
+              <input type="email" id="hw-email" class="form-control" placeholder="student@example.com">
             </div>
             <div class="col-md-12">
               <label class="form-label fw-semibold">Assignment Title</label>
-              <input type="text" id="hw-title" class="form-control" placeholder="e.g. GCSE Algebra Sheet 1">
+              <input type="text" id="hw-title" class="form-control" placeholder="e.g. GCSE Quadratic Equations Sheet 1">
             </div>
             <div class="col-md-8">
               <label class="form-label fw-semibold">Details / Instructions</label>
-              <input type="text" id="hw-details" class="form-control" placeholder="Complete Questions 1-10">
+              <input type="text" id="hw-details" class="form-control" placeholder="Complete exercises 1 to 10">
             </div>
             <div class="col-md-4">
               <label class="form-label fw-semibold">Due Date</label>
               <input type="date" id="hw-due" class="form-control">
             </div>
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">Attach PDF Worksheet (Optional)</label>
+              <input type="file" id="hw-file" class="form-control" accept="application/pdf">
+            </div>
           </div>
-          <button onclick="assignHW()" class="btn btn-dark w-100 fw-bold mt-3">Assign & Send WhatsApp Alert</button>
+          <button id="assignHwBtn" onclick="assignHW()" class="btn btn-dark w-100 fw-bold mt-3">Assign & Send Email Alert</button>
         </div>
       </div>
 
@@ -130,7 +134,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKqaum5Rpok2gru6seuIoIqphLCMEuUJFWGsy1KKmbxUXgH2WfynSMRhRR_xbIAHz9/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLExo5Fpf3oewa3PSzw1jvFcii0vDjkjlkntJiXfPzVRBSog8X9bjwQpDWbNRxNKlw/exec";
     let globalStudentList = [];
 
     document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
@@ -170,7 +174,7 @@
     }
 
     function populateDropdowns() {
-      const options = globalStudentList.map(s => `<option value="${s.studentId}" data-fee="${s.customFee}" data-phone="${s.phone}">${s.name} (${s.yearGroup}) - ${s.studentId}</option>`).join('');
+      const options = globalStudentList.map(s => `<option value="${s.studentId}" data-fee="${s.customFee}" data-email="${s.email}">${s.name} (${s.yearGroup}) - ${s.studentId}</option>`).join('');
       const defaultOpt = `<option value="" disabled selected>Select a Student...</option>`;
 
       document.getElementById('lesson-student-select').innerHTML = defaultOpt + options;
@@ -184,9 +188,9 @@
       document.getElementById(targetId).value = selectedOption.getAttribute('data-fee') || '';
     }
 
-    function autoFillPhone(selectEl) {
+    function autoFillEmail(selectEl) {
       const selectedOption = selectEl.options[selectEl.selectedIndex];
-      document.getElementById('hw-phone').value = selectedOption.getAttribute('data-phone') || '';
+      document.getElementById('hw-email').value = selectedOption.getAttribute('data-email') || '';
     }
 
     async function logLesson() {
@@ -210,18 +214,58 @@
     }
 
     async function assignHW() {
-      const payload = {
-        studentId: document.getElementById('hw-student-select').value,
-        phone: document.getElementById('hw-phone').value,
-        title: document.getElementById('hw-title').value,
-        details: document.getElementById('hw-details').value,
-        dueDate: document.getElementById('hw-due').value
-      };
-      if (!payload.studentId || !payload.title) return alert("Select a student and enter assignment title.");
+      const btn = document.getElementById('assignHwBtn');
+      const fileInput = document.getElementById('hw-file');
+      const file = fileInput.files[0];
 
-      const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'assignHomework', payload }) });
-      const data = await res.json();
-      alert(data.status === 'success' ? 'Homework assigned and WhatsApp alert sent!' : 'Error assigning homework');
+      const studentId = document.getElementById('hw-student-select').value;
+      const title = document.getElementById('hw-title').value;
+
+      if (!studentId || !title) return alert("Select a student and enter assignment title.");
+
+      btn.disabled = true;
+      btn.innerText = "Uploading PDF & Sending Email...";
+
+      let fileData = null;
+      let fileName = null;
+
+      if (file) {
+        fileName = file.name;
+        fileData = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = e => resolve(e.target.result);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      const payload = {
+        studentId: studentId,
+        email: document.getElementById('hw-email').value,
+        title: title,
+        details: document.getElementById('hw-details').value,
+        dueDate: document.getElementById('hw-due').value,
+        fileData: fileData,
+        fileName: fileName
+      };
+
+      try {
+        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'assignHomework', payload }) });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          alert('Homework assigned and email sent successfully!');
+          document.getElementById('hw-title').value = '';
+          document.getElementById('hw-details').value = '';
+          fileInput.value = '';
+        } else {
+          alert('Error: ' + data.message);
+        }
+      } catch (err) {
+        alert('Failed to send request: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Assign & Send Email Alert";
+      }
     }
 
     async function resetPin() {
