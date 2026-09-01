@@ -3,131 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BrightMind - Add New Student</title>
-  <style>
-    :root { --primary: #0284c7; --bg: #f8fafc; --card: #ffffff; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-    .container { max-width: 500px; margin: 30px auto; }
-    .card { background: var(--card); padding: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; font-weight: 600; margin-bottom: 5px; color: #334155; }
-    input, select, button { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-    button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
-    button:hover { background: #0369a1; }
-    .nav-link { display: inline-block; margin-bottom: 15px; color: var(--primary); text-decoration: none; font-weight: 600; }
-    .alert { padding: 10px; border-radius: 4px; margin-top: 15px; display: none; }
-    .success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
-    .error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
-  </style>
+  <title>BrightMind - Add Student</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
 
-  <div class="container">
-    <a href="index.html" class="nav-link">&larr; Back to Main Dashboard</a>
-    
-    <div class="card">
-      <h2>Register New Student</h2>
-      <form id="addStudentForm">
+  <div class="container py-5" style="max-width: 500px;">
+    <a href="admin.html" class="btn btn-outline-secondary btn-sm mb-3">&larr; Back to Admin Portal</a>
+
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+        <h4 class="card-title fw-bold mb-4">Register New Student</h4>
         
-        <div class="form-group">
-          <label for="name">Full Name</label>
-          <input type="text" id="name" required placeholder="e.g. John Doe">
-        </div>
+        <form id="addStudentForm">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Full Name</label>
+            <input type="text" id="name" class="form-control" required placeholder="e.g. Alex Smith">
+          </div>
 
-        <div class="form-group">
-          <label for="yearGroup">Year Group</label>
-          <select id="yearGroup" required>
-            <option value="" disabled selected>Select Year Group</option>
-            <option value="Year 4">Year 4</option>
-            <option value="Year 5">Year 5</option>
-            <option value="Year 6">Year 6</option>
-            <option value="Year 7">Year 7</option>
-            <option value="Year 8">Year 8</option>
-            <option value="Year 9">Year 9</option>
-            <option value="Year 10">Year 10</option>
-            <option value="Year 11">Year 11</option>
-            <option value="Year 12">Year 12</option>
-            <option value="Year 13">Year 13</option>
-          </select>
-        </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Year Group</label>
+            <select id="yearGroup" class="form-select" required>
+              <option value="" disabled selected>Select Year Group</option>
+              <option value="Year 4">Year 4</option>
+              <option value="Year 5">Year 5</option>
+              <option value="Year 6">Year 6</option>
+              <option value="Year 7">Year 7</option>
+              <option value="Year 8">Year 8</option>
+              <option value="Year 9">Year 9</option>
+              <option value="Year 10">Year 10</option>
+              <option value="Year 11">Year 11</option>
+              <option value="Year 12">Year 12</option>
+              <option value="Year 13">Year 13</option>
+            </select>
+          </div>
 
-        <div class="form-group">
-          <label for="customFee">Fee Per Session (£)</label>
-          <input type="number" id="customFee" step="0.01" required placeholder="e.g. 25.00">
-        </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Fee Per Session (£)</label>
+            <input type="number" id="customFee" step="0.01" class="form-control" required placeholder="e.g. 25.00">
+          </div>
 
-        <div class="form-group">
-          <label for="phone">Contact Mobile Number (for WhatsApp)</label>
-          <input type="tel" id="phone" required placeholder="e.g. +447123456789">
-        </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Contact Mobile (WhatsApp)</label>
+            <input type="tel" id="phone" class="form-control" required placeholder="e.g. +447123456789">
+          </div>
 
-        <div class="form-group">
-          <label for="pin">Portal Login PIN (4 digits)</label>
-          <input type="password" id="pin" maxlength="4" placeholder="Default: 1234">
-        </div>
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Student Portal PIN (4 Digits)</label>
+            <input type="password" id="pin" class="form-control" maxlength="4" placeholder="Default: 1234">
+          </div>
 
-        <button type="submit" id="submitBtn">Save Student Details</button>
-      </form>
+          <button type="submit" id="submitBtn" class="btn btn-primary btn-lg w-100 fw-bold">Save Student Details</button>
+        </form>
 
-      <div id="statusAlert" class="alert"></div>
+        <div id="statusAlert" class="alert mt-3 d-none"></div>
+      </div>
     </div>
   </div>
 
   <script>
-    // Paste your deployed Google Apps Script Web App URL here
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzpl2U2tQb9p0YF_h7jlZ-hyJ7tdAdeZZlWJUajh_3cUicIPDtqQc2UlUjqxFaemF8Z/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKqaum5Rpok2gru6seuIoIqphLCMEuUJFWGsy1KKmbxUXgH2WfynSMRhRR_xbIAHz9/exec";
 
-document.getElementById('addStudentForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  const submitBtn = document.getElementById('submitBtn');
-  const statusAlert = document.getElementById('statusAlert');
-  
-  submitBtn.disabled = true;
-  submitBtn.innerText = "Saving...";
-  statusAlert.style.display = "none";
+    document.getElementById('addStudentForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitBtn');
+      const statusAlert = document.getElementById('statusAlert');
+      
+      submitBtn.disabled = true;
+      statusAlert.classList.add('d-none');
 
-  const payload = {
-    name: document.getElementById('name').value,
-    yearGroup: document.getElementById('yearGroup').value,
-    customFee: parseFloat(document.getElementById('customFee').value),
-    phone: document.getElementById('phone').value,
-    pin: document.getElementById('pin').value || '1234'
-  };
+      const payload = {
+        name: document.getElementById('name').value,
+        yearGroup: document.getElementById('yearGroup').value,
+        customFee: parseFloat(document.getElementById('customFee').value),
+        phone: document.getElementById('phone').value,
+        pin: document.getElementById('pin').value || '1234'
+      };
 
-  try {
-    const response = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Prevents CORS pre-flight triggers
-      body: JSON.stringify({ action: 'addStudent', payload: payload })
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'addStudent', payload })
+        });
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          statusAlert.className = "alert alert-success mt-3";
+          statusAlert.innerHTML = `Registered! Assigned ID: <strong>${result.studentId}</strong> (Default PIN: 1234)`;
+          statusAlert.classList.remove('d-none');
+          document.getElementById('addStudentForm').reset();
+        } else {
+          throw new Error(result.message);
+        }
+      } catch (err) {
+        statusAlert.className = "alert alert-danger mt-3";
+        statusAlert.innerText = "Error: " + err.message;
+        statusAlert.classList.remove('d-none');
+      } finally {
+        submitBtn.disabled = false;
+      }
     });
-
-    const responseText = await response.text();
-    let result;
-
-    try {
-      result = JSON.parse(responseText);
-    } catch (parseError) {
-      throw new Error("Received invalid response from server. Make sure your Apps Script is deployed to 'Anyone'.");
-    }
-
-    if (result.status === 'success') {
-      statusAlert.className = "alert success";
-      statusAlert.innerHTML = `Student registered successfully! Student ID: <strong>${result.studentId}</strong>`;
-      statusAlert.style.display = "block";
-      document.getElementById('addStudentForm').reset();
-    } else {
-      throw new Error(result.message || "Failed to save details.");
-    }
-  } catch (err) {
-    statusAlert.className = "alert error";
-    statusAlert.innerText = "Error: " + err.message;
-    statusAlert.style.display = "block";
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.innerText = "Save Student Details";
-  }
-});
   </script>
 </body>
 </html>
