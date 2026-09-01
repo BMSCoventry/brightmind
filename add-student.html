@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrightMind - Add New Student</title>
+  <style>
+    :root { --primary: #0284c7; --bg: #f8fafc; --card: #ffffff; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+    .container { max-width: 500px; margin: 30px auto; }
+    .card { background: var(--card); padding: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-weight: 600; margin-bottom: 5px; color: #334155; }
+    input, select, button { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+    button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    button:hover { background: #0369a1; }
+    .nav-link { display: inline-block; margin-bottom: 15px; color: var(--primary); text-decoration: none; font-weight: 600; }
+    .alert { padding: 10px; border-radius: 4px; margin-top: 15px; display: none; }
+    .success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <a href="index.html" class="nav-link">&larr; Back to Main Dashboard</a>
+    
+    <div class="card">
+      <h2>Register New Student</h2>
+      <form id="addStudentForm">
+        
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" required placeholder="e.g. John Doe">
+        </div>
+
+        <div class="form-group">
+          <label for="yearGroup">Year Group</label>
+          <select id="yearGroup" required>
+            <option value="" disabled selected>Select Year Group</option>
+            <option value="Year 4">Year 4</option>
+            <option value="Year 5">Year 5</option>
+            <option value="Year 6">Year 6</option>
+            <option value="Year 7">Year 7</option>
+            <option value="Year 8">Year 8</option>
+            <option value="Year 9">Year 9</option>
+            <option value="Year 10">Year 10</option>
+            <option value="Year 11">Year 11</option>
+            <option value="Year 12">Year 12</option>
+            <option value="Year 13">Year 13</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="customFee">Fee Per Session (£)</label>
+          <input type="number" id="customFee" step="0.01" required placeholder="e.g. 25.00">
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Contact Mobile Number (for WhatsApp)</label>
+          <input type="tel" id="phone" required placeholder="e.g. +447123456789">
+        </div>
+
+        <div class="form-group">
+          <label for="pin">Portal Login PIN (4 digits)</label>
+          <input type="password" id="pin" maxlength="4" placeholder="Default: 1234">
+        </div>
+
+        <button type="submit" id="submitBtn">Save Student Details</button>
+      </form>
+
+      <div id="statusAlert" class="alert"></div>
+    </div>
+  </div>
+
+  <script>
+    // Paste your deployed Google Apps Script Web App URL here
+    const SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL";
+
+    document.getElementById('addStudentForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const statusAlert = document.getElementById('statusAlert');
+      
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Saving...";
+      statusAlert.style.display = "none";
+
+      const payload = {
+        name: document.getElementById('name').value,
+        yearGroup: document.getElementById('yearGroup').value,
+        customFee: parseFloat(document.getElementById('customFee').value),
+        phone: document.getElementById('phone').value,
+        pin: document.getElementById('pin').value || '1234'
+      };
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'addStudent', payload: payload })
+        });
+        
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          statusAlert.className = "alert success";
+          statusAlert.innerHTML = `Student registered successfully! Assign ID: <strong>${result.studentId}</strong>`;
+          statusAlert.style.display = "block";
+          document.getElementById('addStudentForm').reset();
+        } else {
+          throw new Error(result.message || "Failed to save details");
+        }
+      } catch (err) {
+        statusAlert.className = "alert error";
+        statusAlert.innerText = "Error: " + err.message;
+        statusAlert.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Save Student Details";
+      }
+    });
+  </script>
+</body>
+</html>
