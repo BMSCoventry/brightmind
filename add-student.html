@@ -39,13 +39,18 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label fw-semibold">Fee Per Session (£)</label>
-            <input type="number" id="customFee" step="0.01" class="form-control" required placeholder="e.g. 25.00">
+            <label class="form-label fw-semibold">Email Address</label>
+            <input type="email" id="email" class="form-control" required placeholder="student@example.com">
           </div>
 
           <div class="mb-3">
-            <label class="form-label fw-semibold">Contact Mobile (WhatsApp)</label>
+            <label class="form-label fw-semibold">Contact Mobile</label>
             <input type="tel" id="phone" class="form-control" required placeholder="e.g. +447123456789">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Fee Per Session (£)</label>
+            <input type="number" id="customFee" step="0.01" class="form-control" required placeholder="e.g. 25.00">
           </div>
 
           <div class="mb-4">
@@ -62,7 +67,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKqaum5Rpok2gru6seuIoIqphLCMEuUJFWGsy1KKmbxUXgH2WfynSMRhRR_xbIAHz9/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLExo5Fpf3oewa3PSzw1jvFcii0vDjkjlkntJiXfPzVRBSog8X9bjwQpDWbNRxNKlw/exec";
 
     document.getElementById('addStudentForm').addEventListener('submit', async function(e) {
       e.preventDefault();
@@ -75,8 +80,9 @@
       const payload = {
         name: document.getElementById('name').value,
         yearGroup: document.getElementById('yearGroup').value,
-        customFee: parseFloat(document.getElementById('customFee').value),
+        email: document.getElementById('email').value,
         phone: document.getElementById('phone').value,
+        customFee: parseFloat(document.getElementById('customFee').value),
         pin: document.getElementById('pin').value || '1234'
       };
 
