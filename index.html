@@ -3,258 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BrightMind - Management & Portal</title>
-  <style>
-    :root { 
-      --primary: #0284c7; 
-      --primary-hover: #0369a1;
-      --bg: #f8fafc; 
-      --card: #ffffff; 
-      --text: #334155;
-    }
-    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-    .container { max-width: 900px; margin: 0 auto; }
-    
-    /* Top Navigation Header */
-    .navbar { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      background: var(--card); 
-      padding: 15px 20px; 
-      border-radius: 8px; 
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
-      margin-bottom: 25px; 
-    }
-    .navbar h1 { margin: 0; font-size: 1.4rem; color: var(--primary); }
-    .nav-links { display: flex; gap: 10px; }
-    .nav-btn { 
-      background: var(--primary); 
-      color: white; 
-      padding: 8px 16px; 
-      border-radius: 6px; 
-      text-decoration: none; 
-      font-weight: 600; 
-      font-size: 14px;
-      transition: background 0.2s;
-    }
-    .nav-btn:hover { background: var(--primary-hover); }
-    .nav-btn.secondary { background: #64748b; }
-    .nav-btn.secondary:hover { background: #475569; }
-
-    /* Tab Switcher */
-    .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
-    .tab-btn { 
-      flex: 1; 
-      padding: 12px; 
-      background: #e2e8f0; 
-      border: none; 
-      border-radius: 6px; 
-      font-weight: bold; 
-      cursor: pointer; 
-      color: var(--text);
-    }
-    .tab-btn.active { background: var(--primary); color: white; }
-
-    /* Cards & Layout */
-    .card { background: var(--card); padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-    
-    input, select, button { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-    .action-btn { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
-    .action-btn:hover { background: var(--primary-hover); }
-    
-    .badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; }
-    .credit { color: #16a34a; }
-    .debit { color: #dc2626; }
-  </style>
+  <title>BrightMind - Student Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
 
-  <div class="container">
-    <!-- Top Navigation Header -->
-    <header class="navbar">
-      <h1>BrightMind Tuition</h1>
-      <nav class="nav-links">
-        <a href="add-student.html" class="nav-btn">+ Add New Student</a>
-      </nav>
-    </header>
-
-    <!-- Section Switcher Tabs -->
-    <div class="tab-container">
-      <button class="tab-btn active" id="tab-admin-btn" onclick="switchTab('admin')">Admin Management</button>
-      <button class="tab-btn" id="tab-student-btn" onclick="switchTab('student')">Student Portal Login</button>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">BrightMind Student Portal</a>
     </div>
+  </nav>
 
-    <!-- ADMIN SECTION -->
-    <div id="admin-section">
-      <div class="card">
-        <h3>Admin Management Dashboard</h3>
-
-        <div class="grid">
-          <!-- Record Lesson -->
-          <div>
-            <h4>1. Log Completed Lesson</h4>
-            <label>Student ID</label>
-            <input type="text" id="adm-stu-id" placeholder="e.g. STU-1001">
-            <label>Fee Charged (£)</label>
-            <input type="number" id="adm-lesson-fee" step="0.01" placeholder="Session fee">
-            <button class="action-btn" onclick="logLesson()">Log Attendance & Debit Fee</button>
+  <div class="container py-3" style="max-width: 550px;">
+    
+    <!-- Login Card -->
+    <div id="login-card" class="card shadow-sm border-0">
+      <div class="card-body p-4">
+        <h4 class="card-title fw-bold text-center mb-4">Student Login</h4>
+        <form id="loginForm">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Student ID</label>
+            <input type="text" id="login-id" class="form-control form-control-lg" placeholder="e.g. STU-1001" required>
           </div>
-
-          <!-- Record Payment -->
-          <div>
-            <h4>2. Record Payment</h4>
-            <label>Student ID</label>
-            <input type="text" id="pay-stu-id" placeholder="e.g. STU-1001">
-            <label>Amount Received (£)</label>
-            <input type="number" id="pay-amount" step="0.01" placeholder="Amount paid">
-            <button class="action-btn" onclick="logPayment()">Record Payment Credit</button>
+          <div class="mb-4">
+            <label class="form-label fw-semibold">4-Digit PIN</label>
+            <input type="password" id="login-pin" class="form-control form-control-lg" maxlength="4" placeholder="••••" required>
           </div>
-        </div>
-
-        <hr style="margin: 25px 0; border: 0; border-top: 1px solid #e2e8f0;">
-
-        <!-- Assign Homework -->
-        <h4>3. Assign Homework & Trigger WhatsApp Alert</h4>
-        <div class="grid">
-          <div>
-            <label>Student ID</label>
-            <input type="text" id="hw-stu-id" placeholder="e.g. STU-1001">
-          </div>
-          <div>
-            <label>Student Mobile (+44...)</label>
-            <input type="tel" id="hw-phone" placeholder="+447123456789">
-          </div>
-        </div>
-        <label>Assignment Title</label>
-        <input type="text" id="hw-title" placeholder="e.g. Algebra Quadratic Equations Sheet 1">
-        <label>Details / Instructions</label>
-        <input type="text" id="hw-details" placeholder="Complete exercises 1 to 10 on page 4">
-        <label>Due Date</label>
-        <input type="date" id="hw-due">
-        <button class="action-btn" onclick="assignHW()">Assign & Send WhatsApp Notification</button>
+          <button type="submit" id="loginBtn" class="btn btn-primary btn-lg w-100 fw-bold">Login to Dashboard</button>
+        </form>
+        <div id="loginAlert" class="alert alert-danger mt-3 d-none" role="alert"></div>
       </div>
     </div>
 
-    <!-- STUDENT SECTION -->
-    <div id="student-section" style="display: none;">
-      <div class="card">
-        <h3>Student Portal Login</h3>
-        <label>Student ID</label>
-        <input type="text" id="login-id" placeholder="Enter Your Student ID (e.g. STU-1001)">
-        <button class="action-btn" onclick="loadStudentData()">View My Account & Homework</button>
-
-        <div id="student-portal-content" style="display: none; margin-top: 20px;">
-          <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
-          <h4>Account Balance Overview</h4>
-          <p>Current Balance: <span id="portal-balance" style="font-size: 1.3em; font-weight: bold;"></span></p>
-          <p><small style="color: #64748b;">(Positive balance = Advance Credit | Negative balance = Payment Due)</small></p>
-
-          <h4>Assigned Homework</h4>
-          <ul id="portal-hw-list"></ul>
-
-          <h4>Lesson & Payment History</h4>
-          <ul id="portal-ledger-list"></ul>
+    <!-- Student Dashboard -->
+    <div id="dashboard" class="d-none">
+      
+      <!-- Balance Card -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4 text-center">
+          <h5 class="text-muted mb-2">Welcome back, <span id="student-name-display" class="fw-bold text-dark"></span>!</h5>
+          <hr class="my-3">
+          <p class="text-muted mb-1 small uppercase fw-semibold">Current Balance</p>
+          <h2 id="balance-display" class="display-6 fw-bold">£0.00</h2>
+          <small class="text-muted d-block mt-2">(Positive = Credit Balance | Negative = Payment Due)</small>
         </div>
       </div>
+
+      <!-- Homework List -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white fw-bold py-3">Assigned Homework</div>
+        <ul id="homework-list" class="list-group list-group-flush"></ul>
+      </div>
+
+      <!-- Ledger / History List -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white fw-bold py-3">Payment & Session History</div>
+        <ul id="ledger-list" class="list-group list-group-flush"></ul>
+      </div>
+
+      <button onclick="logout()" class="btn btn-outline-secondary w-100 mb-5">Logout</button>
     </div>
+
   </div>
 
   <script>
-    // Replace with your deployed Apps Script URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzpl2U2tQb9p0YF_h7jlZ-hyJ7tdAdeZZlWJUajh_3cUicIPDtqQc2UlUjqxFaemF8Z/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKqaum5Rpok2gru6seuIoIqphLCMEuUJFWGsy1KKmbxUXgH2WfynSMRhRR_xbIAHz9/exec";
 
-    // Switch between Admin and Student view
-    function switchTab(tab) {
-      const adminSec = document.getElementById('admin-section');
-      const studentSec = document.getElementById('student-section');
-      const adminBtn = document.getElementById('tab-admin-btn');
-      const studentBtn = document.getElementById('tab-student-btn');
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const loginBtn = document.getElementById('loginBtn');
+      const alertEl = document.getElementById('loginAlert');
+      
+      loginBtn.disabled = true;
+      alertEl.classList.add('d-none');
 
-      if (tab === 'admin') {
-        adminSec.style.display = 'block';
-        studentSec.style.display = 'none';
-        adminBtn.classList.add('active');
-        studentBtn.classList.remove('active');
-      } else {
-        adminSec.style.display = 'none';
-        studentSec.style.display = 'block';
-        studentBtn.classList.add('active');
-        adminBtn.classList.remove('active');
-      }
-    }
+      const studentId = document.getElementById('login-id').value;
+      const pin = document.getElementById('login-pin').value;
 
-    async function apiCall(action, payload) {
       try {
         const res = await fetch(SCRIPT_URL, {
           method: 'POST',
-          body: JSON.stringify({ action, payload })
+          body: JSON.stringify({ action: 'studentLogin', payload: { studentId, pin } })
         });
-        return await res.json();
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          document.getElementById('login-card').classList.add('d-none');
+          document.getElementById('dashboard').classList.remove('d-none');
+          document.getElementById('student-name-display').innerText = data.name;
+          loadStudentData(studentId);
+        } else {
+          alertEl.innerText = data.message;
+          alertEl.classList.remove('d-none');
+        }
       } catch (err) {
-        alert("API Request Failed: " + err.message);
+        alertEl.innerText = "Error connecting to server.";
+        alertEl.classList.remove('d-none');
+      } finally {
+        loginBtn.disabled = false;
       }
-    }
+    });
 
-    async function logLesson() {
-      const studentId = document.getElementById('adm-stu-id').value;
-      const fee = document.getElementById('adm-lesson-fee').value;
-      if (!studentId || !fee) return alert("Please enter Student ID and Fee");
-      
-      const res = await apiCall('recordLesson', { studentId, fee });
-      alert(res.status === 'success' ? 'Lesson logged and account debited.' : 'Error: ' + res.message);
-    }
+    async function loadStudentData(studentId) {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'getStudentData', payload: { studentId } })
+      });
+      const data = await res.json();
 
-    async function logPayment() {
-      const studentId = document.getElementById('pay-stu-id').value;
-      const amount = document.getElementById('pay-amount').value;
-      if (!studentId || !amount) return alert("Please enter Student ID and Amount");
-
-      const res = await apiCall('recordPayment', { studentId, amount });
-      alert(res.status === 'success' ? 'Payment credited.' : 'Error: ' + res.message);
-    }
-
-    async function assignHW() {
-      const payload = {
-        studentId: document.getElementById('hw-stu-id').value,
-        phone: document.getElementById('hw-phone').value,
-        title: document.getElementById('hw-title').value,
-        details: document.getElementById('hw-details').value,
-        dueDate: document.getElementById('hw-due').value
-      };
-      if (!payload.studentId || !payload.title) return alert("Please complete required fields");
-
-      const res = await apiCall('assignHomework', payload);
-      alert(res.status === 'success' ? 'Homework assigned and WhatsApp alert sent!' : 'Error: ' + res.message);
-    }
-
-    async function loadStudentData() {
-      const studentId = document.getElementById('login-id').value;
-      if (!studentId) return alert("Please enter your Student ID");
-
-      const data = await apiCall('getStudentData', { studentId });
-
-      if (data && data.status === 'success') {
-        document.getElementById('student-portal-content').style.display = 'block';
-
-        const balEl = document.getElementById('portal-balance');
+      if (data.status === 'success') {
+        const balEl = document.getElementById('balance-display');
         balEl.innerText = (data.balance >= 0 ? '+' : '') + '£' + data.balance.toFixed(2);
-        balEl.className = data.balance >= 0 ? 'credit' : 'debit';
+        balEl.className = 'display-6 fw-bold ' + (data.balance >= 0 ? 'text-success' : 'text-danger');
 
-        const hwList = document.getElementById('portal-hw-list');
-        hwList.innerHTML = data.homework.length > 0 
-          ? data.homework.map(h => `<li><strong>${h.title}</strong> (Due: ${h.dueDate})<br>${h.details}</li>`).join('')
-          : '<li>No pending homework assigned.</li>';
+        const hwEl = document.getElementById('homework-list');
+        hwEl.innerHTML = data.homework.length > 0
+          ? data.homework.map(h => `<li class="list-group-item p-3"><strong>${h.title}</strong> <span class="badge bg-secondary float-end">Due: ${h.dueDate}</span><br><small class="text-muted d-block mt-1">${h.details}</small></li>`).join('')
+          : '<li class="list-group-item p-3 text-muted">No pending homework assigned.</li>';
 
-        const ledgerList = document.getElementById('portal-ledger-list');
-        ledgerList.innerHTML = data.ledger.length > 0
-          ? data.ledger.map(l => `<li>${l.date} - <strong>${l.type}</strong>: £${parseFloat(l.amount).toFixed(2)} (${l.note})</li>`).join('')
-          : '<li>No transaction history found.</li>';
-      } else {
-        alert("Student record not found.");
+        const ledgerEl = document.getElementById('ledger-list');
+        ledgerEl.innerHTML = data.ledger.length > 0
+          ? data.ledger.map(l => `<li class="list-group-item p-3"><span class="fw-bold ${l.type === 'CREDIT' ? 'text-success' : 'text-danger'}">${l.type}</span>: £${parseFloat(l.amount).toFixed(2)} <span class="float-end text-muted small">${l.date}</span></li>`).join('')
+          : '<li class="list-group-item p-3 text-muted">No transactions found.</li>';
       }
+    }
+
+    function logout() {
+      location.reload();
     }
   </script>
 </body>
